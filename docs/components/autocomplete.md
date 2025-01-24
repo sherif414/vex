@@ -1,8 +1,15 @@
+<script setup lang="ts">
+import AutocompleteDemo from './demos/AutocompleteDemo.vue';
+
+</script>
+
 # Autocomplete Component Documentation
 
 ## Overview
 
 The Autocomplete component is a composable, accessible Vue component that provides dropdown selection functionality. It's built using a compound component pattern, offering flexibility and full control over the rendering and behavior of each part of the autocomplete interface.
+
+<AutocompleteDemo/>
 
 ## Key Features
 
@@ -19,8 +26,8 @@ The Autocomplete consists of four main components:
 
 1. `Autocomplete.vue` - Root component that manages state and context
 2. `AutocompleteInput.vue` - Input field component
-3. `AutocompleteOptions.vue` - Options list container
-4. `AutocompleteOption.vue` - Individual option component
+3. `AutocompleteList.vue` - Options list container (renamed from AutocompleteOptions)
+4. `AutocompleteListItem.vue` - Individual option component (renamed from AutocompleteOption)
 
 ## Basic Usage
 
@@ -29,21 +36,23 @@ The Autocomplete consists of four main components:
 import {
   Autocomplete,
   AutocompleteInput,
-  AutocompleteOptions,
-  AutocompleteOption,
+  AutocompleteList,
+  AutocompleteListItem,
 } from "@/components/autocomplete";
 
 const selected = ref<string[]>([]);
+const searchQuery = ref("");
+const items = ref(["Apple", "Banana", "Cherry"]);
 </script>
 
 <template>
   <Autocomplete v-model="selected">
     <AutocompleteInput v-model="searchQuery" />
-    <AutocompleteOptions>
-      <AutocompleteOption v-for="item in items" :key="item" :value="item">
+    <AutocompleteList>
+      <AutocompleteListItem v-for="item in items" :key="item" :value="item">
         {{ item }}
-      </AutocompleteOption>
-    </AutocompleteOptions>
+      </AutocompleteListItem>
+    </AutocompleteList>
   </Autocomplete>
 </template>
 ```
@@ -58,7 +67,7 @@ Root component that provides context to all child components.
 
 | Name                 | Type       | Default | Description                        |
 | -------------------- | ---------- | ------- | ---------------------------------- |
-| `modelValue`         | `string[]` | `[]`    | Selected values                    |
+| `v-model`            | `string[]` | `[]`    | Selected values                    |
 | `disabled`           | `boolean`  | `false` | Disables the autocomplete          |
 | `multiselect`        | `boolean`  | `false` | Enables multiple selection         |
 | `deselectOnReselect` | `boolean`  | `false` | Deselects item when selected again |
@@ -74,46 +83,50 @@ Input component that triggers the options display.
 
 #### Props
 
-| Name         | Type     | Default     | Description |
-| ------------ | -------- | ----------- | ----------- |
-| `modelValue` | `string` | `undefined` | Input value |
+| Name      | Type     | Default     | Description |
+| --------- | -------- | ----------- | ----------- |
+| `v-model` | `string` | `undefined` | Input value |
 
-#### Events
+#### Attributes
 
-- `update:modelValue`: Emitted when input value changes
+- `role="combobox"`
+- `aria-autocomplete="list"`
+- Automatically manages `aria-activedescendant`, `aria-controls`, and `aria-expanded`
 
-### AutocompleteOptions
+### AutocompleteList
 
 Container for option items with keyboard navigation support.
 
 #### Props
 
-| Name | Type     | Default | Description           |
-| ---- | -------- | ------- | --------------------- |
-| `as` | `string` | `'ul'`  | Container element tag |
+| Name          | Type                         | Default          | Description                             |
+| ------------- | ---------------------------- | ---------------- | --------------------------------------- |
+| `as`          | `string`                     | `'ul'`           | Container element tag                   |
+| `placement`   | `Placement`                  | `'bottom-start'` | Floating UI placement relative to input |
+| `offset`      | `number`                     | `4`              | Space between input and list in pixels  |
+| `orientation` | `'vertical' \| 'horizontal'` | `'vertical'`     | Direction of keyboard navigation        |
 
-### AutocompleteOption
+### AutocompleteListItem
 
 Individual option component.
 
 #### Props
 
-| Name    | Type     | Default  | Description        |
-| ------- | -------- | -------- | ------------------ |
-| `value` | `string` | Required | Option value       |
-| `as`    | `string` | `'li'`   | Option element tag |
+| Name       | Type      | Default  | Description         |
+| ---------- | --------- | -------- | ------------------- |
+| `value`    | `string`  | Required | Option value        |
+| `as`       | `string`  | `'li'`   | Option element tag  |
+| `disabled` | `boolean` | `false`  | Disables the option |
 
-#### Slots
+#### Slot Props
 
 ```vue
-<AutocompleteOption v-slot="{ selected }">
-  <!-- Custom option content -->
-</AutocompleteOption>
+<AutocompleteListItem v-slot="{ selected, focused }">
+  <!-- Custom option content with state -->
+</AutocompleteListItem>
 ```
 
 ## Keyboard Navigation
-
-The component supports the following keyboard interactions:
 
 - `↓` (Down Arrow): Opens dropdown and moves focus to next option
 - `↑` (Up Arrow): Moves focus to previous option
@@ -122,39 +135,13 @@ The component supports the following keyboard interactions:
 
 ## Accessibility
 
-The component implements the following ARIA attributes and roles:
+Implements comprehensive ARIA attributes:
 
-- Options container has proper `role="listbox"`
-- Individual options have `role="option"`
+- `role="combobox"` on root and input
+- `role="listbox"` on options container
+- `role="option"` on individual options
+- Proper `aria-*` attributes for state management
 - Keyboard navigation follows ARIA best practices
-- Focus management between input and options
-
-## TypeScript Support
-
-The component is written in TypeScript and provides full type safety:
-
-```typescript
-interface AutocompleteRootProps {
-  modelValue?: string[];
-  disabled?: boolean;
-  multiselect?: boolean;
-  deselectOnReselect?: boolean;
-  as?: string;
-}
-
-interface AutocompleteInputProps {
-  modelValue?: string;
-}
-
-interface AutocompleteOptionsProps {
-  as?: string;
-}
-
-interface AutocompleteOptionProps {
-  value: string;
-  as?: string;
-}
-```
 
 ## Browser Support
 

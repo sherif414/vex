@@ -36,7 +36,7 @@ import {
 } from "@/composables";
 import type { Collection } from "@/composables/collection";
 import type { Placement } from "@floating-ui/dom";
-import { InjectionKey, nextTick, onMounted, provide, watch } from "vue";
+import { type InjectionKey, nextTick, provide, watch } from "vue";
 import { useAutocompleteContext } from "./Autocomplete.vue";
 
 const props = withDefaults(defineProps<AutocompleteListProps>(), {
@@ -96,7 +96,7 @@ useEscapeKey(hide);
 
 <template>
   <Primitive
-    tabindex="0"
+    tabindex="-1"
     :as="props.as"
     v-if="isVisible"
     ref="listEl"

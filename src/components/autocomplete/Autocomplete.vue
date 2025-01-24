@@ -4,7 +4,7 @@ import {
   useContext,
   useSelectionGroup,
 } from "@/composables";
-import { type InjectionKey, provide, Ref, ref, watch } from "vue";
+import { type InjectionKey, provide, type Ref, ref } from "vue";
 
 export interface AutocompleteProps {
   modelValue?: string[];
@@ -33,7 +33,7 @@ export function useAutocompleteContext(componentName: string) {
 
 <script lang="ts" setup>
 import { Primitive } from "@/components";
-import { useFocusTrap, useID } from "@/composables";
+import { useID } from "@/composables";
 
 const props = withDefaults(defineProps<AutocompleteProps>(), {
   modelValue: () => [],
@@ -57,22 +57,6 @@ const modelValue = defineModel<string[]>({ default: [] });
 const group = useSelectionGroup(modelValue, {
   deselectOnReselect: () => props.deselectOnReselect,
   multiselect: () => props.multiselect,
-});
-
-// Focus management
-const focusTrap = useFocusTrap(listEl, {
-  allowOutsideClick: true,
-  escapeDeactivates: false,
-  immediate: true,
-  initialFocus: () => listEl.value,
-});
-
-watch(isVisible, (visible) => {
-  if (visible) {
-    focusTrap.resume();
-  } else {
-    focusTrap.pause();
-  }
 });
 
 provide(AUTOCOMPLETE_INJECTION_KEY, {
