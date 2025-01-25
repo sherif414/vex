@@ -4,18 +4,19 @@ import { isWatchable } from "@/utils";
 
 type PrimitiveValue = string | number | boolean | symbol;
 
-interface Options {
+interface Options<T> {
   multiselect?: MaybeRefOrGetter<boolean>;
   deselectOnReselect?: MaybeRefOrGetter<boolean>;
+  getKey?: (value: T) => PrimitiveValue;
 }
 
-interface SelectionStrategy<T extends PrimitiveValue> {
+interface SelectionStrategy<T> {
   select: (value: T, deselectOnReselect: boolean) => void;
   deselect: (value: T) => void;
   isSelected: (value: T) => boolean;
 }
 
-export interface SelectionGroup<T extends PrimitiveValue> {
+export interface SelectionGroup<T> {
   select: (value: T) => void;
   selected: Ref<T[]>;
   deselect: (value: T) => void;
@@ -23,39 +24,15 @@ export interface SelectionGroup<T extends PrimitiveValue> {
   clearSelected: () => void;
 }
 
-/**
- * Establishes and controls a group of selectable primitive values.
- *
- * This composable includes methods for selecting, deselecting, and verifying
- * if individual values are selected within a collective group. It supports
- * both single selection and multiple selection modes, which can be configured
- * through the provided options.
- *
- * @template T - The type of primitive value being handled (string, number, boolean, or symbol).
- * @param {Ref<T[]>} selected - A reactive reference to the array of values that are currently selected.
- * @param {Options} [options] - A configuration object with optional settings.
- * @param {MaybeRefOrGetter<boolean>} [options.multiselect] - Determines if multiple selections are allowed.
- * @param {MaybeRefOrGetter<boolean>} [options.deselectOnReselect] - Determines if selecting an already selected item should deselect it; applies only in single-select mode.
- * @returns {SelectionGroup<T>} An object equipped with methods for managing the selection group.
- *
- * @example
- * const selectedItems = ref<string[]>([]);
- * const selectionGroup = useSelectionGroup(selectedItems);
- *
- * // Usage example:
- * selectionGroup.select('item1');
- * selectionGroup.deselect('item2');
- * console.log(selectionGroup.isSelected('item1')); // true
- * selectionGroup.clearSelected();
- */
-export function useSelectionGroup<T extends PrimitiveValue>(
+export function useSelectionGroup<T>(
   selected: Ref<T[]>,
-  options: Options = {}
+  options: Options<T> = {}
 ): SelectionGroup<T> {
-  const { deselectOnReselect = false, multiselect = false } = options;
+  const { deselectOnReselect = false, multiselect = false, getKey } = options;
+
   let selectionStrategy = toValue(multiselect)
-    ? useMultiSelect(selected)
-    : useSingleSelect(selected);
+    ? useMultiSelect(selected, getKey)
+    : useSingleSelect(selected, getKey);
 
   const select = (value: T): void => {
     selectionStrategy.select(value, toValue(deselectOnReselect));
@@ -77,8 +54,8 @@ export function useSelectionGroup<T extends PrimitiveValue>(
     watch(multiselect, (multi) => {
       clearSelected();
       selectionStrategy = multi
-        ? useMultiSelect(selected)
-        : useSingleSelect(selected);
+        ? useMultiSelect(selected, getKey)
+        : useSingleSelect(selected, getKey);
     });
   }
 
@@ -91,17 +68,23 @@ export function useSelectionGroup<T extends PrimitiveValue>(
   };
 }
 
-//===
-
-function useSingleSelect<T extends PrimitiveValue>(
-  selected: Ref<T[]>
+function useSingleSelect<T>(
+  selected: Ref<T[]>,
+  getKey?: (value: T) => PrimitiveValue
 ): SelectionStrategy<T> {
   const isSelected = (value: T): boolean => {
-    return selected.value.includes(value);
+    if (getKey) {
+      const key = getKey(value);
+      return selected.value.some((item) => getKey(item) === key);
+    } else {
+      return selected.value.includes(value);
+    }
   };
 
   const deselect = (value: T): void => {
-    selected.value = [];
+    if (isSelected(value)) {
+      selected.value = [];
+    }
   };
 
   const select = (value: T, deselectOnReselect: boolean): void => {
@@ -119,17 +102,26 @@ function useSingleSelect<T extends PrimitiveValue>(
   };
 }
 
-//===
-
-function useMultiSelect<T extends PrimitiveValue>(
-  selected: Ref<T[]>
+function useMultiSelect<T>(
+  selected: Ref<T[]>,
+  getKey?: (value: T) => PrimitiveValue
 ): SelectionStrategy<T> {
   const isSelected = (value: T): boolean => {
-    return selected.value.includes(value);
+    if (getKey) {
+      const key = getKey(value);
+      return selected.value.some((item) => getKey(item) === key);
+    } else {
+      return selected.value.includes(value);
+    }
   };
 
   const deselect = (value: T): void => {
-    selected.value = selected.value.filter((_value) => _value !== value);
+    if (getKey) {
+      const key = getKey(value);
+      selected.value = selected.value.filter((item) => getKey(item) !== key);
+    } else {
+      selected.value = selected.value.filter((_value) => _value !== value);
+    }
   };
 
   const select = (value: T): void => {
