@@ -1,6 +1,6 @@
 <template>
   <div class="grid place-items-center min-h-screen">
-    <AutocompleteDemo/>
+    <MenuDemo />
   </div>
 </template>
 
@@ -12,6 +12,7 @@
 // import AvatarDemo from "./AvatarDemo.vue";
 // import DialogDemo from "./DialogDemo.vue";
 import AutocompleteDemo from "./AutocompleteDemo.vue";
+import MenuDemo from "./MenuDemo.vue";
 </script>
 <style>
 /*------ colors ------*/
@@ -136,11 +137,11 @@ import AutocompleteDemo from "./AutocompleteDemo.vue";
 
 :root {
   --vex-box-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
-  0 0 1px rgba(0, 0, 0, 0.1);
+    0 0 1px rgba(0, 0, 0, 0.1);
   --vex-box-shadow-md: 0 1px 6px 0px rgba(0, 0, 0, 0.1),
-  0 2px 4px -2px rgb(0 0 0 / 0.1);
+    0 2px 4px -2px rgb(0 0 0 / 0.1);
   --vex-box-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1),
-  0 4px 6px -4px rgb(0 0 0 / 0.1);
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
 
   --vex-drop-shadow-sm: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.15));
   --vex-drop-shadow-md: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.2));

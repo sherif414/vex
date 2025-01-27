@@ -1,40 +1,40 @@
+<script lang="ts">
+interface MenuGroupProps {
+  type?: "radio" | "checkbox";
+}
+
+const MENU_GROUP_INJECTION_KEY = Symbol() as InjectionKey<{
+  selectionGroup: SelectionGroup<string>;
+  groupType: () => MenuGroupProps["type"];
+}>;
+
+export function useMenuGroupContext() {
+  return inject(MENU_GROUP_INJECTION_KEY, null);
+}
+</script>
+
 <script setup lang="ts">
-import { createSelectScope, useVModel } from '@/composables'
-import { MENU_GROUP, type Selected } from './context'
-import { provide } from 'vue'
+import { useSelectionGroup, type SelectionGroup } from "@/composables";
+import { inject, provide, type InjectionKey } from "vue";
 
-//----------------------------------------------------------------------------------------------------
-// 📌 component meta
-//----------------------------------------------------------------------------------------------------
+const props = withDefaults(defineProps<MenuGroupProps>(), {
+  type: "checkbox",
+});
 
-const p = withDefaults(
-  defineProps<{
-    modelValue?: Selected
-    type?: 'radio' | 'checkbox'
-  }>(),
-  {
-    type: 'checkbox',
-  }
-)
+const modelValue = defineModel<string[]>({ default: [] });
+const selectionGroup = useSelectionGroup(modelValue, {
+  multiselect: () => props.type === "checkbox",
+  deselectOnReselect: () => props.type === "checkbox",
+});
 
-//----------------------------------------------------------------------------------------------------
-
-const selection = useSelect(
-  useVModel<Selected>(() => p.modelValue),
-  {
-    multiselect: () => p.type === 'checkbox',
-    deselection: () => p.type === 'checkbox',
-  }
-)
-
-provide(MENU_GROUP, {
-  selection,
-  itemType: () => (p.type === 'checkbox' ? 'menuitemcheckbox' : 'menuitemradio'),
-})
+provide(MENU_GROUP_INJECTION_KEY, {
+  selectionGroup,
+  groupType: () => props.type,
+});
 </script>
 
 <template>
-  <div role="group" class="vex-menu-group">
+  <div role="group">
     <slot />
   </div>
 </template>

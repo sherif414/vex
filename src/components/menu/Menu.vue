@@ -1,75 +1,71 @@
-<script setup lang="ts">
-import { useControllableState, useID, useTemplateRef } from '@/composables'
-import { inject, onUnmounted, provide, shallowReactive, toRef } from 'vue'
-import { MENU_CTX, type MenuContext } from './context'
-import type { Getter } from '@/types'
-
-//----------------------------------------------------------------------------------------------------
-// 📌 component meta
-//----------------------------------------------------------------------------------------------------
-
-const p = withDefaults(
-  defineProps<{
-    orientation?: 'vertical' | 'horizontal'
-    open?: boolean
-  }>(),
-  {
-    orientation: 'vertical',
-  }
-)
-
-defineSlots<{
-  default: (props: { open: boolean }) => any
-}>()
-
-//----------------------------------------------------------------------------------------------------
-
-const TRIGGER_ID = useID()
-const CONTENT_ID = useID()
-
-const TriggerEl = useTemplateRef('MenuTrigger')
-const ContentEl = useTemplateRef('MenuContent')
-
-const isMenuOpen = useControllableState({
-  prop: () => p.open,
-  defaultValue: !!p.open,
-  name: 'open',
-})
-
-const parentMenu = inject(MENU_CTX, null)
-const isSubMenu = !!parentMenu
-
-const menu: MenuContext = {
-  isMenuOpen,
-  TriggerEl,
-  ContentEl,
-  TRIGGER_ID,
-  CONTENT_ID,
-  isSubMenu,
-  orientation: () => p.orientation,
-  submenus: shallowReactive([]),
-  parentMenu,
+<script lang="ts">
+interface MenuProps {
+  orientation?: "vertical" | "horizontal";
 }
 
-//----------------------------------------------------------------------------------------------------
+const MENU_INJECTION_KEY = Symbol() as InjectionKey<{
+  isVisible: Ref<boolean>;
+  triggerEl: Ref<HTMLElement | null>;
+  dropdownEl: Ref<HTMLElement | null>;
+  triggerID: string;
+  dropdownID: string;
+  show: () => void;
+  hide: () => void;
+  highlightedIndex: Ref<number>;
+  orientation: MaybeRefOrGetter<"vertical" | "horizontal">;
+}>;
 
-isSubMenu && parentMenu.submenus.push(menu)
-onUnmounted(() => {
-  const array = parentMenu?.submenus
-  if (!array) return
+export function useMenuContext(component: string) {
+  return useContext(MENU_INJECTION_KEY, "Menu", component);
+}
+</script>
 
-  const index = array.indexOf(menu)
-  index !== -1 && array.splice(index, 1)
-})
+<script setup lang="ts">
+import { useContext, useID } from "@/composables";
+import {
+  provide,
+  ref,
+  type InjectionKey,
+  type MaybeRefOrGetter,
+  type Ref,
+} from "vue";
 
-provide(MENU_CTX, menu)
+const props = withDefaults(defineProps<MenuProps>(), {
+  orientation: "vertical",
+});
 
-const open = toRef(isMenuOpen[0] as Getter<boolean>)
-defineExpose({
-  open,
-})
+defineSlots<{
+  default: (props: { visible: boolean }) => any;
+}>();
+
+const triggerID = useID();
+const dropdownID = useID();
+const triggerEl = ref(null);
+const dropdownEl = ref(null);
+const isVisible = ref(false);
+const highlightedIndex = ref(-1);
+
+function show() {
+  isVisible.value = true;
+}
+
+function hide() {
+  isVisible.value = false;
+}
+
+provide(MENU_INJECTION_KEY, {
+  isVisible,
+  triggerEl,
+  dropdownEl,
+  triggerID,
+  dropdownID,
+  show,
+  hide,
+  highlightedIndex,
+  orientation: () => props.orientation,
+});
 </script>
 
 <template>
-  <slot :open="open" />
+  <slot :visible="isVisible" />
 </template>

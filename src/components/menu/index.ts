@@ -1,7 +1,6 @@
 // export * from './Menu'
-export { default as Menu } from './Menu.vue'
-export { default as MenuTrigger } from './MenuTrigger.vue'
-export { default as MenuContent } from './MenuContent.vue'
-export { default as MenuGroup } from './MenuGroup.vue'
-export { default as MenuItem } from './MenuItem.vue'
-import './Menu.scss'
+export { default as Menu } from "./Menu.vue";
+export { default as MenuTrigger } from "./MenuTrigger.vue";
+export { default as MenuDropdown } from "./MenuDropdown.vue";
+export { default as MenuDropdownItem } from "./MenuDropdownItem.vue";
+export { default as MenuGroup } from "./MenuGroup.vue";
