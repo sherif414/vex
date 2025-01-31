@@ -1,6 +1,14 @@
 import { remove } from "@/utils";
 import type { ComputedRef, MaybeRefOrGetter, Ref } from "vue";
-import { computed, onUnmounted, shallowReactive, toRef } from "vue";
+import {
+  computed,
+  onUnmounted,
+  reactive,
+  ref,
+  shallowReactive,
+  toRef,
+  watch,
+} from "vue";
 
 export type CollectionItem<T> = T & {
   templateRef: Ref<HTMLElement | null>;
@@ -11,7 +19,7 @@ export interface Collection<T> {
   addItem: (item: Omit<CollectionItem<T>, "uid">) => CollectionItem<T>;
   items: CollectionItem<T>[];
   removeItem: (item: CollectionItem<T>) => void;
-  elements: ComputedRef<HTMLElement[]>;
+  elements: Readonly<Ref<HTMLElement[]>>;
 }
 
 export function createCollection<T>(uid: string): Collection<T> {
@@ -19,16 +27,20 @@ export function createCollection<T>(uid: string): Collection<T> {
   const generateUID = () => `${uid}-${count++}`;
   const items = shallowReactive<CollectionItem<T>[]>([]);
 
-  const elements = computed(() =>
-    items.reduce<HTMLElement[]>((arr, ref) => {
+  const elements = ref<HTMLElement[]>([]);
+  watch(items, (items) => {
+    elements.value = items.reduce<HTMLElement[]>((arr, ref) => {
       const el = ref.templateRef.value;
       el != null && arr.push(el);
       return arr;
-    }, [])
-  );
+    }, []);
+  });
 
   const addItem = (item: Omit<CollectionItem<T>, "uid">): CollectionItem<T> => {
-    const collectionItem = { ...item, uid: generateUID() } as CollectionItem<T>;
+    const collectionItem = reactive({
+      ...item,
+      uid: generateUID(),
+    }) as CollectionItem<T>;
     items.push(collectionItem);
     return collectionItem;
   };
