@@ -1,59 +1,40 @@
+import { remove } from "@/utils";
 import type { ComputedRef, MaybeRefOrGetter, Ref } from "vue";
 import { computed, onUnmounted, shallowReactive, toRef } from "vue";
 
-export interface CollectionItem<T extends HTMLElement = HTMLElement> {
+export type CollectionItem<T> = T & {
+  templateRef: Ref<HTMLElement | null>;
   uid: string;
-  templateRef: Ref<T | null>;
-  disabled: Ref<boolean>;
+};
+
+export interface Collection<T> {
+  addItem: (item: Omit<CollectionItem<T>, "uid">) => CollectionItem<T>;
+  items: CollectionItem<T>[];
+  removeItem: (item: CollectionItem<T>) => void;
+  elements: ComputedRef<HTMLElement[]>;
 }
 
-export interface Collection<T extends HTMLElement = HTMLElement> {
-  addItem: (
-    templateRef: Ref<T | null>,
-    disabled: Ref<boolean>
-  ) => CollectionItem<T>;
-  items: ComputedRef<CollectionItem<T>[]>;
-  removeItem: (templateRef: Ref<T | null>) => void;
-  elements: ComputedRef<T[]>;
-}
-
-export function createCollection<T extends HTMLElement = HTMLElement>(
-  uid: string
-): Collection<T> {
+export function createCollection<T>(uid: string): Collection<T> {
   let count = 0;
-  const collection = shallowReactive<Map<Ref<T | null>, CollectionItem<T>>>(
-    new Map()
-  );
+  const generateUID = () => `${uid}-${count++}`;
+  const items = shallowReactive<CollectionItem<T>[]>([]);
 
-  const items = computed(() => [...collection.values()]);
   const elements = computed(() =>
-    [...collection.keys()].reduce<T[]>((arr, ref) => {
-      const el = ref.value;
+    items.reduce<HTMLElement[]>((arr, ref) => {
+      const el = ref.templateRef.value;
       el != null && arr.push(el);
       return arr;
     }, [])
   );
 
-  const generateID = (): string => {
-    return `${uid}-${count++}`;
+  const addItem = (item: Omit<CollectionItem<T>, "uid">): CollectionItem<T> => {
+    const collectionItem = { ...item, uid: generateUID() } as CollectionItem<T>;
+    items.push(collectionItem);
+    return collectionItem;
   };
 
-  const addItem = (
-    templateRef: Ref<T | null>,
-    disabled: Ref<boolean>
-  ): CollectionItem<T> => {
-    const uid = generateID();
-    const item = { uid, templateRef, disabled };
-    collection.set(templateRef, item);
-
-    onUnmounted(() => {
-      removeItem(templateRef);
-    });
-    return item;
-  };
-
-  const removeItem = (templateRef: Ref<T | null>): void => {
-    collection.delete(templateRef);
+  const removeItem = (item: CollectionItem<T>): void => {
+    remove(items, item);
   };
 
   return {
@@ -64,14 +45,11 @@ export function createCollection<T extends HTMLElement = HTMLElement>(
   };
 }
 
-export function useCollection<T extends HTMLElement = HTMLElement>(
+export function useCollection<T>(
   collection: Collection<T>,
-  item: { templateRef: Ref<T | null>; disabled: MaybeRefOrGetter<boolean> }
+  item: Omit<CollectionItem<T>, "uid">
 ) {
-  const disabled = toRef(item.disabled);
-  onUnmounted(() => {
-    collection.removeItem(item.templateRef);
-  });
-  const _item = collection.addItem(item.templateRef, disabled);
-  return _item;
+  const collectionItem = collection.addItem(item);
+  onUnmounted(() => collection.removeItem(collectionItem));
+  return collectionItem;
 }
