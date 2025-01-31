@@ -4,14 +4,19 @@ interface AutocompleteListItemProps {
   as?: string;
   disabled?: boolean;
 }
+
+export type ListItem = CollectionItem<{
+  label: Ref<string>;
+  value: Ref<string>;
+  disabled: Ref<boolean>;
+}>;
 </script>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
-import { useAutocompleteContext } from "./Autocomplete.vue";
 import { Primitive } from "@/components";
-import { useCollection } from "@/composables/collection";
-import { useAutocompleteListContext } from "./AutocompleteList.vue";
+import type { CollectionItem } from "@/composables/collection";
+import { computed, ref, toRefs, type Ref } from "vue";
+import { useAutocompleteContext } from "./Autocomplete.vue";
 
 const props = withDefaults(defineProps<AutocompleteListItemProps>(), {
   as: "li",
@@ -19,18 +24,18 @@ const props = withDefaults(defineProps<AutocompleteListItemProps>(), {
 });
 
 const listItemEl = ref<HTMLElement | null>(null);
-const { collection } = useAutocompleteListContext("AutocompleteListItem");
-const { group, highlighted } = useAutocompleteContext("AutocompleteListItem");
+const { group, collection, activeListItem } = useAutocompleteContext(
+  "AutocompleteListItem"
+);
 
 const isSelected = computed(() => group.isSelected(props.value));
-const isFocused = computed(() => {
-  const index = collection.elements.value.indexOf(listItemEl.value!);
-  return index === highlighted.value;
-});
-
-const item = useCollection(collection, {
+const isActive = computed(() => activeListItem.value?.uid === item.uid);
+const { value, disabled } = toRefs(props);
+const item = collection.addItem({
   templateRef: listItemEl,
-  disabled: () => props.disabled,
+  value,
+  disabled,
+  label: ref("label"),
 });
 </script>
 
@@ -42,10 +47,10 @@ const item = useCollection(collection, {
     :id="item.uid"
     :as="props.as"
     :aria-selected="isSelected"
-    :aria-disabled="props.disabled"
-    @click.prevent="() => !props.disabled && group.select(props.value)"
-    @keydown.enter.prevent="() => !props.disabled && group.select(props.value)"
+    :aria-disabled="disabled"
+    @click.prevent="() => !disabled && group.select(props.value)"
+    @keydown.enter.prevent="() => !disabled && group.select(props.value)"
   >
-    <slot :selected="isSelected" :focused="isFocused" />
+    <slot :selected="isSelected" :active="isActive" />
   </Primitive>
 </template>

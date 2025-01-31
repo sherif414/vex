@@ -4,7 +4,18 @@ import {
   useContext,
   useSelectionGroup,
 } from "@/composables";
-import { type InjectionKey, provide, type Ref, ref } from "vue";
+import type { Collection } from "@/composables/collection";
+import type { Orientation } from "@/types";
+import {
+  computed,
+  type ComputedRef,
+  type InjectionKey,
+  provide,
+  type Ref,
+  ref,
+  shallowRef,
+} from "vue";
+import type { ListItem } from "./AutocompleteListItem.vue";
 
 export interface AutocompleteProps {
   modelValue?: string[];
@@ -12,18 +23,25 @@ export interface AutocompleteProps {
   multiselect?: boolean;
   deselectOnReselect?: boolean;
   as?: string;
+  /** Direction of keyboard navigation. @default 'vertical' */
+  orientation?: "vertical" | "horizontal";
 }
+
+export type AutocompleteCollection = Collection<ListItem>;
 
 export const AUTOCOMPLETE_INJECTION_KEY = Symbol() as InjectionKey<{
   isVisible: Ref<boolean>;
   hide: () => void;
   show: () => void;
   group: SelectionGroup<string>;
+  collection: AutocompleteCollection;
   listElementID: string;
   inputElementID: string;
   listEl: Ref<HTMLElement | null>;
   inputEl: Ref<HTMLInputElement | null>;
-  highlighted: Ref<number>;
+  highlightedIndex: Ref<number>;
+  activeListItem: Ref<ListItem | null>;
+  orientation: () => Orientation;
 }>;
 
 export function useAutocompleteContext(componentName: string) {
@@ -33,10 +51,11 @@ export function useAutocompleteContext(componentName: string) {
 
 <script lang="ts" setup>
 import { Primitive } from "@/components";
-import { useID } from "@/composables";
+import { useCollection, useID } from "@/composables";
 
 const props = withDefaults(defineProps<AutocompleteProps>(), {
   modelValue: () => [],
+  orientation: "vertical",
   as: "div",
 });
 
@@ -47,12 +66,15 @@ defineEmits<{
 const listEl = ref<HTMLElement | null>(null);
 const inputEl = ref<HTMLInputElement | null>(null);
 const isVisible = ref(false);
-const highlighted = ref(-1);
+const activeListItem = shallowRef<ListItem | null>(null);
+const highlightedIndex = ref(-1);
 
 const listElementID = useID();
 const inputElementID = useID();
 
 const modelValue = defineModel<string[]>({ default: [] });
+
+const collection = useCollection<ListItem>(listElementID);
 
 const group = useSelectionGroup(modelValue, {
   deselectOnReselect: () => props.deselectOnReselect,
@@ -68,7 +90,10 @@ provide(AUTOCOMPLETE_INJECTION_KEY, {
   inputElementID,
   listEl,
   inputEl,
-  highlighted,
+  collection,
+  highlightedIndex,
+  activeListItem,
+  orientation: () => props.orientation,
 });
 </script>
 

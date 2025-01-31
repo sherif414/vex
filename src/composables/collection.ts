@@ -1,14 +1,5 @@
-import { remove } from "@/utils";
-import type { ComputedRef, MaybeRefOrGetter, Ref } from "vue";
-import {
-  computed,
-  onUnmounted,
-  reactive,
-  ref,
-  shallowReactive,
-  toRef,
-  watch,
-} from "vue";
+import type { Ref } from "vue";
+import { reactive, ref, shallowRef, watch } from "vue";
 
 export type CollectionItem<T> = T & {
   templateRef: Ref<HTMLElement | null>;
@@ -17,15 +8,16 @@ export type CollectionItem<T> = T & {
 
 export interface Collection<T> {
   addItem: (item: Omit<CollectionItem<T>, "uid">) => CollectionItem<T>;
-  items: CollectionItem<T>[];
-  removeItem: (item: CollectionItem<T>) => void;
+  items: Ref<CollectionItem<T>[]>;
+  removeItem: (id: string) => void;
+  getItem: (id: string) => CollectionItem<T> | undefined;
   elements: Readonly<Ref<HTMLElement[]>>;
 }
 
-export function createCollection<T>(uid: string): Collection<T> {
+export function useCollection<T>(uid: string): Collection<T> {
   let count = 0;
   const generateUID = () => `${uid}-${count++}`;
-  const items = shallowReactive<CollectionItem<T>[]>([]);
+  const items = shallowRef<CollectionItem<T>[]>([]);
 
   const elements = ref<HTMLElement[]>([]);
   watch(items, (items) => {
@@ -37,31 +29,27 @@ export function createCollection<T>(uid: string): Collection<T> {
   });
 
   const addItem = (item: Omit<CollectionItem<T>, "uid">): CollectionItem<T> => {
-    const collectionItem = reactive({
+    const collectionItem = {
       ...item,
       uid: generateUID(),
-    }) as CollectionItem<T>;
-    items.push(collectionItem);
+    } as CollectionItem<T>;
+    items.value.push(collectionItem);
     return collectionItem;
   };
 
-  const removeItem = (item: CollectionItem<T>): void => {
-    remove(items, item);
+  const removeItem = (uid: string): void => {
+    items.value = items.value.filter((i) => i.uid === uid);
+  };
+
+  const getItem = (uid: string): CollectionItem<T> | undefined => {
+    return items.value.find((item) => item.uid === uid);
   };
 
   return {
     addItem,
     removeItem,
+    getItem,
     items,
     elements,
   };
-}
-
-export function useCollection<T>(
-  collection: Collection<T>,
-  item: Omit<CollectionItem<T>, "uid">
-) {
-  const collectionItem = collection.addItem(item);
-  onUnmounted(() => collection.removeItem(collectionItem));
-  return collectionItem;
 }
