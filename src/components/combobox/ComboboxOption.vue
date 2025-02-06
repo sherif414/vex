@@ -1,13 +1,12 @@
 <script lang="ts">
-interface AutocompleteListItemProps {
+interface ComboboxOptionProps {
   value: string;
   as?: string;
   disabled?: boolean;
   description?: string;
-  multiselect?: boolean;
 }
 
-export type ListItem = CollectionItem<{
+export type OptionItem = CollectionItem<{
   label: Ref<string>;
   value: Ref<string>;
   disabled: Ref<boolean>;
@@ -20,24 +19,21 @@ export type ListItem = CollectionItem<{
 import { Primitive } from "@/components";
 import type { CollectionItem } from "@/composables/collection";
 import { computed, onMounted, onUnmounted, ref, toRefs, type Ref } from "vue";
-import { useAutocompleteContext } from "./Autocomplete.vue";
+import { useComboboxContext } from "./Combobox.vue";
 
-const props = withDefaults(defineProps<AutocompleteListItemProps>(), {
+const props = withDefaults(defineProps<ComboboxOptionProps>(), {
   as: "li",
   disabled: false,
-  multiselect: false,
 });
 
-const listItemEl = ref<HTMLElement | null>(null);
-const { group, collection, activeListItem } = useAutocompleteContext(
-  "AutocompleteListItem"
-);
+const optionEl = ref<HTMLElement | null>(null);
+const { group, collection, activeOption } = useComboboxContext("ComboboxOption");
 
 const isSelected = computed(() => group.isSelected(props.value));
-const isActive = computed(() => activeListItem.value?.uid === item.uid);
+const isActive = computed(() => activeOption.value?.uid === item.uid);
 const { value, disabled } = toRefs(props);
 
-// Get position in list for aria attributes
+// Position tracking for ARIA attributes
 const itemIndex = ref(0);
 const totalItems = ref(0);
 
@@ -48,50 +44,57 @@ onMounted(() => {
 });
 
 const item = collection.addItem({
-  templateRef: listItemEl,
+  templateRef: optionEl,
   value,
   disabled,
   label: ref("label"),
   index: itemIndex,
   total: totalItems,
 });
+
 onUnmounted(() => {
   collection.removeItem(item.uid);
 });
+
+const handleSelect = () => {
+  if (!props.disabled) {
+    group.select(props.value);
+  }
+};
 </script>
 
 <template>
   <Primitive
-    ref="listItemEl"
+    ref="optionEl"
     role="option"
     tabindex="-1"
     :id="item.uid"
     :as="props.as"
     :aria-selected="isSelected"
-    :aria-checked="props.multiselect ? isSelected : undefined"
     :aria-disabled="disabled"
     :aria-current="isActive"
     :aria-posinset="itemIndex"
     :aria-setsize="totalItems"
     :aria-describedby="props.description ? `${item.uid}-desc` : undefined"
     :class="[
-      'vex-autocomplete-item',
+      'vex-combobox-option',
       {
         '--selected': isSelected,
         '--active': isActive,
         '--disabled': disabled,
       },
     ]"
-    @click.prevent="() => !disabled && group.select(props.value)"
-    @keydown.enter.prevent="() => !disabled && group.select(props.value)"
-    @keydown.space.prevent="() => !disabled && group.select(props.value)"
+    @click.prevent="handleSelect"
+    @keydown.enter.prevent="handleSelect"
+    @keydown.space.prevent="handleSelect"
   >
     <slot :selected="isSelected" :active="isActive" />
     <span
       v-if="props.description"
       :id="`${item.uid}-desc`"
-      class="vex-autocomplete-item-description"
-      >{{ props.description }}</span
+      class="vex-combobox-option-description"
     >
+      {{ props.description }}
+    </span>
   </Primitive>
 </template>

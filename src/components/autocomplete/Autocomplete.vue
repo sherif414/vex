@@ -25,6 +25,18 @@ export interface AutocompleteProps {
   as?: string;
   /** Direction of keyboard navigation. @default 'vertical' */
   orientation?: "vertical" | "horizontal";
+  /** Label for the autocomplete input */
+  label?: string;
+  /** Whether the field is required */
+  required?: boolean;
+  /** Description text for the autocomplete */
+  description?: string;
+  /** Error message to display */
+  errorMessage?: string;
+  /** ID of element that labels the autocomplete */
+  ariaLabelledby?: string;
+  /** ID of element that describes the autocomplete */
+  ariaDescribedby?: string;
 }
 
 export type AutocompleteCollection = Collection<ListItem>;
@@ -37,11 +49,20 @@ export const AUTOCOMPLETE_INJECTION_KEY = Symbol() as InjectionKey<{
   collection: AutocompleteCollection;
   listElementID: string;
   inputElementID: string;
+  descriptionID: string;
+  errorID: string;
   listEl: Ref<HTMLElement | null>;
   inputEl: Ref<HTMLInputElement | null>;
   highlightedIndex: Ref<number>;
   activeListItem: Ref<ListItem | null>;
   orientation: () => Orientation;
+  required: () => boolean;
+  disabled: () => boolean;
+  label: () => string | undefined;
+  description: () => string | undefined;
+  errorMessage: () => string | undefined;
+  ariaLabelledby: () => string | undefined;
+  ariaDescribedby: () => string | undefined;
 }>;
 
 export function useAutocompleteContext(componentName: string) {
@@ -57,6 +78,8 @@ const props = withDefaults(defineProps<AutocompleteProps>(), {
   modelValue: () => [],
   orientation: "vertical",
   as: "div",
+  required: false,
+  disabled: false,
 });
 
 defineEmits<{
@@ -71,6 +94,8 @@ const highlightedIndex = ref(-1);
 
 const listElementID = useID();
 const inputElementID = useID();
+const descriptionID = useID();
+const errorID = useID();
 
 const modelValue = defineModel<string[]>({ default: [] });
 
@@ -88,23 +113,26 @@ provide(AUTOCOMPLETE_INJECTION_KEY, {
   group,
   listElementID,
   inputElementID,
+  descriptionID,
+  errorID,
   listEl,
   inputEl,
   collection,
   highlightedIndex,
   activeListItem,
   orientation: () => props.orientation,
+  required: () => props.required,
+  disabled: () => props.disabled,
+  label: () => props.label,
+  description: () => props.description,
+  errorMessage: () => props.errorMessage,
+  ariaLabelledby: () => props.ariaLabelledby,
+  ariaDescribedby: () => props.ariaDescribedby,
 });
 </script>
 
 <template>
-  <Primitive
-    :aria-controls="listElementID"
-    :aria-expanded="isVisible"
-    :aria-labelledby="inputElementID"
-    :as="props.as"
-    role="combobox"
-  >
+  <Primitive :as="props.as">
     <slot></slot>
   </Primitive>
 </template>

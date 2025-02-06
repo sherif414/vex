@@ -37,13 +37,13 @@ const sampleItems = [
             :key="item.value"
             :value="item.value"
             class="flex w-full cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm text-gray-900 outline-none transition-colors hover:bg-gray-100 focus:bg-gray-100"
-            #="{ selected, focused }"
+            #="{ selected, active }"
           >
             <span
               class="mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-gray-400"
               :class="{
                 'border-blue-500 bg-blue-500 text-white': selected,
-                'border-gray-400 bg-gray-100': focused && !selected,
+                'border-gray-400 bg-gray-100': active && !selected,
               }"
             >
               <svg

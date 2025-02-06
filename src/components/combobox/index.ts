@@ -1,2 +1,8 @@
-export { ComboboxTrigger, ComboboxDropdown, ComboboxOption, ComboboxListbox } from './Combobox'
-export { useCombobox } from './ComboboxContext'
+export {
+  ComboboxRoot,
+  ComboboxInput,
+  ComboboxList,
+  ComboboxOption,
+} from "./Combobox";
+
+export { useCombobox } from "./ComboboxContext";

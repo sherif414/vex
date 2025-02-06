@@ -7,16 +7,24 @@ import {
   useSelectionGroup,
   type SelectionGroup,
 } from "@/composables";
-import type { Collection } from "@/composables/collection";
+import type { Collection, CollectionItem } from "@/composables/collection";
 import type { MaybeRefOrGetter, TemplateRef } from "@/types";
 import {
   provide,
   readonly,
   ref,
+  shallowRef,
   toValue,
   type InjectionKey,
   type Ref,
 } from "vue";
+
+export interface ComboboxItem {
+  label: string;
+  value: string;
+  templateRef: Ref<HTMLElement | null>;
+  uid: string;
+}
 
 export interface ComboboxContext {
   triggerID: string;
@@ -25,11 +33,13 @@ export interface ComboboxContext {
   triggerEl: TemplateRef<HTMLInputElement>;
   loop: MaybeRefOrGetter<boolean>;
   group: SelectionGroup<string>;
-  collection: Collection<HTMLElement>;
+  collection: Collection<ComboboxItem>;
   scrollBehavior: MaybeRefOrGetter<ScrollBehavior>;
-  isDropdownVisible: Readonly<Ref<boolean>>;
-  showDropdown: () => void;
-  hideDropdown: () => void;
+  isOpen: Readonly<Ref<boolean>>;
+  toggle: () => void;
+  highlightedIndex: Ref<number>;
+  activeListItem: Ref<ComboboxItem | null>;
+  orientation: "vertical" | "horizontal";
 }
 
 export interface UseComboboxOptions {
@@ -45,15 +55,16 @@ export interface UseComboboxOptions {
 }
 
 interface UseComboboxReturn {
-  listboxID: string;
   triggerID: string;
-  listboxEl: TemplateRef;
   triggerEl: TemplateRef<HTMLInputElement>;
+  listboxID: string;
+  listboxEl: TemplateRef;
   group: SelectionGroup<string>;
-  collection: Collection<HTMLElement>;
-  showDropdown: (delay?: number | undefined) => void;
-  hideDropdown: (delay?: number | undefined) => void;
-  isDropdownVisible: Readonly<Ref<boolean>>;
+  collection: Collection<ComboboxItem>;
+  isOpen: Readonly<Ref<boolean>>;
+  toggle: () => void;
+  highlightedIndex: Ref<number>;
+  activeListItem: Ref<ComboboxItem | null>;
 }
 
 // ----------------------------------------------------------------------------------------------------
@@ -80,17 +91,24 @@ export function useCombobox(
   const listboxEl: TemplateRef = ref(null);
   const triggerEl: TemplateRef<HTMLInputElement> = ref(null);
 
-  const isDropdownVisible = ref(false);
+  const isOpen = ref(false);
+  const highlightedIndex = ref(-1);
+  const activeListItem = shallowRef<ComboboxItem | null>(null);
+  const orientation = "vertical";
+
+  const toggle = () => {
+    isOpen.value = !isOpen.value;
+  };
 
   const delayed = useDelayedOpen(
     () => {
-      if (isDropdownVisible.value) return;
-      isDropdownVisible.value = true;
+      if (isOpen.value) return;
+      isOpen.value = true;
       onShowDropdown?.();
     },
     () => {
-      if (!isDropdownVisible.value) return;
-      isDropdownVisible.value = false;
+      if (!isOpen.value) return;
+      isOpen.value = false;
       onHideDropdown?.();
     },
     {
@@ -103,14 +121,9 @@ export function useCombobox(
     deselectOnReselect: deselection,
     multiselect,
   });
-  const collection = useCollection(listboxID);
+  const collection = useCollection<ComboboxItem>(listboxID);
 
   const select = (value: string): void => {
-    const inputEl = triggerEl.value;
-    if (!inputEl) return;
-
-    inputEl.value = value;
-    group.select(value);
     onSelect?.(value);
   };
 
@@ -124,15 +137,15 @@ export function useCombobox(
     triggerEl,
     listboxID,
     listboxEl,
-
     loop,
     group: _group,
     collection,
     scrollBehavior,
-
-    showDropdown: delayed.show,
-    hideDropdown: delayed.hide,
-    isDropdownVisible: readonly(isDropdownVisible),
+    isOpen: readonly(isOpen),
+    toggle,
+    highlightedIndex,
+    activeListItem,
+    orientation,
   });
 
   return {
@@ -140,13 +153,12 @@ export function useCombobox(
     triggerEl,
     listboxID,
     listboxEl,
-
     group: _group,
     collection,
-
-    showDropdown: delayed.show,
-    hideDropdown: delayed.hide,
-    isDropdownVisible: readonly(isDropdownVisible),
+    isOpen: readonly(isOpen),
+    toggle,
+    highlightedIndex,
+    activeListItem,
   };
 }
 

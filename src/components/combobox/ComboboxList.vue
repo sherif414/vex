@@ -1,21 +1,37 @@
 <script lang="ts">
 export interface ComboboxListProps {
+  /** HTML element to render as. @default 'ul' */
   as?: string;
+  /** Floating UI placement of the list relative to input. @default 'bottom-start' */
+  placement?: "bottom-start" | "bottom-end" | "top-start" | "top-end";
+  /** Space between input and list in pixels. @default 4 */
+  offset?: number;
 }
 </script>
 
 <script setup lang="ts">
 import { Primitive } from "@/components";
-import { useComboboxContext } from "./Combobox.vue";
+import { useComboboxContext } from "./ComboboxContext";
+import { useFloating } from "@/composables";
 import { ref, onUpdated } from "vue";
 
 const props = withDefaults(defineProps<ComboboxListProps>(), {
   as: "ul",
+  placement: "bottom-start",
+  offset: 4,
 });
 
-const { isOpen, toggle } = useComboboxContext("ComboboxList");
+const { isOpen, toggle, triggerEl, triggerID } =
+  useComboboxContext("ComboboxList");
 
 const listRef = ref<HTMLElement | null>(null);
+const listId = `combobox-list-${Math.random().toString(36).slice(2, 11)}`;
+
+const { floatingStyles } = useFloating(triggerEl, listRef, isOpen, {
+  placement: () => props.placement,
+  offset: props.offset,
+  autoMinWidth: true,
+});
 
 const focusFirstOption = () => {
   if (listRef.value) {
@@ -67,7 +83,21 @@ onUpdated(() => {
 </script>
 
 <template>
-  <Primitive :as="props.as" v-if="isOpen" ref="listRef">
-    <slot></slot>
-  </Primitive>
+  <Teleport to="body">
+    <Transition name="vex-fade">
+      <Primitive
+        :as="props.as"
+        v-if="isOpen"
+        ref="listRef"
+        role="listbox"
+        :id="listId"
+        :aria-labelledby="triggerID"
+        tabindex="-1"
+        :style="floatingStyles"
+        @keydown="onKeyDown"
+      >
+        <slot></slot>
+      </Primitive>
+    </Transition>
+  </Teleport>
 </template>
