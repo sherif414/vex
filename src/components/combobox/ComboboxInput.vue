@@ -16,6 +16,7 @@ export interface ComboboxInputProps {
 import { useEventListener, useKeyIntent } from "@/composables";
 import { nextTick, watch } from "vue";
 import { useComboboxContext } from "./ComboboxContext";
+import { onClickOutside } from "@vueuse/core";
 
 const props = withDefaults(defineProps<ComboboxInputProps>(), {
   pageSize: 5,
@@ -38,7 +39,9 @@ const {
 } = useComboboxContext("ComboboxInput");
 
 const getListItems = () => {
-  return Array.from(listboxEl.value?.querySelectorAll('[role="option"]') ?? []);
+  return Array.from(
+    listboxEl.value?.querySelectorAll<HTMLElement>('[role="option"]') ?? []
+  );
 };
 
 const handleInput = (e: Event) => {
@@ -56,19 +59,20 @@ useEventListener(triggerEl, "keydown", (e: KeyboardEvent) => {
     const items = getListItems();
     const highlightedItem = items[highlightedIndex.value];
     if (!highlightedItem) return;
-    const id = highlightedItem.id;
-    id && group.select(id);
+    const value = highlightedItem.dataset.vexValue;
+    value && group.select(value);
   } else if (e.key === "Escape" || e.key === "Tab") {
     hide();
   } else if (e.key === "ArrowDown" && !isVisible.value) {
     e.preventDefault();
+    e.stopImmediatePropagation();
     show();
   }
 });
 
 // virtual roving focus with aria-activedescendant
 useKeyIntent(
-  listboxEl,
+  triggerEl,
   (e, intent) => {
     const items = getListItems();
     if (!isVisible.value || items.length === 0) return;
@@ -108,6 +112,8 @@ watch(isVisible, (visible) => {
     highlightedIndex.value = -1;
   }
 });
+
+onClickOutside(listboxEl, hide, { ignore: [triggerEl] });
 </script>
 
 <template>

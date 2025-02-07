@@ -1,6 +1,6 @@
 <script lang="ts">
 export interface ComboboxListboxProps {
-  as: string;
+  as?: string;
 }
 </script>
 

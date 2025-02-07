@@ -25,6 +25,8 @@ const isSelected = computed(() => group.isSelected(props.value));
   <Primitive
     role="option"
     :as="props.as"
+    :id="id"
+    :data-vex-value="value"
     @click="() => group.select(props.value)"
   >
     <slot :is-selected="isSelected" :is-active="isActive" :id="id" />

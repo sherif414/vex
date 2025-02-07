@@ -16,7 +16,13 @@ export {
   AutocompleteListItem,
   AutocompleteList,
 } from "./autocomplete";
-export { Announcer } from "./announcer";
+export {
+  ComboboxInput,
+  ComboboxListItem,
+  ComboboxListbox,
+  ComboboxPanel,
+  ComboboxRoot,
+} from "./combobox";
 // export {
 //   Menu,
 //   MenuDropdown,

@@ -7,9 +7,8 @@ export interface ComboboxRootProps {
 </script>
 
 <script lang="ts" setup>
-import { computed, nextTick, ref, watch } from "vue";
+import { computed, ref } from "vue";
 import { useCombobox } from "./ComboboxContext";
-import { useEventListener } from "@/composables";
 
 const props = withDefaults(defineProps<ComboboxRootProps>(), {
   modelValue: () => [],

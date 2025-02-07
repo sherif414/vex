@@ -1,6 +1,6 @@
 <template>
   <div class="grid place-items-center min-h-screen">
-    <AutocompleteDemo />
+    <ComboboxDemo />
   </div>
 </template>
 
@@ -11,6 +11,7 @@
 // import CheckboxDemo from "./CheckboxDemo.vue";
 // import AvatarDemo from "./AvatarDemo.vue";
 // import DialogDemo from "./DialogDemo.vue";
-import AutocompleteDemo from "./AutocompleteDemo.vue";
+// import AutocompleteDemo from "./demos/AutocompleteDemo.vue";
+import ComboboxDemo from "./demos/ComboboxDemo.vue";
 // import MenuDemo from "./MenuDemo.vue";
 </script>
