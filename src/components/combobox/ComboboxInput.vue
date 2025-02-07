@@ -9,17 +9,19 @@ export interface ComboboxInputProps {
   pageSize?: number;
   disabled?: boolean;
   readonly?: boolean;
+  persistHighlight?: boolean;
 }
 </script>
 
 <script setup lang="ts">
 import { useEventListener, useKeyIntent } from "@/composables";
-import { nextTick, watch } from "vue";
+import { nextTick, watch, ref } from "vue";
 import { useComboboxContext } from "./ComboboxContext";
 import { onClickOutside } from "@vueuse/core";
 
 const props = withDefaults(defineProps<ComboboxInputProps>(), {
   pageSize: 5,
+  persistHighlight: false,
 });
 
 const emit = defineEmits<{ "update:modelValue": [value?: string] }>();
@@ -36,13 +38,8 @@ const {
   highlightedIndex,
   activeDescendentID,
   orientation,
+  listItems,
 } = useComboboxContext("ComboboxInput");
-
-const getListItems = () => {
-  return Array.from(
-    listboxEl.value?.querySelectorAll<HTMLElement>('[role="option"]') ?? []
-  );
-};
 
 const handleInput = (e: Event) => {
   const target = e.target as HTMLInputElement;
@@ -56,8 +53,7 @@ useEventListener(triggerEl, "keydown", (e: KeyboardEvent) => {
     if (!isVisible.value || highlightedIndex.value === -1) return;
 
     e.preventDefault();
-    const items = getListItems();
-    const highlightedItem = items[highlightedIndex.value];
+    const highlightedItem = listItems.value[highlightedIndex.value];
     if (!highlightedItem) return;
     const value = highlightedItem.dataset.vexValue;
     value && group.select(value);
@@ -74,14 +70,13 @@ useEventListener(triggerEl, "keydown", (e: KeyboardEvent) => {
 useKeyIntent(
   triggerEl,
   (e, intent) => {
-    const items = getListItems();
-    if (!isVisible.value || items.length === 0) return;
+    if (!isVisible.value || listItems.value.length === 0) return;
 
     e.preventDefault();
 
     if (intent === "next") {
       highlightedIndex.value = Math.min(
-        items.length - 1,
+        listItems.value.length - 1,
         highlightedIndex.value + 1
       );
       return;
@@ -95,18 +90,35 @@ useKeyIntent(
       return;
     }
     if (intent === "last") {
-      highlightedIndex.value = items.length - 1;
+      highlightedIndex.value = listItems.value.length - 1;
       return;
     }
   },
   { orientation }
 );
 
+const lastHighlightedIndex = ref(-1);
+
+// Update last valid index when highlight changes and dropdown is visible
+watch(highlightedIndex, (index) => {
+  if (index !== -1 && isVisible.value) {
+    lastHighlightedIndex.value = index;
+  }
+});
+
 // Handle dropdown visibility
 watch(isVisible, (visible) => {
   if (visible) {
     nextTick(() => {
-      highlightedIndex.value = 0;
+      if (
+        props.persistHighlight &&
+        lastHighlightedIndex.value !== -1 &&
+        lastHighlightedIndex.value < listItems.value.length
+      ) {
+        highlightedIndex.value = lastHighlightedIndex.value;
+      } else {
+        highlightedIndex.value = 0;
+      }
     });
   } else {
     highlightedIndex.value = -1;
@@ -114,6 +126,21 @@ watch(isVisible, (visible) => {
 });
 
 onClickOutside(listboxEl, hide, { ignore: [triggerEl] });
+
+// Add scroll into view behavior when highlighted item changes
+watch(highlightedIndex, (index) => {
+  if (index === -1 || !isVisible.value) return;
+
+  nextTick(() => {
+    const highlightedItem = listItems.value[index];
+    if (!highlightedItem || !listboxEl.value) return;
+
+    highlightedItem.scrollIntoView({
+      block: "nearest",
+      inline: "nearest",
+    });
+  });
+});
 </script>
 
 <template>
@@ -121,6 +148,7 @@ onClickOutside(listboxEl, hide, { ignore: [triggerEl] });
     ref="triggerEl"
     role="combobox"
     aria-autocomplete="list"
+    aria-haspopup="listbox"
     :aria-activedescendant="activeDescendentID"
     :aria-controls="listboxID"
     :aria-expanded="isVisible"

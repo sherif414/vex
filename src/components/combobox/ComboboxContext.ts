@@ -6,6 +6,7 @@ import {
   type SelectionGroup,
 } from "@/composables";
 import type { TemplateRef } from "@/types";
+import { useMutationObserver } from "@vueuse/core";
 import type { ComputedRef, InjectionKey, MaybeRefOrGetter, Ref } from "vue";
 import { computed, provide, ref } from "vue";
 
@@ -23,6 +24,7 @@ export interface ComboboxContext {
   highlightedIndex: Ref<number>;
   activeDescendentID: ComputedRef<string | undefined>;
   orientation: "vertical" | "horizontal";
+  listItems: Ref<HTMLElement[]>;
 }
 
 export interface UseComboboxOptions {
@@ -47,6 +49,7 @@ interface UseComboboxReturn {
   hide: () => void;
   highlightedIndex: Ref<number>;
   activeDescendentID: ComputedRef<string | undefined>;
+  listItems: Ref<HTMLElement[]>;
 }
 
 // ----------------------------------------------------------------------------------------------------
@@ -72,6 +75,7 @@ export function useCombobox(
   const triggerID = useID();
   const listboxEl: TemplateRef = ref(null);
   const triggerEl: TemplateRef<HTMLInputElement> = ref(null);
+  const listItems = ref<HTMLElement[]>([]);
 
   const isVisible = ref(false);
   const highlightedIndex = ref(-1);
@@ -81,6 +85,21 @@ export function useCombobox(
     return elements[highlightedIndex.value]?.id;
   });
   const orientation = "vertical";
+
+  // Watch for changes in the listbox and update listItems
+  useMutationObserver(
+    listboxEl,
+    () => {
+      if (!listboxEl.value) return;
+      listItems.value = Array.from(
+        listboxEl.value.querySelectorAll<HTMLElement>('[role="option"]')
+      );
+    },
+    {
+      childList: true,
+      subtree: true,
+    }
+  );
 
   const { hide, show } = useDelayedOpen(
     () => {
@@ -118,6 +137,7 @@ export function useCombobox(
     highlightedIndex,
     orientation,
     activeDescendentID,
+    listItems,
   });
 
   return {
@@ -131,6 +151,7 @@ export function useCombobox(
     hide,
     highlightedIndex,
     activeDescendentID,
+    listItems,
   };
 }
 
