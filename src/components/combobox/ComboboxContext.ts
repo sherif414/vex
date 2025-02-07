@@ -8,7 +8,7 @@ import {
 import type { TemplateRef } from "@/types";
 import { useMutationObserver } from "@vueuse/core";
 import type { ComputedRef, InjectionKey, MaybeRefOrGetter, Ref } from "vue";
-import { computed, provide, ref } from "vue";
+import { computed, provide, ref, watch } from "vue";
 
 export interface ComboboxContext {
   triggerID: string;
@@ -80,13 +80,12 @@ export function useCombobox(
   const isVisible = ref(false);
   const highlightedIndex = ref(-1);
   const activeDescendentID = computed<string | undefined>(() => {
-    const elements = listboxEl.value?.querySelectorAll("[role=option]") ?? [];
     if (highlightedIndex.value < 0) return undefined;
-    return elements[highlightedIndex.value]?.id;
+    return listItems.value[highlightedIndex.value]?.id;
   });
+
   const orientation = "vertical";
 
-  // Watch for changes in the listbox and update listItems
   useMutationObserver(
     listboxEl,
     () => {
@@ -100,6 +99,13 @@ export function useCombobox(
       subtree: true,
     }
   );
+
+  watch(listboxEl, (el) => {
+    if (!el) return;
+    listItems.value = Array.from(
+      el.querySelectorAll<HTMLElement>('[role="option"]')
+    );
+  });
 
   const { hide, show } = useDelayedOpen(
     () => {
