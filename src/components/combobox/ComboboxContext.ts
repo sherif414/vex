@@ -1,30 +1,13 @@
 import {
-  useCollection,
   useContext,
   useDelayedOpen,
-  useEventListener,
   useID,
   useSelectionGroup,
   type SelectionGroup,
 } from "@/composables";
-import type { Collection, CollectionItem } from "@/composables/collection";
-import type { MaybeRefOrGetter, TemplateRef } from "@/types";
-import {
-  provide,
-  readonly,
-  ref,
-  shallowRef,
-  toValue,
-  type InjectionKey,
-  type Ref,
-} from "vue";
-
-export interface ComboboxItem {
-  label: string;
-  value: string;
-  templateRef: Ref<HTMLElement | null>;
-  uid: string;
-}
+import type { TemplateRef } from "@/types";
+import type { ComputedRef, InjectionKey, MaybeRefOrGetter, Ref } from "vue";
+import { computed, provide, ref } from "vue";
 
 export interface ComboboxContext {
   triggerID: string;
@@ -33,17 +16,16 @@ export interface ComboboxContext {
   triggerEl: TemplateRef<HTMLInputElement>;
   loop: MaybeRefOrGetter<boolean>;
   group: SelectionGroup<string>;
-  collection: Collection<ComboboxItem>;
   scrollBehavior: MaybeRefOrGetter<ScrollBehavior>;
-  isOpen: Readonly<Ref<boolean>>;
-  toggle: () => void;
+  isVisible: Readonly<Ref<boolean>>;
+  show: () => void;
+  hide: () => void;
   highlightedIndex: Ref<number>;
-  activeListItem: Ref<ComboboxItem | null>;
+  activeDescendentID: ComputedRef<string | undefined>;
   orientation: "vertical" | "horizontal";
 }
 
 export interface UseComboboxOptions {
-  onSelect?: (value?: string) => void;
   onShowDropdown?: () => void;
   onHideDropdown?: () => void;
   loop?: MaybeRefOrGetter<boolean>;
@@ -60,11 +42,11 @@ interface UseComboboxReturn {
   listboxID: string;
   listboxEl: TemplateRef;
   group: SelectionGroup<string>;
-  collection: Collection<ComboboxItem>;
-  isOpen: Readonly<Ref<boolean>>;
-  toggle: () => void;
+  isVisible: Readonly<Ref<boolean>>;
+  show: () => void;
+  hide: () => void;
   highlightedIndex: Ref<number>;
-  activeListItem: Ref<ComboboxItem | null>;
+  activeDescendentID: ComputedRef<string | undefined>;
 }
 
 // ----------------------------------------------------------------------------------------------------
@@ -72,6 +54,7 @@ interface UseComboboxReturn {
 const COMBOBOX_INJECTION_KEY = Symbol() as InjectionKey<ComboboxContext>;
 
 export function useCombobox(
+  modelValue: Ref<string[]>,
   options: UseComboboxOptions = {}
 ): UseComboboxReturn {
   const {
@@ -81,7 +64,6 @@ export function useCombobox(
     scrollBehavior = "auto",
     hideDelay = 0,
     showDelay = 0,
-    onSelect,
     onHideDropdown,
     onShowDropdown,
   } = options;
@@ -91,24 +73,24 @@ export function useCombobox(
   const listboxEl: TemplateRef = ref(null);
   const triggerEl: TemplateRef<HTMLInputElement> = ref(null);
 
-  const isOpen = ref(false);
+  const isVisible = ref(false);
   const highlightedIndex = ref(-1);
-  const activeListItem = shallowRef<ComboboxItem | null>(null);
+  const activeDescendentID = computed<string | undefined>(() => {
+    const elements = listboxEl.value?.querySelectorAll("[role=option]") ?? [];
+    if (highlightedIndex.value < 0) return undefined;
+    return elements[highlightedIndex.value]?.id;
+  });
   const orientation = "vertical";
 
-  const toggle = () => {
-    isOpen.value = !isOpen.value;
-  };
-
-  const delayed = useDelayedOpen(
+  const { hide, show } = useDelayedOpen(
     () => {
-      if (isOpen.value) return;
-      isOpen.value = true;
+      if (isVisible.value) return;
+      isVisible.value = true;
       onShowDropdown?.();
     },
     () => {
-      if (!isOpen.value) return;
-      isOpen.value = false;
+      if (!isVisible.value) return;
+      isVisible.value = false;
       onHideDropdown?.();
     },
     {
@@ -117,20 +99,10 @@ export function useCombobox(
     }
   );
 
-  const group = useSelectionGroup(ref<string[]>([]), {
+  const group = useSelectionGroup(modelValue, {
     deselectOnReselect: deselection,
     multiselect,
   });
-  const collection = useCollection<ComboboxItem>(listboxID);
-
-  const select = (value: string): void => {
-    onSelect?.(value);
-  };
-
-  const _group = {
-    ...group,
-    select,
-  };
 
   provide(COMBOBOX_INJECTION_KEY, {
     triggerID,
@@ -138,14 +110,14 @@ export function useCombobox(
     listboxID,
     listboxEl,
     loop,
-    group: _group,
-    collection,
+    group,
     scrollBehavior,
-    isOpen: readonly(isOpen),
-    toggle,
+    isVisible,
+    show,
+    hide,
     highlightedIndex,
-    activeListItem,
     orientation,
+    activeDescendentID,
   });
 
   return {
@@ -153,12 +125,12 @@ export function useCombobox(
     triggerEl,
     listboxID,
     listboxEl,
-    group: _group,
-    collection,
-    isOpen: readonly(isOpen),
-    toggle,
+    group,
+    isVisible,
+    show,
+    hide,
     highlightedIndex,
-    activeListItem,
+    activeDescendentID,
   };
 }
 

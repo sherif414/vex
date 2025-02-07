@@ -7,18 +7,18 @@ export interface ComboboxInputProps {
   required?: boolean;
   invalid?: boolean;
   pageSize?: number;
+  disabled?: boolean;
+  readonly?: boolean;
 }
 </script>
 
 <script setup lang="ts">
-import { computed, nextTick, ref, watch } from "vue";
+import { useEventListener, useKeyIntent } from "@/composables";
+import { nextTick, watch } from "vue";
 import { useComboboxContext } from "./ComboboxContext";
-import { useEventListener, useListHighlight } from "@/composables";
 
 const props = withDefaults(defineProps<ComboboxInputProps>(), {
   pageSize: 5,
-  required: false,
-  invalid: false,
 });
 
 const emit = defineEmits<{ "update:modelValue": [value?: string] }>();
@@ -28,108 +28,84 @@ const {
   triggerEl,
   listboxID,
   listboxEl,
-  isOpen,
-  toggle,
+  isVisible,
+  show,
+  hide,
   group,
-  collection,
   highlightedIndex,
-  activeListItem,
+  activeDescendentID,
   orientation,
 } = useComboboxContext("ComboboxInput");
+
+const getListItems = () => {
+  return Array.from(listboxEl.value?.querySelectorAll('[role="option"]') ?? []);
+};
 
 const handleInput = (e: Event) => {
   const target = e.target as HTMLInputElement;
   emit("update:modelValue", target.value);
 };
 
-watch(highlightedIndex, (index) => {
-  if (index === -1 || collection.elements.value.length <= index) {
-    activeListItem.value = null;
-  } else {
-    const element = collection.elements.value[index];
-    activeListItem.value = collection.getItem(element.id) ?? null;
+useEventListener(triggerEl, "keydown", (e: KeyboardEvent) => {
+  if (props.disabled || props.readonly) return;
+
+  if (e.key === "Enter") {
+    if (!isVisible.value || highlightedIndex.value === -1) return;
+
+    e.preventDefault();
+    const items = getListItems();
+    const highlightedItem = items[highlightedIndex.value];
+    if (!highlightedItem) return;
+    const id = highlightedItem.id;
+    id && group.select(id);
+  } else if (e.key === "Escape" || e.key === "Tab") {
+    hide();
+  } else if (e.key === "ArrowDown" && !isVisible.value) {
+    e.preventDefault();
+    show();
   }
 });
 
-// Setup keyboard navigation with callback
-useListHighlight(
-  triggerEl,
-  collection.elements,
-  highlightedIndex,
-  (index) => {
-    highlightedIndex.value = index;
+// virtual roving focus with aria-activedescendant
+useKeyIntent(
+  listboxEl,
+  (e, intent) => {
+    const items = getListItems();
+    if (!isVisible.value || items.length === 0) return;
+
+    e.preventDefault();
+
+    if (intent === "next") {
+      highlightedIndex.value = Math.min(
+        items.length - 1,
+        highlightedIndex.value + 1
+      );
+      return;
+    }
+    if (intent === "prev") {
+      highlightedIndex.value = Math.max(0, highlightedIndex.value - 1);
+      return;
+    }
+    if (intent === "first") {
+      highlightedIndex.value = 0;
+      return;
+    }
+    if (intent === "last") {
+      highlightedIndex.value = items.length - 1;
+      return;
+    }
   },
   { orientation }
 );
 
-watch(isOpen, (visible) => {
-  if (!visible) {
-    triggerEl.value?.focus();
-    highlightedIndex.value = -1;
-  } else {
+// Handle dropdown visibility
+watch(isVisible, (visible) => {
+  if (visible) {
     nextTick(() => {
-      if (collection.elements.value.length > 0) {
-        highlightedIndex.value = 0;
-      }
-    });
-  }
-});
-
-// Handle keyboard navigation
-useEventListener(triggerEl, "keydown", (e: KeyboardEvent) => {
-  if (e.key === "Enter") {
-    e.preventDefault();
-    const item = activeListItem.value;
-    if (item) {
-      emit("update:modelValue", item.value);
-      group.select(item.value);
-      toggle();
-    }
-    return;
-  }
-
-  if (e.altKey) {
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      toggle();
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      isOpen.value = false;
-    }
-    return;
-  }
-
-  if (!isOpen.value && e.key === "ArrowDown") {
-    e.preventDefault();
-    toggle();
-    return;
-  }
-
-  if (!isOpen.value) return;
-
-  switch (e.key) {
-    case "Home":
-      e.preventDefault();
       highlightedIndex.value = 0;
-      break;
-    case "End":
-      e.preventDefault();
-      highlightedIndex.value = collection.elements.value.length - 1;
-      break;
-    case "PageUp":
-      e.preventDefault();
-      highlightedIndex.value = Math.max(
-        0,
-        highlightedIndex.value - props.pageSize
-      );
-      break;
-    case "PageDown":
-      e.preventDefault();
-      highlightedIndex.value = Math.min(
-        collection.elements.value.length - 1,
-        highlightedIndex.value + props.pageSize
-      );
-      break;
+    });
+  } else {
+    highlightedIndex.value = -1;
   }
 });
 </script>
@@ -139,9 +115,9 @@ useEventListener(triggerEl, "keydown", (e: KeyboardEvent) => {
     ref="triggerEl"
     role="combobox"
     aria-autocomplete="list"
-    :aria-activedescendant="activeListItem?.uid"
+    :aria-activedescendant="activeDescendentID"
     :aria-controls="listboxID"
-    :aria-expanded="isOpen"
+    :aria-expanded="isVisible"
     :id="triggerID"
     :value="props.modelValue"
     :aria-labelledby="props.labelledBy"
@@ -149,6 +125,5 @@ useEventListener(triggerEl, "keydown", (e: KeyboardEvent) => {
     :aria-required="props.required"
     :aria-invalid="props.invalid"
     @input="handleInput"
-    @click="toggle"
   />
 </template>
