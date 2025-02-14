@@ -75,7 +75,7 @@ function setActiveElement(currID?: string, prevID?: string): void {
   }
 }
 
-function refreshSelection(items: HTMLElement[]): void {
+function refreshSelection(): void {
   if (!listboxEl.value) return;
 
   // Apply current selection state

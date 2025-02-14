@@ -1,6 +1,7 @@
 <script lang="ts">
 interface ComboboxListItemProps {
   disabled?: boolean;
+  textContent: string;
   value: string;
 }
 </script>
@@ -20,6 +21,7 @@ const id = `${listboxID}-${props.value}`;
     :id="id"
     :data-vex-value="value"
     :aria-disabled="props.disabled"
+    :data-vex-text-content="props.textContent"
   >
     <slot :id="id" />
   </li>

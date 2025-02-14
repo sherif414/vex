@@ -1,6 +1,5 @@
 <script lang="ts">
 export interface ComboboxInputProps {
-  modelValue?: string;
   label?: string;
   labelledBy?: string;
   description?: string;
@@ -21,8 +20,6 @@ const props = withDefaults(defineProps<ComboboxInputProps>(), {
   pageSize: 5,
   persistHighlight: false,
 });
-
-const emit = defineEmits<{ "update:modelValue": [value?: string] }>();
 
 const {
   triggerID,
@@ -46,8 +43,10 @@ const {
 
 const handleInput = (e: Event) => {
   const target = e.target as HTMLInputElement;
-  emit("update:modelValue", target.value);
+  modelValue.value = target.value;
 };
+
+const modelValue = defineModel<string | undefined>();
 
 useEventListener(triggerEl, "keydown", (e: KeyboardEvent) => {
   if (disabled.value || readonly.value) return;
@@ -101,22 +100,30 @@ useKeyIntent(
   { orientation }
 );
 
-// Handle dropdown visibility
 watch(isVisible, (visible) => {
+  // When combobox panel becomes visible
   if (visible) {
     nextTick(() => {
       const hasSelectedValue = group.selected.value.length;
+
       if (!hasSelectedValue || multiselect.value) {
         highlightedIndex.value = 0;
-      } else {
-        const el = listboxEl.value?.querySelector<HTMLElement>(
-          `[role="option"][data-vex-value="${group.selected.value[0]}"]`
-        );
-        highlightedIndex.value = el ? listItems.value.indexOf(el) ?? 0 : 0;
+        return;
       }
+
+      const selectedValue = group.selected.value[0];
+      const selectedElement = listboxEl.value?.querySelector<HTMLElement>(
+        `[role="option"][data-vex-value="${selectedValue}"]`
+      );
+
+      // Default to first item if selected element not found
+      highlightedIndex.value = selectedElement
+        ? listItems.value.indexOf(selectedElement)
+        : 0;
     });
   } else {
     highlightedIndex.value = -1;
+    modelValue.value = getSelectedLabel();
   }
 });
 
@@ -143,6 +150,17 @@ function handleFocus() {
     show();
   }
 }
+
+function getSelectedLabel(): string | undefined {
+  if (!group.selected.value.length) return undefined;
+
+  const selectedValue = group.selected.value[0];
+  const selectedElement = listboxEl.value?.querySelector<HTMLElement>(
+    `[role="option"][data-vex-value="${selectedValue}"]`
+  );
+
+  return selectedElement?.dataset.vexTextContent?.trim();
+}
 </script>
 
 <template>
@@ -155,7 +173,7 @@ function handleFocus() {
     :aria-controls="listboxID"
     :aria-expanded="isVisible"
     :id="triggerID"
-    :value="props.modelValue"
+    :value="modelValue"
     :aria-labelledby="props.labelledBy"
     :aria-describedby="props.description"
     :aria-required="props.required"

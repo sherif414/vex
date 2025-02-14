@@ -19,7 +19,7 @@ const COMBOBOX_INJECTION_KEY = Symbol() as InjectionKey<{
   multiselect: Ref<boolean>;
   group: SelectionGroup<string>;
   scrollBehavior: Ref<ScrollBehavior>;
-  isVisible: Readonly<Ref<boolean>>;
+  isVisible: ComputedRef<boolean>;
   show: () => void;
   hide: () => void;
   highlightedIndex: Ref<number>;
@@ -80,7 +80,13 @@ const listboxEl = ref<HTMLElement | null>(null);
 const triggerEl = ref<HTMLInputElement | null>(null);
 const listItems = ref<HTMLElement[]>([]);
 
-const isVisible = ref(false);
+const _isVisible = ref(false);
+const isVisible = computed(() => {
+  if (disabled.value || readonly.value) {
+    return false;
+  }
+  return _isVisible.value;
+});
 const highlightedIndex = ref(-1);
 const activeDescendentID = computed<string | undefined>(() => {
   if (highlightedIndex.value < 0) return undefined;
@@ -106,11 +112,11 @@ const group = useSelectionGroup(modelValue, {
 const { hide, show } = useDelayedOpen(
   () => {
     if (isVisible.value) return;
-    isVisible.value = true;
+    _isVisible.value = true;
   },
   () => {
     if (!isVisible.value) return;
-    isVisible.value = false;
+    _isVisible.value = false;
   },
   {
     defaultShowDelay: showDelay,
