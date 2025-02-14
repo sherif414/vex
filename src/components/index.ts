@@ -5,23 +5,23 @@
 //   AccordionContent,
 //   AccordionTrigger,
 // } from "./accordion";
-export { Alert, AlertContent, AlertHeader } from "./alert";
+// export { Alert, AlertContent, AlertHeader } from "./alert";
 export { Primitive } from "./primitive";
 // export { Checkbox } from "./checkbox";
-export { Avatar, AvatarImage, AvatarFallback } from "./avatar";
+// export { Avatar, AvatarImage, AvatarFallback } from "./avatar";
 // export { Dialog } from "./dialog";
-export {
-  Autocomplete,
-  AutocompleteInput,
-  AutocompleteListItem,
-  AutocompleteList,
-} from "./autocomplete";
+// export {
+//   Autocomplete,
+//   AutocompleteInput,
+//   AutocompleteListItem,
+//   AutocompleteList,
+// } from "./autocomplete";
 export {
   ComboboxInput,
   ComboboxListItem,
   ComboboxListbox,
   ComboboxPanel,
-  ComboboxRoot,
+  Combobox as ComboboxRoot,
 } from "./combobox";
 // export {
 //   Menu,

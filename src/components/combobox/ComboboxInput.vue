@@ -7,17 +7,15 @@ export interface ComboboxInputProps {
   required?: boolean;
   invalid?: boolean;
   pageSize?: number;
-  disabled?: boolean;
-  readonly?: boolean;
   persistHighlight?: boolean;
 }
 </script>
 
 <script setup lang="ts">
 import { useEventListener, useKeyIntent } from "@/composables";
-import { nextTick, watch, ref } from "vue";
-import { useComboboxContext } from "./ComboboxContext";
 import { onClickOutside } from "@vueuse/core";
+import { nextTick, watch } from "vue";
+import { useComboboxContext } from "./Combobox.vue";
 
 const props = withDefaults(defineProps<ComboboxInputProps>(), {
   pageSize: 5,
@@ -39,6 +37,11 @@ const {
   activeDescendentID,
   orientation,
   listItems,
+  multiselect,
+  scrollBehavior,
+  showOnFocus,
+  disabled,
+  readonly,
 } = useComboboxContext("ComboboxInput");
 
 const handleInput = (e: Event) => {
@@ -47,7 +50,7 @@ const handleInput = (e: Event) => {
 };
 
 useEventListener(triggerEl, "keydown", (e: KeyboardEvent) => {
-  if (props.disabled || props.readonly) return;
+  if (disabled.value || readonly.value) return;
 
   if (e.key === "Enter") {
     if (!isVisible.value || highlightedIndex.value === -1) return;
@@ -57,6 +60,7 @@ useEventListener(triggerEl, "keydown", (e: KeyboardEvent) => {
     if (!highlightedItem) return;
     const value = highlightedItem.dataset.vexValue;
     value && group.select(value);
+    multiselect.value || hide();
   } else if (e.key === "Escape" || e.key === "Tab") {
     hide();
   } else if (e.key === "ArrowDown" && !isVisible.value) {
@@ -97,27 +101,18 @@ useKeyIntent(
   { orientation }
 );
 
-const lastHighlightedIndex = ref(-1);
-
-// Update last valid index when highlight changes and dropdown is visible
-watch(highlightedIndex, (index) => {
-  if (index !== -1 && isVisible.value) {
-    lastHighlightedIndex.value = index;
-  }
-});
-
 // Handle dropdown visibility
 watch(isVisible, (visible) => {
   if (visible) {
     nextTick(() => {
-      if (
-        props.persistHighlight &&
-        lastHighlightedIndex.value !== -1 &&
-        lastHighlightedIndex.value < listItems.value.length
-      ) {
-        highlightedIndex.value = lastHighlightedIndex.value;
-      } else {
+      const hasSelectedValue = group.selected.value.length;
+      if (!hasSelectedValue || multiselect.value) {
         highlightedIndex.value = 0;
+      } else {
+        const el = listboxEl.value?.querySelector<HTMLElement>(
+          `[role="option"][data-vex-value="${group.selected.value[0]}"]`
+        );
+        highlightedIndex.value = el ? listItems.value.indexOf(el) ?? 0 : 0;
       }
     });
   } else {
@@ -138,9 +133,16 @@ watch(highlightedIndex, (index) => {
     highlightedItem.scrollIntoView({
       block: "nearest",
       inline: "nearest",
+      behavior: scrollBehavior.value,
     });
   });
 });
+
+function handleFocus() {
+  if (showOnFocus.value) {
+    show();
+  }
+}
 </script>
 
 <template>
@@ -158,6 +160,10 @@ watch(highlightedIndex, (index) => {
     :aria-describedby="props.description"
     :aria-required="props.required"
     :aria-invalid="props.invalid"
+    :disabled="disabled"
+    :readonly="readonly"
     @input="handleInput"
+    @focus="handleFocus"
+    @blur="hide"
   />
 </template>

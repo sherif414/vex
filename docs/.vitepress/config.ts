@@ -27,9 +27,10 @@ export default defineConfig({
         {
           text: "Components",
           items: [
-            { text: "Accordion", link: "/components/accordion" },
-            { text: "Avatar", link: "/components/avatar" },
-            { text: "Autocomplete", link: "/components/autocomplete" },
+            // { text: "Accordion", link: "/components/accordion" },
+            // { text: "Avatar", link: "/components/avatar" },
+            // { text: "Autocomplete", link: "/components/autocomplete" },
+            { text: "Combobox", link: "/components/combobox" },
             // Add more components here
           ],
         },

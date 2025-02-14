@@ -1,34 +1,26 @@
 <script lang="ts">
 interface ComboboxListItemProps {
+  disabled?: boolean;
   value: string;
-  as?: string;
 }
 </script>
 
 <script setup lang="ts">
-import { computed } from "vue";
-import { useComboboxContext } from "./ComboboxContext";
-import { Primitive } from "@/components";
+import { useComboboxContext } from "./Combobox.vue";
 
-const props = withDefaults(defineProps<ComboboxListItemProps>(), {
-  as: "li",
-});
+const props = withDefaults(defineProps<ComboboxListItemProps>(), {});
 
-const { group, activeDescendentID, listboxID } =
-  useComboboxContext("ComboboxListItem");
-const id = computed(() => `${listboxID}-${props.value}`);
-const isActive = computed(() => activeDescendentID.value === id.value);
-const isSelected = computed(() => group.isSelected(props.value));
+const { listboxID } = useComboboxContext("ComboboxListItem");
+const id = `${listboxID}-${props.value}`;
 </script>
 
 <template>
-  <Primitive
+  <li
     role="option"
-    :as="props.as"
     :id="id"
     :data-vex-value="value"
-    @click="() => group.select(props.value)"
+    :aria-disabled="props.disabled"
   >
-    <slot :is-selected="isSelected" :is-active="isActive" :id="id" />
-  </Primitive>
+    <slot :id="id" />
+  </li>
 </template>

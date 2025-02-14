@@ -11,7 +11,7 @@ export interface ComboboxPanelProps {
 
 <script setup lang="ts">
 import { Primitive } from "@/components";
-import { useComboboxContext } from "./ComboboxContext";
+import { useComboboxContext } from "./Combobox.vue";
 import { useFloating } from "@/composables";
 import { ref } from "vue";
 import type { Placement } from "@floating-ui/dom";
