@@ -13,7 +13,7 @@ export interface ComboboxInputProps {
 <script setup lang="ts">
 import { useEventListener, useKeyIntent } from "@/composables";
 import { onClickOutside } from "@vueuse/core";
-import { nextTick, watch } from "vue";
+import { nextTick, onMounted, watch } from "vue";
 import { useComboboxContext } from "./Combobox.vue";
 
 const props = withDefaults(defineProps<ComboboxInputProps>(), {
@@ -125,6 +125,18 @@ watch(isVisible, async (visible) => {
     await nextTick();
     modelValue.value = getSelectedLabel();
   }
+});
+
+onMounted(() => {
+  // Watch for changes in selected values to update input in single select mode
+  watch(
+    group.selected,
+    () => {
+      if (multiselect.value) return;
+      modelValue.value = getSelectedLabel();
+    },
+    { immediate: true }
+  );
 });
 
 onClickOutside(listboxEl, hide, { ignore: [triggerEl] });
