@@ -100,29 +100,29 @@ useKeyIntent(
   { orientation }
 );
 
-watch(isVisible, (visible) => {
+watch(isVisible, async (visible) => {
   // When combobox panel becomes visible
   if (visible) {
-    nextTick(() => {
-      const hasSelectedValue = group.selected.value.length;
+    await nextTick();
+    const hasSelectedValue = group.selected.value.length;
 
-      if (!hasSelectedValue || multiselect.value) {
-        highlightedIndex.value = 0;
-        return;
-      }
+    if (!hasSelectedValue || multiselect.value) {
+      highlightedIndex.value = 0;
+      return;
+    }
 
-      const selectedValue = group.selected.value[0];
-      const selectedElement = listboxEl.value?.querySelector<HTMLElement>(
-        `[role="option"][data-vex-value="${selectedValue}"]`
-      );
+    const selectedValue = group.selected.value[0];
+    const selectedElement = listboxEl.value?.querySelector<HTMLElement>(
+      `[role="option"][data-vex-value="${selectedValue}"]`
+    );
 
-      // Default to first item if selected element not found
-      highlightedIndex.value = selectedElement
-        ? listItems.value.indexOf(selectedElement)
-        : 0;
-    });
+    // Default to first item if selected element not found
+    highlightedIndex.value = selectedElement
+      ? listItems.value.indexOf(selectedElement)
+      : 0;
   } else {
     highlightedIndex.value = -1;
+    await nextTick();
     modelValue.value = getSelectedLabel();
   }
 });
@@ -159,7 +159,7 @@ function getSelectedLabel(): string | undefined {
     `[role="option"][data-vex-value="${selectedValue}"]`
   );
 
-  return selectedElement?.dataset.vexTextContent?.trim();
+  return selectedElement?.dataset.vexTextContent;
 }
 </script>
 
