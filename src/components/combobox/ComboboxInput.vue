@@ -7,6 +7,7 @@ export interface ComboboxInputProps {
   invalid?: boolean;
   pageSize?: number;
   persistHighlight?: boolean;
+  displayValue?: (textContent: string) => string; // Changed prop to a function
 }
 </script>
 
@@ -19,6 +20,7 @@ import { useComboboxContext } from "./Combobox.vue";
 const props = withDefaults(defineProps<ComboboxInputProps>(), {
   pageSize: 5,
   persistHighlight: false,
+  // displayValue remains undefined if not provided
 });
 
 const {
@@ -166,13 +168,13 @@ function handleFocus() {
 
 function getSelectedLabel(): string | undefined {
   if (!group.selected.value.length) return undefined;
-
   const selectedValue = group.selected.value[0];
   const selectedElement = listboxEl.value?.querySelector<HTMLElement>(
     `[role="option"][data-vex-value="${selectedValue}"]`
   );
-
-  return selectedElement?.dataset.vexTextContent;
+  const textContent = selectedElement?.dataset.vexTextContent;
+  if (!textContent) return undefined;
+  return props.displayValue ? props.displayValue(textContent) : textContent;
 }
 
 function handleBlur(event: FocusEvent) {
