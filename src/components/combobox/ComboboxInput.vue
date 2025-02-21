@@ -20,7 +20,6 @@ import { useComboboxContext } from "./Combobox.vue";
 const props = withDefaults(defineProps<ComboboxInputProps>(), {
   pageSize: 5,
   persistHighlight: false,
-  // displayValue remains undefined if not provided
 });
 
 const {
