@@ -10,7 +10,7 @@ import DevTools from "vite-plugin-vue-devtools";
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [vue(), Unocss({}), vueJsx(), DevTools()],
+  plugins: [vue(), vueJsx()],
   build: {
     lib: {
       entry: resolve(__dirname, "src/index.ts"),
