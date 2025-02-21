@@ -1,6 +1,6 @@
 <script lang="ts">
 export interface ComboboxProps {
-  modelValue: string[];
+  modelValue?: string[];
   disabled?: boolean;
   readonly?: boolean;
   multiselect?: boolean;
@@ -40,6 +40,7 @@ export function useComboboxContext(component: string) {
 <script lang="ts" setup>
 import {
   useContext,
+  useControllableState,
   useDelayedOpen,
   useID,
   useSelectionGroup,
@@ -68,10 +69,7 @@ const emit = defineEmits<{
   "update:modelValue": [value: string[]];
 }>();
 
-const modelValue = computed({
-  get: () => props.modelValue,
-  set: (v) => emit("update:modelValue", v),
-});
+const modelValue = useControllableState(() => props.modelValue);
 
 // Internal state
 const inputValue = ref("");

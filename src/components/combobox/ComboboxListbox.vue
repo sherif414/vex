@@ -7,23 +7,14 @@ export interface ComboboxListboxProps {
 <script setup lang="ts">
 import { Primitive } from "@/components";
 import { useEventListener } from "@/composables";
-import { onMounted, watch } from "vue";
 import { useComboboxContext } from "./Combobox.vue";
 
 const props = withDefaults(defineProps<ComboboxListboxProps>(), {
   as: "ul",
 });
 
-const {
-  triggerID,
-  listboxEl,
-  listboxID,
-  group,
-  activeDescendentID,
-  multiselect,
-  hide,
-  listItems,
-} = useComboboxContext("ComboboxListbox");
+const { triggerID, listboxEl, listboxID, group, multiselect, hide, listItems } =
+  useComboboxContext("ComboboxListbox");
 
 // Event delegation for clicks
 useEventListener(listboxEl, "click", (e) => {
@@ -35,64 +26,9 @@ useEventListener(listboxEl, "click", (e) => {
 
   if (value) {
     group.select(value);
-    if (!multiselect.value) hide();
+    const multi = multiselect.value;
+    if (!multi) hide();
   }
-});
-
-function updateSelection(newValues: string[], oldValues: string[] = []): void {
-  if (!listboxEl.value) return;
-
-  const added = newValues.filter((value) => !oldValues.includes(value));
-  const removed = oldValues.filter((value) => !newValues.includes(value));
-
-  added.forEach((value) => {
-    const element = listboxEl.value?.querySelector<HTMLElement>(
-      `[role="option"][data-vex-value="${value}"]`
-    );
-    if (!element) return;
-    element.setAttribute("aria-selected", "true");
-    element.dataset.vexSelected = "true";
-  });
-
-  removed.forEach((value) => {
-    const element = listboxEl.value?.querySelector<HTMLElement>(
-      `[role="option"][data-vex-value="${value}"]`
-    );
-    if (!element) return;
-    element.setAttribute("aria-selected", "false");
-    element.dataset.vexSelected = "false";
-  });
-}
-
-function setActiveElement(currID?: string, prevID?: string): void {
-  if (prevID) {
-    const el = listboxEl.value?.querySelector<HTMLElement>(`#${prevID}`);
-    el && (el.dataset.vexActive = "false");
-  }
-  if (currID) {
-    const el = listboxEl.value?.querySelector<HTMLElement>(`#${currID}`);
-    el && (el.dataset.vexActive = "true");
-  }
-}
-
-function refreshSelection(): void {
-  if (!listboxEl.value) return;
-
-  // Apply current selection state
-  group.selected.value.forEach((value) => {
-    const element = listboxEl.value?.querySelector<HTMLElement>(
-      `[role="option"][data-vex-value="${value}"]`
-    );
-    if (!element) return;
-    element.setAttribute("aria-selected", "true");
-    element.dataset.vexSelected = "true";
-  });
-}
-
-onMounted(() => {
-  watch(group.selected, updateSelection, { immediate: true });
-  watch(activeDescendentID, setActiveElement, { immediate: true });
-  watch(listItems, refreshSelection);
 });
 </script>
 
