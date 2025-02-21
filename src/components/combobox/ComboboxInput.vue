@@ -7,7 +7,7 @@ export interface ComboboxInputProps {
   invalid?: boolean;
   pageSize?: number;
   persistHighlight?: boolean;
-  displayValue?: (textContent: string) => string; // Changed prop to a function
+  displayValue?: (textContent: string) => string;
 }
 </script>
 
@@ -103,7 +103,6 @@ useKeyIntent(
 );
 
 watch(isVisible, async (visible) => {
-  // When combobox panel becomes visible
   if (visible) {
     await nextTick();
     const hasSelectedValue = group.selected.value.length;
@@ -130,7 +129,6 @@ watch(isVisible, async (visible) => {
 });
 
 onMounted(() => {
-  // Watch for changes in selected values to update input in single select mode
   watch(
     group.selected,
     () => {
@@ -143,7 +141,6 @@ onMounted(() => {
 
 onClickOutside(panelEl, hide, { ignore: [triggerEl] });
 
-// Add scroll into view behavior when highlighted item changes
 watch(highlightedIndex, (index) => {
   if (index === -1 || !isVisible.value) return;
 
@@ -177,12 +174,10 @@ function getSelectedLabel(): string | undefined {
 }
 
 function handleBlur(event: FocusEvent) {
-  // Check if the new focused element is within our panel
   const relatedTarget = event.relatedTarget as HTMLElement;
   const isWithinPanel = panelEl.value?.contains(relatedTarget);
   const isInput = triggerEl.value === relatedTarget;
 
-  // Only hide if focus is not within our component
   if (!isWithinPanel && !isInput) {
     hide();
   }
