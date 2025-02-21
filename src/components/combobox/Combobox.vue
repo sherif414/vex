@@ -16,6 +16,7 @@ const COMBOBOX_INJECTION_KEY = Symbol() as InjectionKey<{
   listboxID: string;
   listboxEl: Ref<HTMLElement | null>;
   triggerEl: Ref<HTMLInputElement | null>;
+  panelEl: Ref<HTMLElement | null>;
   multiselect: Ref<boolean>;
   group: SelectionGroup<string>;
   scrollBehavior: Ref<ScrollBehavior>;
@@ -78,6 +79,7 @@ const listboxID = useID();
 const triggerID = useID();
 const listboxEl = ref<HTMLElement | null>(null);
 const triggerEl = ref<HTMLInputElement | null>(null);
+const panelEl = ref<HTMLElement | null>(null);
 const listItems = ref<HTMLElement[]>([]);
 
 const _isVisible = ref(false);
@@ -152,6 +154,7 @@ watch(listboxEl, (el) => {
 provide(COMBOBOX_INJECTION_KEY, {
   triggerID,
   triggerEl,
+  panelEl,
   listboxID,
   listboxEl,
   multiselect,

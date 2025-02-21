@@ -22,7 +22,8 @@ const props = withDefaults(defineProps<ComboboxPanelProps>(), {
   offset: 4,
 });
 
-const panelEl = ref<HTMLElement | null>(null);
+const { panelEl } = useComboboxContext("ComboboxPanel");
+
 const { isVisible, triggerEl } = useComboboxContext("ComboboxPanel");
 const { floatingStyles } = useFloating(triggerEl, panelEl, isVisible, {
   autoMinWidth: true,

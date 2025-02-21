@@ -26,6 +26,7 @@ const {
   triggerEl,
   listboxID,
   listboxEl,
+  panelEl,
   isVisible,
   show,
   hide,
@@ -139,7 +140,7 @@ onMounted(() => {
   );
 });
 
-onClickOutside(listboxEl, hide, { ignore: [triggerEl] });
+onClickOutside(panelEl, hide, { ignore: [triggerEl] });
 
 // Add scroll into view behavior when highlighted item changes
 watch(highlightedIndex, (index) => {
@@ -173,6 +174,18 @@ function getSelectedLabel(): string | undefined {
 
   return selectedElement?.dataset.vexTextContent;
 }
+
+function handleBlur(event: FocusEvent) {
+  // Check if the new focused element is within our panel
+  const relatedTarget = event.relatedTarget as HTMLElement;
+  const isWithinPanel = panelEl.value?.contains(relatedTarget);
+  const isInput = triggerEl.value === relatedTarget;
+
+  // Only hide if focus is not within our component
+  if (!isWithinPanel && !isInput) {
+    hide();
+  }
+}
 </script>
 
 <template>
@@ -194,6 +207,6 @@ function getSelectedLabel(): string | undefined {
     :readonly="readonly"
     @input="handleInput"
     @focus="handleFocus"
-    @blur="hide"
+    @blur="handleBlur"
   />
 </template>
