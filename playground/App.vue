@@ -1,6 +1,6 @@
 <template>
   <div class="grid place-items-center min-h-screen">
-    <ComboboxDemo />
+    <HoverDemo />
   </div>
 </template>
 
@@ -12,6 +12,7 @@
 // import AvatarDemo from "./AvatarDemo.vue";
 // import DialogDemo from "./DialogDemo.vue";
 // import AutocompleteDemo from "./demos/AutocompleteDemo.vue";
-import ComboboxDemo from "./demos/ComboboxDemo.vue";
+// import ComboboxDemo from "./demos/ComboboxDemo.vue";
 // import MenuDemo from "./MenuDemo.vue";
+import HoverDemo from "./demos/HoverDemo.vue";
 </script>
