@@ -31,20 +31,15 @@ export interface UseHoverOptions {
   ignoreTouchDevices?: Ref<boolean>;
 
   /**
-   * Whether to restart the hover delay when the reference element is
-   * clicked.
-   * @default true
+   * Callback function that is triggered when the open state changes.
+   * @param open - A boolean indicating whether the floating element is open.
    */
-  restartOnClickOutside?: Ref<boolean>;
-
   onOpenChange: (open: boolean) => void;
-  open: Readonly<Ref<boolean>>;
 }
 
 /**
  * Opens or closes the floating element when hovering over the reference element,
  * adding extra event handling to ensure good UX.
- * @see https://floating-ui.com/docs/useHover
  */
 export function useHover(target: Ref<HTMLElement | null>, options: UseHoverOptions) {
   const {
@@ -52,8 +47,6 @@ export function useHover(target: Ref<HTMLElement | null>, options: UseHoverOptio
     delay = ref(0),
     handleFocus = ref(true),
     ignoreTouchDevices = ref(true),
-    restartOnClickOutside = ref(true),
-    open,
     onOpenChange,
   } = options;
 
@@ -71,8 +64,8 @@ export function useHover(target: Ref<HTMLElement | null>, options: UseHoverOptio
   };
 
   const delayed = useDelayedOpen(show, hide, {
-    defaultShowDelay: typeof delay.value === "number" ? delay.value : delay.value.show,
-    defaultHideDelay: typeof delay.value === "number" ? delay.value : delay.value.hide,
+    defaultShowDelay: () => (typeof delay.value === "number" ? delay.value : delay.value.show),
+    defaultHideDelay: () => (typeof delay.value === "number" ? delay.value : delay.value.hide),
   });
 
   const handlePointerEnter = (event: PointerEvent) => {
