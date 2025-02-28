@@ -24,7 +24,6 @@ describe("useHover", () => {
     const targetRef = ref(target);
     const { isHovered } = scope.run(() =>
       useHover(targetRef, {
-        open: ref(false),
         onOpenChange,
       })
     )!;
@@ -35,7 +34,6 @@ describe("useHover", () => {
     const targetRef = ref(target);
     const { isHovered } = scope.run(() =>
       useHover(targetRef, {
-        open: ref(false),
         onOpenChange,
       })
     )!;
@@ -51,7 +49,6 @@ describe("useHover", () => {
     const targetRef = ref(target);
     const { isHovered } = scope.run(() =>
       useHover(targetRef, {
-        open: ref(false),
         onOpenChange,
       })
     )!;
@@ -69,7 +66,6 @@ describe("useHover", () => {
     const targetRef = ref(target);
     const { isHovered } = scope.run(() =>
       useHover(targetRef, {
-        open: ref(false),
         onOpenChange,
         ignoreTouchDevices: ref(true),
       })
@@ -86,7 +82,6 @@ describe("useHover", () => {
     const targetRef = ref(target);
     const { isHovered } = scope.run(() =>
       useHover(targetRef, {
-        open: ref(false),
         onOpenChange,
         handleFocus: ref(true),
       })
@@ -107,7 +102,6 @@ describe("useHover", () => {
     const targetRef = ref(target);
     const { isHovered } = scope.run(() =>
       useHover(targetRef, {
-        open: ref(false),
         onOpenChange,
         handleFocus: ref(false),
       })
@@ -126,7 +120,6 @@ describe("useHover", () => {
 
     scope.run(() =>
       useHover(targetRef, {
-        open: ref(false),
         onOpenChange,
         delay,
       })
@@ -154,7 +147,6 @@ describe("useHover", () => {
 
     scope.run(() =>
       useHover(targetRef, {
-        open: ref(false),
         onOpenChange,
       })
     )!;
@@ -171,7 +163,6 @@ describe("useHover", () => {
     const targetRef = ref(target);
     const { isHovered } = scope.run(() =>
       useHover(targetRef, {
-        open: ref(false),
         onOpenChange,
         enabled: ref(false),
       })
