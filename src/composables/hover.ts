@@ -50,7 +50,7 @@ export function useHover(target: Ref<HTMLElement | null>, options: UseHoverOptio
     onOpenChange,
   } = options;
 
-  const pointerTypeRef = ref<string | undefined>(undefined);
+  const pointerType = ref<string | undefined>(undefined);
   const isHovered = ref(false);
 
   const show = () => {
@@ -69,9 +69,9 @@ export function useHover(target: Ref<HTMLElement | null>, options: UseHoverOptio
   });
 
   const handlePointerEnter = (event: PointerEvent) => {
-    pointerTypeRef.value = event.pointerType;
+    pointerType.value = event.pointerType;
 
-    if (ignoreTouchDevices.value && !isMouseLikePointerType(pointerTypeRef.value)) {
+    if (ignoreTouchDevices.value && !isMouseLikePointerType(pointerType.value)) {
       return;
     }
 
@@ -80,7 +80,7 @@ export function useHover(target: Ref<HTMLElement | null>, options: UseHoverOptio
   };
 
   const handlePointerLeave = (event: PointerEvent) => {
-    if (ignoreTouchDevices.value && !isMouseLikePointerType(pointerTypeRef.value)) {
+    if (ignoreTouchDevices.value && !isMouseLikePointerType(pointerType.value)) {
       return;
     }
 
