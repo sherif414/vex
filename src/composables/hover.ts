@@ -19,7 +19,7 @@ export interface UseHoverOptions {
 
   /**
    * Whether to handle keyboard focus events.
-   * @default true
+   * @default false
    */
   handleFocus?: Ref<boolean>;
 
@@ -45,7 +45,7 @@ export function useHover(target: Ref<HTMLElement | null>, options: UseHoverOptio
   const {
     enabled = ref(true),
     delay = ref(0),
-    handleFocus = ref(true),
+    handleFocus = ref(false),
     ignoreTouchDevices = ref(true),
     onOpenChange,
   } = options;
