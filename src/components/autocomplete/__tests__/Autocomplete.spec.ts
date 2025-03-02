@@ -80,9 +80,7 @@ describe("Autocomplete", () => {
       await input.trigger("keydown", { key: "ArrowDown" });
       await input.trigger("keydown", { key: "PageDown" });
 
-      expect(wrapper.vm.highlightedIndex).toBe(
-        Math.min(4, defaultProps.items.length - 1)
-      );
+      expect(wrapper.vm.highlightedIndex).toBe(Math.min(4, defaultProps.items.length - 1));
     });
   });
 

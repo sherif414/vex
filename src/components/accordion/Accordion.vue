@@ -56,7 +56,7 @@ const group = useSelectionGroup(
   }),
   {
     multiselect: () => props.multiple,
-  }
+  },
 );
 const accordionEl = useTemplateRef("accordion");
 useRovingFocus(accordionEl, () => {

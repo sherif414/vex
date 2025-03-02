@@ -5,22 +5,22 @@ const props = withDefaults(
      * the rendered html tag
      * @default 'li'
      */
-    tag?: string
+    tag?: string;
 
     /**
      * whether the item is disabled
      */
-    disabled?: boolean
+    disabled?: boolean;
 
     /**
      * whether the item is selected
      */
-    selected?: boolean
+    selected?: boolean;
   }>(),
   {
-    tag: 'li',
-  }
-)
+    tag: "li",
+  },
+);
 </script>
 
 <template>

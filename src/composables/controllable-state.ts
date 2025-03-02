@@ -17,10 +17,7 @@ interface Options<T> {
  * @param {(newValue: T) => T} [options.setter] - A function to set the new value.
  * @returns {Ref<T>} A reactive reference to the state value.
  */
-export function useControllableState<T>(
-  getter: Getter<T>,
-  options: Options<T> = {}
-): Ref<T> {
+export function useControllableState<T>(getter: Getter<T>, options: Options<T> = {}): Ref<T> {
   const { propName = "modelValue", setter } = options;
   const isControlled = hasVModelBound(propName);
 
@@ -33,8 +30,7 @@ function hasVModelBound(propName: string) {
   const vm = getCurrentInstance();
   const kebabPropName = getKebabCase(propName);
 
-  const hasPropBound =
-    hasOwn(vm?.vnode.props, propName) || hasOwn(vm?.vnode.props, kebabPropName);
+  const hasPropBound = hasOwn(vm?.vnode.props, propName) || hasOwn(vm?.vnode.props, kebabPropName);
   const hasEventBound =
     hasOwn(vm?.vnode.props, `onUpdate:${propName}`) ||
     hasOwn(vm?.vnode.props, `onUpdate:${kebabPropName}`);

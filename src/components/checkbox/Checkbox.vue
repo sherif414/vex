@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref } from "vue";
 
 //----------------------------------------------------------------------------------------------------
 // 📌 component meta
@@ -7,47 +7,47 @@ import { computed, ref } from 'vue'
 
 defineOptions({
   inheritAttrs: false,
-})
+});
 
 const p = withDefaults(
   defineProps<{
     /**
      * whether the checkbox is checked
      */
-    modelValue?: boolean
+    modelValue?: boolean;
 
     /**
      * specifies the checkbox size
      * @default 'md'
      */
-    size?: 'sm' | 'md' | 'lg'
+    size?: "sm" | "md" | "lg";
 
-    class?: string
-    style?: string
+    class?: string;
+    style?: string;
   }>(),
   {
-    size: 'md',
-  }
-)
+    size: "md",
+  },
+);
 
 const emit = defineEmits<{
-  (event: 'update:modelValue', value: boolean): void
-}>()
+  (event: "update:modelValue", value: boolean): void;
+}>();
 
 //----------------------------------------------------------------------------------------------------
 
-const InputEl = ref<HTMLInputElement | null>(null)
+const InputEl = ref<HTMLInputElement | null>(null);
 
 const modifierClasses = computed(() => [
   p.class,
-  'vex-checkbox',
+  "vex-checkbox",
   `--size-${p.size}`,
-  { '--checked': p.modelValue },
-])
+  { "--checked": p.modelValue },
+]);
 
 defineExpose({
   InputEl,
-})
+});
 </script>
 
 <template>

@@ -34,7 +34,7 @@ const props = withDefaults(
   }>(),
   {
     preventScroll: true,
-  }
+  },
 );
 
 const emit = defineEmits<{
@@ -74,8 +74,7 @@ function hideBodyScrollbar(): void {
 
   dialogStore.openDialogsCount++;
   if (dialogStore.openDialogsCount === 1) {
-    const scrollBarWidth =
-      window.innerWidth - document.documentElement.clientWidth;
+    const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
     document.body.style.marginRight = `${scrollBarWidth}px`;
     document.body.style.overflow = "hidden";
   }
@@ -110,7 +109,7 @@ watch(
       focusTrap?.deactivate();
       emit("close");
     }
-  }
+  },
 );
 
 onUnmounted(() => {

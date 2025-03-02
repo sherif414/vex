@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref } from "vue";
 
 //----------------------------------------------------------------------------------------------------
 // 📌 component meta
@@ -10,33 +10,33 @@ const p = withDefaults(
     /**
      * specifies the current active radio value.
      */
-    modelValue?: string
+    modelValue?: string;
 
     /**
      * specifies the radio value attribute.
      */
-    value?: string
+    value?: string;
 
     /**
      * specifies the radio name attribute.
      */
-    name?: string
+    name?: string;
   }>(),
-  {}
-)
+  {},
+);
 
 const emit = defineEmits<{
-  'update:modelValue': [value: string]
-}>()
+  "update:modelValue": [value: string];
+}>();
 
 //----------------------------------------------------------------------------------------------------
 
-const InputEl = ref<HTMLInputElement | null>(null)
-const isChecked = computed(() => p.modelValue === p.value)
+const InputEl = ref<HTMLInputElement | null>(null);
+const isChecked = computed(() => p.modelValue === p.value);
 
 defineExpose({
   InputEl,
-})
+});
 </script>
 
 <template>

@@ -1,10 +1,6 @@
 import { ref } from "vue";
 import { describe, expect, it } from "vitest";
-import {
-  MultiSelect,
-  SingleSelect,
-  useSelectionGroup,
-} from "../selection-group";
+import { MultiSelect, SingleSelect, useSelectionGroup } from "../selection-group";
 
 // ----------------------------------------------------------------------------------------------------
 // 📌 SingleSelection

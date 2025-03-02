@@ -1,4 +1,10 @@
-import { Accordion, AccordionContent, AccordionHeader, AccordionItem, AccordionTrigger } from "../index";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionHeader,
+  AccordionItem,
+  AccordionTrigger,
+} from "../index";
 import { h, ref } from "vue";
 import { mount } from "cypress/vue";
 
@@ -20,10 +26,14 @@ function createWrapper(props = {}, items: AccordionItemConfig[] = []) {
             {
               default: ({ expanded }) => [
                 h(AccordionHeader, null, () => h(AccordionTrigger, null, () => item.trigger)),
-                h(AccordionContent, { style: { display: expanded ? undefined : "none" } }, () => item.content),
+                h(
+                  AccordionContent,
+                  { style: { display: expanded ? undefined : "none" } },
+                  () => item.content,
+                ),
               ],
-            }
-          )
+            },
+          ),
         ),
     },
   });
@@ -127,7 +137,9 @@ describe("Accordion", () => {
   });
 
   it("maintains focus when items are toggled", () => {
-    createWrapper({ deselectOnReselect: true }, [{ value: "item1", trigger: "Trigger 1", content: "Content 1" }]);
+    createWrapper({ deselectOnReselect: true }, [
+      { value: "item1", trigger: "Trigger 1", content: "Content 1" },
+    ]);
 
     cy.contains("button", "Trigger 1").as("trigger");
 
@@ -142,7 +154,9 @@ describe("Accordion", () => {
   });
 
   it("supports deselection when deselectOnReselect is true", () => {
-    createWrapper({ deselectOnReselect: true }, [{ value: "item1", trigger: "Trigger 1", content: "Content 1" }]);
+    createWrapper({ deselectOnReselect: true }, [
+      { value: "item1", trigger: "Trigger 1", content: "Content 1" },
+    ]);
 
     cy.contains("button", "Trigger 1").as("trigger");
     cy.contains("[role=region]", "Content 1").as("content");

@@ -80,10 +80,7 @@ useKeyIntent(
     e.preventDefault();
 
     if (intent === "next") {
-      highlightedIndex.value = Math.min(
-        listItems.value.length - 1,
-        highlightedIndex.value + 1
-      );
+      highlightedIndex.value = Math.min(listItems.value.length - 1, highlightedIndex.value + 1);
       return;
     }
     if (intent === "prev") {
@@ -99,7 +96,7 @@ useKeyIntent(
       return;
     }
   },
-  { orientation }
+  { orientation },
 );
 
 watch(isVisible, async (visible) => {
@@ -114,13 +111,11 @@ watch(isVisible, async (visible) => {
 
     const selectedValue = group.selected.value[0];
     const selectedElement = listboxEl.value?.querySelector<HTMLElement>(
-      `[role="option"][data-vex-value="${selectedValue}"]`
+      `[role="option"][data-vex-value="${selectedValue}"]`,
     );
 
     // Default to first item if selected element not found
-    highlightedIndex.value = selectedElement
-      ? listItems.value.indexOf(selectedElement)
-      : 0;
+    highlightedIndex.value = selectedElement ? listItems.value.indexOf(selectedElement) : 0;
   } else {
     highlightedIndex.value = -1;
     await nextTick();
@@ -135,7 +130,7 @@ onMounted(() => {
       if (multiselect.value) return;
       modelValue.value = getSelectedLabel();
     },
-    { immediate: true }
+    { immediate: true },
   );
 });
 
@@ -166,7 +161,7 @@ function getSelectedLabel(): string | undefined {
   if (!group.selected.value.length) return undefined;
   const selectedValue = group.selected.value[0];
   const selectedElement = listboxEl.value?.querySelector<HTMLElement>(
-    `[role="option"][data-vex-value="${selectedValue}"]`
+    `[role="option"][data-vex-value="${selectedValue}"]`,
   );
   const textContent = selectedElement?.dataset.vexTextContent;
   if (!textContent) return undefined;

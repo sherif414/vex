@@ -29,14 +29,10 @@ const { uid, disabled } = useCollection(collection, {
 
 const role = computed(() => {
   if (!isGrouped) return "menuitem";
-  return toValue(groupCtx.groupType) === "radio"
-    ? "menuitemradio"
-    : "menuitemcheckbox";
+  return toValue(groupCtx.groupType) === "radio" ? "menuitemradio" : "menuitemcheckbox";
 });
 
-const isChecked = computed(() =>
-  groupCtx?.selectionGroup.isSelected(props.value)
-);
+const isChecked = computed(() => groupCtx?.selectionGroup.isSelected(props.value));
 function onClick() {
   if (disabled.value) return;
   if (isGrouped) {

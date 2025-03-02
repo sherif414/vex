@@ -13,7 +13,7 @@ const Primitive = defineComponent(
   {
     name: "TestComponent",
     props: ["tag"],
-  }
+  },
 );
 
 describe("test usePrimitive functionalities", () => {
@@ -48,10 +48,7 @@ describe("test usePrimitive functionalities", () => {
         props: { tag: "template" },
         attrs: { "data-parent-attr": "", "data-testid": "testid" },
         slots: {
-          default: () => [
-            `<!-- this is a comment -->`,
-            h("div", { "data-child-attr": "" }),
-          ],
+          default: () => [`<!-- this is a comment -->`, h("div", { "data-child-attr": "" })],
         },
       });
 
@@ -74,11 +71,7 @@ describe("test usePrimitive functionalities", () => {
         props: { tag: "div" },
         attrs: { "data-parent-attr": "" },
         slots: {
-          default: () => [
-            h("div", "child-1"),
-            h("div", "child-2"),
-            h("div", "child-3"),
-          ],
+          default: () => [h("div", "child-1"), h("div", "child-2"), h("div", "child-3")],
         },
       });
       expect(screen.getByText("child-1")).toBeInTheDocument();
@@ -91,9 +84,7 @@ describe("test usePrimitive functionalities", () => {
     it("throws error for template with no children", () => {
       expect(() => {
         render(Primitive, { props: { tag: "template" } });
-      }).toThrowError(
-        COMPONENT_ERROR_MESSAGES.TEMPLATE.NO_CHILDREN("TestComponent")
-      );
+      }).toThrowError(COMPONENT_ERROR_MESSAGES.TEMPLATE.NO_CHILDREN("TestComponent"));
     });
 
     it("throws error for template with multiple children", () => {
@@ -102,9 +93,7 @@ describe("test usePrimitive functionalities", () => {
           props: { tag: "template" },
           slots: { default: [h("div"), h("div")] },
         });
-      }).toThrowError(
-        COMPONENT_ERROR_MESSAGES.TEMPLATE.MULTIPLE_CHILDREN("TestComponent", 2)
-      );
+      }).toThrowError(COMPONENT_ERROR_MESSAGES.TEMPLATE.MULTIPLE_CHILDREN("TestComponent", 2));
     });
 
     it("merges child class and attrs with parent's", () => {
@@ -190,7 +179,7 @@ describe("test usePrimitive functionalities", () => {
         slots: { default: () => h("div") },
       });
       expect(consoleSpy).toHaveBeenCalledWith(
-        COMPONENT_ERROR_MESSAGES.VOID_ELEMENT.HAS_CHILDREN("img")
+        COMPONENT_ERROR_MESSAGES.VOID_ELEMENT.HAS_CHILDREN("img"),
       );
       consoleSpy.mockRestore();
     });

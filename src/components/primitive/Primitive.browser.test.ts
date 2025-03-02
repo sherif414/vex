@@ -25,9 +25,7 @@ describe("Primitive", () => {
       slots: { default: () => "Click me" },
     });
     await expect.element(getByText("Click me")).toBeInTheDocument();
-    await expect
-      .element(getByRole("button"))
-      .toHaveAttribute("aria-label", "Test Button");
+    await expect.element(getByRole("button")).toHaveAttribute("aria-label", "Test Button");
   });
 
   it("renders template with single child correctly", async () => {
@@ -52,7 +50,7 @@ describe("Primitive", () => {
         slots: {
           default: () => null,
         },
-      })
+      }),
     ).toThrow(COMPONENT_ERROR_MESSAGES.NO_CHILDREN("Primitive"));
   });
 
@@ -61,7 +59,7 @@ describe("Primitive", () => {
       render(Primitive, {
         props: { as: "template" },
         slots: { default: () => [h("div"), h("div")] },
-      })
+      }),
     ).toThrow(COMPONENT_ERROR_MESSAGES.MULTIPLE_CHILDREN("Primitive", 2));
   });
 

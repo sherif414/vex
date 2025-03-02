@@ -36,12 +36,7 @@ provide(ALERT_INJECTION_KEY, {
 </script>
 
 <template>
-  <Primitive
-    :as="props.as"
-    role="alert"
-    :aria-labelledby="headerID"
-    :aria-describedby="contentID"
-  >
+  <Primitive :as="props.as" role="alert" :aria-labelledby="headerID" :aria-describedby="contentID">
     <slot />
   </Primitive>
 </template>

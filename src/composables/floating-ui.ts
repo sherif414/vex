@@ -56,10 +56,7 @@ export interface UseClickOptions {
  * Opens or closes the floating element when clicking the reference element.
  * @see https://floating-ui.com/docs/useClick
  */
-export function useClick(
-  target: Ref<HTMLElement | null>,
-  options: UseClickOptions
-) {
+export function useClick(target: Ref<HTMLElement | null>, options: UseClickOptions) {
   const {
     enabled = ref(true),
     open,
@@ -86,11 +83,7 @@ export function useClick(
     if (eventOption.value === "click") return;
     if (isMouseLikePointerType(pointerType, true) && ignoreMouse.value) return;
 
-    if (
-      open.value &&
-      toggle.value &&
-      (stickIfOpen.value ? openEventType === "mousedown" : true)
-    ) {
+    if (open.value && toggle.value && (stickIfOpen.value ? openEventType === "mousedown" : true)) {
       onOpenChange(false);
     } else {
       // Prevent stealing focus from the floating element
@@ -107,11 +100,7 @@ export function useClick(
 
     if (isMouseLikePointerType(pointerType, true) && ignoreMouse.value) return;
 
-    if (
-      open.value &&
-      toggle.value &&
-      (stickIfOpen.value ? openEventType === "click" : true)
-    ) {
+    if (open.value && toggle.value && (stickIfOpen.value ? openEventType === "click" : true)) {
       onOpenChange(false);
     } else {
       onOpenChange(true);
@@ -185,7 +174,7 @@ export function useClick(
 
       onWatcherCleanup(() => cleanup(el));
     },
-    { immediate: true }
+    { immediate: true },
   );
 
   // Cleanup on scope dispose
@@ -206,10 +195,7 @@ function isSpaceIgnored(element: Element | null) {
   return isTypeableElement(element);
 }
 
-export function isMouseLikePointerType(
-  pointerType: string | undefined,
-  strict?: boolean
-) {
+export function isMouseLikePointerType(pointerType: string | undefined, strict?: boolean) {
   // On some Linux machines with Chromium, mouse inputs return a `pointerType`
   // of "pen": https://github.com/floating-ui/floating-ui/issues/2015
   const values: Array<string | undefined> = ["mouse", "pen"];
@@ -223,8 +209,6 @@ function isTypeableElement(element: unknown): boolean {
   return (
     isHTMLElement(element) &&
     element.isContentEditable &&
-    element.matches(
-      "input:not([type='hidden']):not([disabled])," + "textarea:not([disabled])"
-    )
+    element.matches("input:not([type='hidden']):not([disabled])," + "textarea:not([disabled])")
   );
 }

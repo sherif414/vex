@@ -65,8 +65,7 @@ const activeDescendantID = computed(() => {
 
 watch(highlightedIndex, () => {
   if (highlightedIndex.value === -1 || !isVisible.value) return;
-  const currentActiveElement =
-    collection.elements.value[highlightedIndex.value];
+  const currentActiveElement = collection.elements.value[highlightedIndex.value];
   currentActiveElement?.focus();
 });
 

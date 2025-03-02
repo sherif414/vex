@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { useDelayedOpen, useFloating, useID, useInjectRef } from '@/composables'
-import { EXPOSED_EL } from '@/config'
-import type { Placement, Strategy } from '@floating-ui/vue'
-import { onClickOutside, useEventListener } from '@vueuse/core'
-import type { VNode } from 'vue'
-import { computed, nextTick, ref, toRef, watch } from 'vue'
+import { useDelayedOpen, useFloating, useID, useInjectRef } from "@/composables";
+import { EXPOSED_EL } from "@/config";
+import type { Placement, Strategy } from "@floating-ui/vue";
+import { onClickOutside, useEventListener } from "@vueuse/core";
+import type { VNode } from "vue";
+import { computed, nextTick, ref, toRef, watch } from "vue";
 
 //----------------------------------------------------------------------------------------------------
 // 📌 component meta
@@ -12,7 +12,7 @@ import { computed, nextTick, ref, toRef, watch } from 'vue'
 
 defineOptions({
   inheritAttrs: false,
-})
+});
 
 const p = withDefaults(
   defineProps<{
@@ -20,126 +20,126 @@ const p = withDefaults(
      * The dropdown aria role.
      * @default 'menu'
      */
-    role?: 'menu' | 'listbox'
+    role?: "menu" | "listbox";
 
     /**
      * Whether to disable visibility.
      */
-    disabled?: boolean
+    disabled?: boolean;
 
     /**
      * Sets the min-width of the Dropdown to the width of the Trigger element.
      */
-    autoMinWidth?: boolean
+    autoMinWidth?: boolean;
 
     /**
      * Controls the dropdown's placement direction.
      * @defaultValue 'bottom-start'
      */
-    placement?: Placement
+    placement?: Placement;
 
     /**
      * Controls the dropdown's display strategy.
      */
-    strategy?: Strategy
+    strategy?: Strategy;
 
     /**
      * The distance between the dropdown and the trigger.
      * @defaultValue 4
      */
-    offset?: number
+    offset?: number;
 
     /**
      * The time before the dropdown opens/closes
      * @defaultValue 150
      */
 
-    openDelay?: number
+    openDelay?: number;
     /**
      * The time before the dropdown opens/closes
      * @defaultValue 150
      */
-    closeDelay?: number
+    closeDelay?: number;
 
     /**
      * Specifies the action that opens the dropdown.
      */
-    triggerOn?: 'hover' | 'click'
+    triggerOn?: "hover" | "click";
 
     /**
      * the element to position the dropdown relative to
      */
-    triggerEl?: HTMLElement | null
+    triggerEl?: HTMLElement | null;
 
-    triggerId?: string
+    triggerId?: string;
 
-    dropdownId?: string
+    dropdownId?: string;
 
-    teleport?: boolean
+    teleport?: boolean;
   }>(),
   {
-    placement: 'bottom-start',
+    placement: "bottom-start",
     autoMinWidth: true,
     offset: 4,
-    role: 'menu',
+    role: "menu",
     openDelay: 150,
     closeDelay: 150,
-    triggerOn: 'click',
+    triggerOn: "click",
     triggerEl: null,
-  }
-)
+  },
+);
 
 const slots = defineSlots<{
-  default?: (props: {}) => any
-  trigger?: (props: {}) => VNode[]
-}>()
+  default?: (props: {}) => any;
+  trigger?: (props: {}) => VNode[];
+}>();
 
 const emit = defineEmits<{
-  open: [e: Event]
-}>()
+  open: [e: Event];
+}>();
 
 //----------------------------------------------------------------------------------------------------
 
-const DROPDOWN_ID = p.dropdownId || useID()
-const TRIGGER_ID = p.triggerId || useID()
-const role = toRef(() => p.role)
+const DROPDOWN_ID = p.dropdownId || useID();
+const TRIGGER_ID = p.triggerId || useID();
+const role = toRef(() => p.role);
 
-const DropdownEl = ref<HTMLElement | null>(null)
+const DropdownEl = ref<HTMLElement | null>(null);
 
-const __isOpen = ref(false)
+const __isOpen = ref(false);
 const isDropdownOpen = computed({
   get: () => __isOpen.value && !p.disabled,
   set: (val) => {
-    if (val !== __isOpen.value) __isOpen.value = val
+    if (val !== __isOpen.value) __isOpen.value = val;
   },
-})
+});
 
 //----------------------------------------------------------------------------------------------------
 // 📌 Trigger
 //----------------------------------------------------------------------------------------------------
 
-const TriggerSlotEl = ref<HTMLElement | null>(null)
-const TriggerEl = computed(() => (slots.trigger ? TriggerSlotEl.value : p.triggerEl))
-const TriggerComponent = useInjectRef(TriggerSlotEl, () => slots.trigger?.({}), 'Dropdown')
+const TriggerSlotEl = ref<HTMLElement | null>(null);
+const TriggerEl = computed(() => (slots.trigger ? TriggerSlotEl.value : p.triggerEl));
+const TriggerComponent = useInjectRef(TriggerSlotEl, () => slots.trigger?.({}), "Dropdown");
 
 watch(TriggerEl, (el) => {
-  if (!el) return
-  el.setAttribute('aria-expanded', `${isDropdownOpen.value}`)
-  el.setAttribute('aria-haspopup', `${role.value}`)
-  el.setAttribute('aria-controls', `${DROPDOWN_ID}`)
-  el.setAttribute('id', `${TRIGGER_ID}`)
-})
+  if (!el) return;
+  el.setAttribute("aria-expanded", `${isDropdownOpen.value}`);
+  el.setAttribute("aria-haspopup", `${role.value}`);
+  el.setAttribute("aria-controls", `${DROPDOWN_ID}`);
+  el.setAttribute("id", `${TRIGGER_ID}`);
+});
 
 watch(
   [isDropdownOpen, role],
   ([open, role]) => {
-    const el = TriggerEl.value
-    if (!el) return
-    el.setAttribute('aria-haspopup', `${role}`)
-    el.setAttribute('aria-expanded', `${open}`)
+    const el = TriggerEl.value;
+    if (!el) return;
+    el.setAttribute("aria-haspopup", `${role}`);
+    el.setAttribute("aria-expanded", `${open}`);
   },
-  { flush: 'post' }
-)
+  { flush: "post" },
+);
 
 //----------------------------------------------------------------------------------------------------
 // 📌 open / close
@@ -150,46 +150,46 @@ const { close: closeDropdown, open: openDropdown } = useDelayedOpen({
   close: () => (isDropdownOpen.value = false),
   defaultOpenDelay: () => p.openDelay,
   defaultCloseDelay: () => p.closeDelay,
-})
+});
 
-useEventListener(TriggerEl, 'keydown', (e: KeyboardEvent) => {
-  if (e.shiftKey || e.altKey || e.ctrlKey) return
+useEventListener(TriggerEl, "keydown", (e: KeyboardEvent) => {
+  if (e.shiftKey || e.altKey || e.ctrlKey) return;
 
   if (isOpenKey(e.key)) {
-    e.preventDefault()
-    isDropdownOpen.value || openDropdown()
-    emit('open', e)
-    e.stopImmediatePropagation()
-    return
+    e.preventDefault();
+    isDropdownOpen.value || openDropdown();
+    emit("open", e);
+    e.stopImmediatePropagation();
+    return;
   }
 
   if (isCloseKey(e.key)) {
-    e.preventDefault()
-    isDropdownOpen.value && closeDropdown()
-    nextTick(() => TriggerEl.value?.focus({ preventScroll: true }))
-    return
+    e.preventDefault();
+    isDropdownOpen.value && closeDropdown();
+    nextTick(() => TriggerEl.value?.focus({ preventScroll: true }));
+    return;
   }
-})
+});
 
-if (p.triggerOn === 'hover') {
-  useEventListener(TriggerEl, 'pointerenter', () => openDropdown())
-  useEventListener(TriggerEl, 'pointerleave', () => closeDropdown())
+if (p.triggerOn === "hover") {
+  useEventListener(TriggerEl, "pointerenter", () => openDropdown());
+  useEventListener(TriggerEl, "pointerleave", () => closeDropdown());
 
-  useEventListener(DropdownEl, 'pointerenter', () => openDropdown())
-  useEventListener(DropdownEl, 'pointerleave', () => closeDropdown())
+  useEventListener(DropdownEl, "pointerenter", () => openDropdown());
+  useEventListener(DropdownEl, "pointerleave", () => closeDropdown());
 }
 
-if (p.triggerOn === 'click') {
-  useEventListener(TriggerEl, 'pointerdown', () => openDropdown())
-  onClickOutside(DropdownEl, () => closeDropdown(), { ignore: [TriggerEl] })
+if (p.triggerOn === "click") {
+  useEventListener(TriggerEl, "pointerdown", () => openDropdown());
+  onClickOutside(DropdownEl, () => closeDropdown(), { ignore: [TriggerEl] });
 }
 
 function isOpenKey(key: string) {
-  return ['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(key)
+  return ["ArrowDown", "ArrowUp", "Enter", " "].includes(key);
 }
 
 function isCloseKey(key: string) {
-  return ['Escape'].includes(key)
+  return ["Escape"].includes(key);
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -198,14 +198,14 @@ const { floatingStyles } = useFloating(TriggerEl, DropdownEl, isDropdownOpen, {
   autoMinWidth: () => p.autoMinWidth,
   placement: () => p.placement,
   strategy: () => p.strategy,
-})
+});
 
 defineExpose({
   isDropdownOpen,
   DropdownEl,
   TriggerEl,
   [EXPOSED_EL]: TriggerEl,
-})
+});
 </script>
 
 <template>

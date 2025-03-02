@@ -56,7 +56,7 @@ useListHighlight(
   (index) => {
     highlightedIndex.value = index;
   },
-  { orientation }
+  { orientation },
 );
 
 watch(isVisible, (visible) => {
@@ -87,7 +87,7 @@ function handleTypeAhead(char: string) {
   const searchText = lastChar.value.toLowerCase();
   const items = collection.items.value;
   const matchIndex = items.findIndex((item) =>
-    item.label.value.toLowerCase().startsWith(searchText)
+    item.label.value.toLowerCase().startsWith(searchText),
   );
 
   if (matchIndex !== -1) {
@@ -127,16 +127,13 @@ useEventListener(inputEl, "keydown", (e: KeyboardEvent) => {
       break;
     case "PageUp":
       e.preventDefault();
-      highlightedIndex.value = Math.max(
-        0,
-        highlightedIndex.value - props.pageSize
-      );
+      highlightedIndex.value = Math.max(0, highlightedIndex.value - props.pageSize);
       break;
     case "PageDown":
       e.preventDefault();
       highlightedIndex.value = Math.min(
         collection.elements.value.length - 1,
-        highlightedIndex.value + props.pageSize
+        highlightedIndex.value + props.pageSize,
       );
       break;
     default:
@@ -162,7 +159,7 @@ useEventListener(inputEl, "keydown", (e: KeyboardEvent) => {
     :aria-describedby="props.description"
     :aria-required="props.required"
     :aria-invalid="props.invalid"
-    @input="(e)=> emit('update:modelValue', (e.target as HTMLInputElement).value)"
+    @input="(e) => emit('update:modelValue', (e.target as HTMLInputElement).value)"
     @keydown.down.prevent="show"
   />
 </template>

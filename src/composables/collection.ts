@@ -24,7 +24,7 @@ export function useCollection<T>(uid: string): Collection<T> {
       const el = ref.templateRef.value;
       el && arr.push(el);
       return arr;
-    }, [])
+    }, []),
   );
 
   const addItem = (item: Omit<CollectionItem<T>, "uid">): CollectionItem<T> => {

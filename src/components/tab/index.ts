@@ -1,2 +1,2 @@
-export { Tabs, TabTrigger } from './Tab'
-import './Tab.scss'
+export { Tabs, TabTrigger } from "./Tab";
+import "./Tab.scss";

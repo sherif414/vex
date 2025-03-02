@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useCollection, useSelectScope, useID } from '@/composables'
-import { IconCheck } from '@/icons'
-import { TransitionExpand } from '@/transitions'
-import { ref } from 'vue'
+import { useCollection, useSelectScope, useID } from "@/composables";
+import { IconCheck } from "@/icons";
+import { TransitionExpand } from "@/transitions";
+import { ref } from "vue";
 
 //----------------------------------------------------------------------------------------------------
 // 📌 component meta
@@ -10,39 +10,39 @@ import { ref } from 'vue'
 
 defineOptions({
   inheritAttrs: false,
-})
+});
 
 const p = withDefaults(
   defineProps<{
     /**
      * specifies the chip's unique value.
      */
-    value: string
+    value: string;
 
     /**
      * whether the chip is disabled
      */
-    disabled?: boolean
+    disabled?: boolean;
   }>(),
-  {}
-)
+  {},
+);
 
 defineEmits<{
-  'update:modelValue': [value: boolean]
-}>()
+  "update:modelValue": [value: boolean];
+}>();
 
 defineSlots<{
-  default: (props: {}) => any
-}>()
+  default: (props: {}) => any;
+}>();
 
 //----------------------------------------------------------------------------------------------------
 
-const ChipEl = ref<HTMLElement | null>(null)
-const chipID = useID()
+const ChipEl = ref<HTMLElement | null>(null);
+const chipID = useID();
 
-const { isSelected, setSelected } = useSelectScope(() => p.value)
+const { isSelected, setSelected } = useSelectScope(() => p.value);
 
-useCollection({ id: chipID, ref: ChipEl, disabled: () => p.disabled })
+useCollection({ id: chipID, ref: ChipEl, disabled: () => p.disabled });
 </script>
 
 <template>

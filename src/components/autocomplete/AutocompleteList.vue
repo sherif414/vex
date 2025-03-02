@@ -102,7 +102,7 @@ onMounted(() => {
     :style="floatingStyles"
   >
     <slot
-      :setListItems="(items: HTMLElement[]) => listItems = items"
+      :setListItems="(items: HTMLElement[]) => (listItems = items)"
       :currentFocusIndex="currentFocusIndex"
     ></slot>
   </Primitive>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed } from "vue";
 
 //----------------------------------------------------------------------------------------------------
 // 📌 component meta
@@ -7,40 +7,40 @@ import { computed } from 'vue'
 
 defineOptions({
   inheritAttrs: false,
-})
+});
 
 const p = withDefaults(
   defineProps<{
     /**
      * whether the switch is on/off
      */
-    modelValue?: boolean
+    modelValue?: boolean;
 
     /**
      * whether the switch is disabled
      */
-    disabled?: boolean
+    disabled?: boolean;
 
     /**
      * renders a small switch
      */
-    compact?: boolean
+    compact?: boolean;
   }>(),
-  {}
-)
+  {},
+);
 
 const emit = defineEmits<{
-  'update:modelValue': [value: boolean]
-}>()
+  "update:modelValue": [value: boolean];
+}>();
 
 //----------------------------------------------------------------------------------------------------
 
 const modifierClasses = computed(() => [
-  'vex-switch',
+  "vex-switch",
   {
-    '--compact': p.compact,
+    "--compact": p.compact,
   },
-])
+]);
 </script>
 
 <template>

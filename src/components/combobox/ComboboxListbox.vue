@@ -19,9 +19,7 @@ const { triggerID, listboxEl, listboxID, group, multiselect, hide, listItems } =
 // Event delegation for clicks
 useEventListener(listboxEl, "click", (e) => {
   const target = e.target as HTMLElement;
-  const option = target.closest<HTMLElement>(
-    '[role="option"]:not([aria-disabled="true"])'
-  );
+  const option = target.closest<HTMLElement>('[role="option"]:not([aria-disabled="true"])');
   const value = option?.dataset.vexValue;
 
   if (value) {

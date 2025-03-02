@@ -22,13 +22,7 @@ export function useMenuContext(component: string) {
 
 <script setup lang="ts">
 import { useContext, useID } from "@/composables";
-import {
-  provide,
-  ref,
-  type InjectionKey,
-  type MaybeRefOrGetter,
-  type Ref,
-} from "vue";
+import { provide, ref, type InjectionKey, type MaybeRefOrGetter, type Ref } from "vue";
 
 const props = withDefaults(defineProps<MenuProps>(), {
   orientation: "vertical",

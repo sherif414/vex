@@ -12,7 +12,7 @@ interface RovingFocusOptions {
 export function useRovingFocus(
   parent: MaybeRefOrGetter<HTMLElement | null>,
   children: MaybeRefOrGetter<HTMLElement[]>,
-  options: RovingFocusOptions = {}
+  options: RovingFocusOptions = {},
 ) {
   const { orientation, onEntryFocus } = options;
 
@@ -56,7 +56,7 @@ export function useRovingFocus(
         }
       }
     },
-    { orientation }
+    { orientation },
   );
 }
 

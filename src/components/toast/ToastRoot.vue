@@ -1,25 +1,25 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import Toast from './Toast.vue'
-import type { ToastItem } from './use-toast'
+import { ref } from "vue";
+import Toast from "./Toast.vue";
+import type { ToastItem } from "./use-toast";
 
 //----------------------------------------------------------------------------------------------------
 
-const items = ref<ToastItem[]>([])
+const items = ref<ToastItem[]>([]);
 
 function addToast(item: ToastItem) {
-  items.value.unshift(item)
+  items.value.unshift(item);
 }
 
 function removeToast(item: ToastItem) {
-  const _idx = items.value.findIndex((_item) => _item === item)
-  items.value.splice(_idx, 1)
+  const _idx = items.value.findIndex((_item) => _item === item);
+  items.value.splice(_idx, 1);
 }
 
 defineExpose({
   addToast,
   removeToast,
-})
+});
 </script>
 
 <template>

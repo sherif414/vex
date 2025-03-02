@@ -121,7 +121,7 @@ export function useHover(target: Ref<HTMLElement | null>, options: UseHoverOptio
 
       onWatcherCleanup(() => cleanup(el));
     },
-    { immediate: true }
+    { immediate: true },
   );
 
   // Cleanup on scope dispose

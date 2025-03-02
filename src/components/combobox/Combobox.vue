@@ -121,7 +121,7 @@ const { hide, show } = useDelayedOpen(
   {
     defaultShowDelay: showDelay,
     defaultHideDelay: hideDelay,
-  }
+  },
 );
 
 useMutationObserver(
@@ -129,23 +129,19 @@ useMutationObserver(
   () => {
     if (!listboxEl.value) return;
     listItems.value = Array.from(
-      listboxEl.value.querySelectorAll<HTMLElement>(
-        '[role="option"]:not([aria-disabled="true"])'
-      )
+      listboxEl.value.querySelectorAll<HTMLElement>('[role="option"]:not([aria-disabled="true"])'),
     );
   },
   {
     childList: true,
     subtree: true,
-  }
+  },
 );
 
 watch(listboxEl, (el) => {
   if (!el) return;
   listItems.value = Array.from(
-    el.querySelectorAll<HTMLElement>(
-      '[role="option"]:not([aria-disabled="true"])'
-    )
+    el.querySelectorAll<HTMLElement>('[role="option"]:not([aria-disabled="true"])'),
   );
 });
 

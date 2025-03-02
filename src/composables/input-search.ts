@@ -1,63 +1,63 @@
-import { watchDebounced } from '@vueuse/core'
-import { type Ref, readonly, ref } from 'vue'
-import { isFunction } from '@/utils'
+import { watchDebounced } from "@vueuse/core";
+import { type Ref, readonly, ref } from "vue";
+import { isFunction } from "@/utils";
 
 interface Options {
-  search?: (data: Suggestion[], query: string, limit: number) => Suggestion[]
-  debounce: () => number
-  onCleanup?: () => void
-  onAfterSearch?: () => void
-  onBeforeSearch?: () => void
-  maxDisplayedSuggestions: () => number
+  search?: (data: Suggestion[], query: string, limit: number) => Suggestion[];
+  debounce: () => number;
+  onCleanup?: () => void;
+  onAfterSearch?: () => void;
+  onBeforeSearch?: () => void;
+  maxDisplayedSuggestions: () => number;
 }
 
 interface Suggestion {
-  label: string
-  value: string
+  label: string;
+  value: string;
 }
 
 export function useInputSearch(
   query: Ref<string | undefined>,
   suggestions: Suggestion[] | ((query: string, limit: number) => Promise<Suggestion[]>),
-  options: Options
+  options: Options,
 ) {
-  const result = ref<Suggestion[]>([])
-  const isSearching = ref(false)
+  const result = ref<Suggestion[]>([]);
+  const isSearching = ref(false);
   const { search, debounce, onCleanup, onAfterSearch, onBeforeSearch, maxDisplayedSuggestions } =
-    options
+    options;
 
   watchDebounced(
     query,
     async (query, _, cleanup) => {
-      if (!query) return
+      if (!query) return;
 
-      onBeforeSearch?.()
+      onBeforeSearch?.();
 
       if (isFunction(suggestions)) {
-        onCleanup && cleanup(onCleanup)
-        isSearching.value = true
-        await suggestions(query, maxDisplayedSuggestions?.())
-        isSearching.value = false
+        onCleanup && cleanup(onCleanup);
+        isSearching.value = true;
+        await suggestions(query, maxDisplayedSuggestions?.());
+        isSearching.value = false;
       } else {
-        result.value = (search ?? defaultSearch)(suggestions, query, maxDisplayedSuggestions?.())
+        result.value = (search ?? defaultSearch)(suggestions, query, maxDisplayedSuggestions?.());
       }
 
-      onAfterSearch?.()
+      onAfterSearch?.();
     },
-    { debounce }
-  )
+    { debounce },
+  );
 
   return {
     result: readonly(result),
     isSearching: readonly(isSearching),
-  }
+  };
 }
 
 function defaultSearch(data: Suggestion[], query: string, limit: number): Suggestion[] {
-  const result = []
+  const result = [];
   for (const suggestion of data) {
-    if (suggestion.label.includes(query)) result.push(suggestion)
-    if (result.length >= limit) break
+    if (suggestion.label.includes(query)) result.push(suggestion);
+    if (result.length >= limit) break;
   }
-  return result
+  return result;
 }

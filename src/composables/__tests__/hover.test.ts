@@ -25,7 +25,7 @@ describe("useHover", () => {
     const { isHovered } = scope.run(() =>
       useHover(targetRef, {
         onOpenChange,
-      })
+      }),
     )!;
     expect(isHovered.value).toBe(false);
   });
@@ -35,7 +35,7 @@ describe("useHover", () => {
     const { isHovered } = scope.run(() =>
       useHover(targetRef, {
         onOpenChange,
-      })
+      }),
     )!;
 
     target?.dispatchEvent(new PointerEvent("pointerenter", { pointerType: "mouse" }));
@@ -50,7 +50,7 @@ describe("useHover", () => {
     const { isHovered } = scope.run(() =>
       useHover(targetRef, {
         onOpenChange,
-      })
+      }),
     )!;
 
     target?.dispatchEvent(new PointerEvent("pointerenter", { pointerType: "mouse" }));
@@ -68,7 +68,7 @@ describe("useHover", () => {
       useHover(targetRef, {
         onOpenChange,
         ignoreTouchDevices: ref(true),
-      })
+      }),
     )!;
 
     target?.dispatchEvent(new PointerEvent("pointerenter", { pointerType: "touch" }));
@@ -84,7 +84,7 @@ describe("useHover", () => {
       useHover(targetRef, {
         onOpenChange,
         handleFocus: ref(true),
-      })
+      }),
     )!;
 
     target?.dispatchEvent(new FocusEvent("focus"));
@@ -104,7 +104,7 @@ describe("useHover", () => {
       useHover(targetRef, {
         onOpenChange,
         handleFocus: ref(false),
-      })
+      }),
     )!;
 
     target?.dispatchEvent(new FocusEvent("focus"));
@@ -122,7 +122,7 @@ describe("useHover", () => {
       useHover(targetRef, {
         onOpenChange,
         delay,
-      })
+      }),
     )!;
 
     target?.dispatchEvent(new PointerEvent("pointerenter", { pointerType: "mouse" }));
@@ -148,7 +148,7 @@ describe("useHover", () => {
     scope.run(() =>
       useHover(targetRef, {
         onOpenChange,
-      })
+      }),
     )!;
 
     // Simulate unmount
@@ -165,7 +165,7 @@ describe("useHover", () => {
       useHover(targetRef, {
         onOpenChange,
         enabled: ref(false),
-      })
+      }),
     )!;
 
     target?.dispatchEvent(new PointerEvent("pointerenter", { pointerType: "mouse" }));

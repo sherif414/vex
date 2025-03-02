@@ -84,7 +84,7 @@ export function useListHighlight(
   children: Ref<HTMLElement[]>,
   highlightedIndex: Readonly<Ref<number>>,
   onHighlight: (index: number) => void,
-  options: ListHighlightOptions = {}
+  options: ListHighlightOptions = {},
 ): cleanupFn {
   return useKeyIntent(
     parent,
@@ -118,6 +118,6 @@ export function useListHighlight(
 
       onHighlight(newIndex);
     },
-    options
+    options,
   );
 }

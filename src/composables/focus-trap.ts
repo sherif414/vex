@@ -12,11 +12,10 @@ const trapStack: FocusTrap[] = [];
 
 export function useFocusTrap(
   target: MaybeRefOrGetter<HTMLElement | null | undefined>,
-  options: Options = {}
+  options: Options = {},
 ) {
   let trap: FocusTrap | null = null;
-  const createTrap = (el: HTMLElement) =>
-    createFocusTrap(el, { ...options, trapStack });
+  const createTrap = (el: HTMLElement) => createFocusTrap(el, { ...options, trapStack });
 
   if (isWatchable(target)) {
     watch(target, (el) => {

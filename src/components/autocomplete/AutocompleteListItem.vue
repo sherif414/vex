@@ -29,9 +29,7 @@ const props = withDefaults(defineProps<AutocompleteListItemProps>(), {
 });
 
 const listItemEl = ref<HTMLElement | null>(null);
-const { group, collection, activeListItem } = useAutocompleteContext(
-  "AutocompleteListItem"
-);
+const { group, collection, activeListItem } = useAutocompleteContext("AutocompleteListItem");
 
 const isSelected = computed(() => group.isSelected(props.value));
 const isActive = computed(() => activeListItem.value?.uid === item.uid);

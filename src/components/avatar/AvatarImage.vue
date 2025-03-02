@@ -38,7 +38,7 @@ watch(
     }
     img.src = props.src;
   },
-  { immediate: true }
+  { immediate: true },
 );
 </script>
 

@@ -1,9 +1,5 @@
 <script lang="ts">
-import {
-  type SelectionGroup,
-  useContext,
-  useSelectionGroup,
-} from "@/composables";
+import { type SelectionGroup, useContext, useSelectionGroup } from "@/composables";
 import type { Collection } from "@/composables/collection";
 import type { Orientation } from "@/types";
 import {

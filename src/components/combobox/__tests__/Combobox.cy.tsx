@@ -41,11 +41,7 @@ describe("Combobox", () => {
     cy.get('[role="combobox"]').focus();
     cy.get('[role="option"][data-vex-value="item1"]').click();
 
-    cy.get('[role="option"][data-vex-value="item1"]').should(
-      "have.attr",
-      "aria-selected",
-      "true"
-    );
+    cy.get('[role="option"][data-vex-value="item1"]').should("have.attr", "aria-selected", "true");
   });
 
   it("should allow multiple options to be selected when multiselect is enabled", () => {
@@ -55,16 +51,8 @@ describe("Combobox", () => {
     cy.get('[role="option"][data-vex-value="item1"]').click();
     cy.get('[role="option"][data-vex-value="item2"]').click();
 
-    cy.get('[role="option"][data-vex-value="item1"]').should(
-      "have.attr",
-      "aria-selected",
-      "true"
-    );
-    cy.get('[role="option"][data-vex-value="item2"]').should(
-      "have.attr",
-      "aria-selected",
-      "true"
-    );
+    cy.get('[role="option"][data-vex-value="item1"]').should("have.attr", "aria-selected", "true");
+    cy.get('[role="option"][data-vex-value="item2"]').should("have.attr", "aria-selected", "true");
   });
 
   it("should set aria-expanded to true when focused and showOnFocus is enabled", () => {
@@ -80,22 +68,14 @@ describe("Combobox", () => {
     cy.get('[role="combobox"]').focus();
     cy.get('[role="combobox"]').type("{downarrow}");
 
-    cy.get('[role="option"]')
-      .first()
-      .should("have.attr", "data-vex-active", "true");
+    cy.get('[role="option"]').first().should("have.attr", "data-vex-active", "true");
 
     cy.get('[role="combobox"]').type("{downarrow}");
-    cy.get('[role="option"]')
-      .eq(1)
-      .should("have.attr", "data-vex-active", "true");
+    cy.get('[role="option"]').eq(1).should("have.attr", "data-vex-active", "true");
 
     cy.get('[role="combobox"]').type("{enter}");
 
-    cy.get('[role="option"][data-vex-value="item2"]').should(
-      "have.attr",
-      "aria-selected",
-      "true"
-    );
+    cy.get('[role="option"][data-vex-value="item2"]').should("have.attr", "aria-selected", "true");
   });
 
   it("should keep aria-expanded false when clicking disabled combobox", () => {

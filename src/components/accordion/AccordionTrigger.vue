@@ -13,7 +13,8 @@ const props = withDefaults(defineProps<AccordionTriggerProps>(), {
   as: "button",
 });
 
-const { expand, collapse, contentID, isExpanded, triggerID, disabled } = useAccordionItemCtx("AccordionTrigger");
+const { expand, collapse, contentID, isExpanded, triggerID, disabled } =
+  useAccordionItemCtx("AccordionTrigger");
 function onClick() {
   if (isExpanded.value) {
     collapse();

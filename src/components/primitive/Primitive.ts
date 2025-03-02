@@ -5,10 +5,7 @@ interface PrimitiveProps {
   as: string;
 }
 
-export const Primitive: FunctionalComponent<PrimitiveProps> = (
-  props,
-  { slots, attrs }
-) => {
+export const Primitive: FunctionalComponent<PrimitiveProps> = (props, { slots, attrs }) => {
   if (props.as === "template") {
     const children = normalizeSlotNodes(normalizeChildren(slots.default?.()));
     const child = validateRootChild(children);
@@ -50,9 +47,7 @@ function validateRootChild(nodes: VNode[]): VNode {
   }
 
   if (nodes.length > 1) {
-    throw new Error(
-      COMPONENT_ERROR_MESSAGES.MULTIPLE_CHILDREN("Primitive", nodes.length)
-    );
+    throw new Error(COMPONENT_ERROR_MESSAGES.MULTIPLE_CHILDREN("Primitive", nodes.length));
   }
 
   return nodes[0];
