@@ -15,24 +15,24 @@ import { useAvatarContext } from "./Avatar.vue";
 
 const props = defineProps<AvatarImageProps>();
 
-const { setLoadingState } = useAvatarContext("AvatarImage");
+const { setLoadState } = useAvatarContext("AvatarImage");
 
 watch(
   () => props.src,
   () => {
     if (!props.src) {
-      setLoadingState("error");
+      setLoadState("error");
       return;
     }
 
-    setLoadingState("loading");
+    setLoadState("loading");
     const img = new Image();
     img.onload = () => {
       if (img.complete && img.naturalHeight > 0) {
-        setLoadingState("loaded");
+        setLoadState("loaded");
       }
     };
-    img.onerror = () => setLoadingState("error");
+    img.onerror = () => setLoadState("error");
     if (props.crossOrigin) {
       img.crossOrigin = props.crossOrigin;
     }

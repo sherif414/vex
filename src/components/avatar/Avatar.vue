@@ -1,11 +1,11 @@
 <script lang="ts">
-import { InjectionKey, Ref } from "vue";
+import type { InjectionKey, Ref } from "vue";
 import { useContext } from "@/composables";
 
 export type LoadState = "loading" | "error" | "idle" | "loaded";
 
 export const AVATAR_INJECTION_KEY = Symbol() as InjectionKey<{
-  setLoadingState: (state: LoadState) => void;
+  setLoadState: (state: LoadState) => void;
   loadState: Readonly<Ref<LoadState>>;
 }>;
 
@@ -29,11 +29,11 @@ const props = withDefaults(defineProps<AvatarProps>(), {
 
 const loadState = ref<LoadState>("idle");
 
-const setLoadingState = (state: LoadState) => {
+const setLoadState = (state: LoadState) => {
   loadState.value = state;
 };
 
-provide(AVATAR_INJECTION_KEY, { setLoadingState, loadState });
+provide(AVATAR_INJECTION_KEY, { setLoadState, loadState });
 </script>
 
 <template>
