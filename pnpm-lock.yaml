@@ -66,6 +66,9 @@ importers:
       npm-run-all2:
         specifier: ^7.0.2
         version: 7.0.2
+      prettier:
+        specifier: ^3.5.2
+        version: 3.5.2
       typescript:
         specifier: ~5.6.3
         version: 5.6.3
@@ -2435,6 +2438,11 @@ packages:
 
   preact@10.25.4:
     resolution: {integrity: sha512-jLdZDb+Q+odkHJ+MpW/9U5cODzqnB+fy2EiHSZES7ldV5LK7yjlVzTp7R8Xy6W6y75kfK8iWYtFVH7lvjwrCMA==}
+
+  prettier@3.5.2:
+    resolution: {integrity: sha512-lc6npv5PH7hVqozBR7lkBNOGXV9vMwROAPlumdBkX0wTbbzPu/U1hk5yL8p2pt4Xoc+2mkT8t/sow2YrV/M5qg==}
+    engines: {node: '>=14'}
+    hasBin: true
 
   pretty-bytes@5.6.0:
     resolution: {integrity: sha512-FFw039TmrBqFK8ma/7OL3sDz/VytdtJr044/QUJtH0wK9lb9jLq9tJyIxUwtQJHwar2BqtiA4iCWSwo9JLkzFg==}
@@ -5467,6 +5475,8 @@ snapshots:
       source-map-js: 1.2.1
 
   preact@10.25.4: {}
+
+  prettier@3.5.2: {}
 
   pretty-bytes@5.6.0: {}
 
