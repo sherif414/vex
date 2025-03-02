@@ -61,7 +61,7 @@ const group = useSelectionGroup(
 const accordionEl = useTemplateRef("accordion");
 useRovingFocus(accordionEl, () => {
   return collection.items.value.reduce<HTMLElement[]>((arr, { templateRef, triggerID }) => {
-    const triggerEl = templateRef.value?.querySelector<HTMLElement>(triggerID);
+    const triggerEl = templateRef.value?.querySelector<HTMLElement>(`#${triggerID}`);
     triggerEl && arr.push(triggerEl);
     return arr;
   }, []);
