@@ -1,12 +1,12 @@
 <template>
   <div class="grid place-items-center min-h-screen">
-    <HoverDemo />
+    <AccordionDemo />
   </div>
 </template>
 
 <script lang="ts" setup>
 // import BenchmarkDemo from "./BenchmarkDemo.vue";
-// import AccordionDemo from "./AccordionDemo.vue";
+import AccordionDemo from "./demos/AccordionDemo.vue";
 // import AlertDemo from "./AlertDemo.vue";
 // import CheckboxDemo from "./CheckboxDemo.vue";
 // import AvatarDemo from "./AvatarDemo.vue";
@@ -14,5 +14,5 @@
 // import AutocompleteDemo from "./demos/AutocompleteDemo.vue";
 // import ComboboxDemo from "./demos/ComboboxDemo.vue";
 // import MenuDemo from "./MenuDemo.vue";
-import HoverDemo from "./demos/HoverDemo.vue";
+// import HoverDemo from "./demos/HoverDemo.vue";
 </script>

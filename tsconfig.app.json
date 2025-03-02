@@ -1,15 +1,9 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
-  "include": [
-    "env.d.ts",
-    "src/**/*",
-    "src/**/*.vue",
-    "docs/**/*.ts",
-    "docs/**/*.vue",
-    "docs/**/*.md",
-    "cypress/**/*"
-  ],
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "docs/**/*.ts", "docs/**/*.vue", "docs/**/*.md", "cypress/**/*"],
   "exclude": ["src/**/__tests__/*"],
+  "jsx": "preserve",
+  "jsxImportSource": "vue",
   "vueCompilerOptions": {
     "vitePressExtensions": [".md"]
   },

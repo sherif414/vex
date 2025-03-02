@@ -1,29 +1,22 @@
 <script lang="ts">
 import type { SelectionGroup } from "@/composables";
-import type { Collection } from "@/composables/collection";
-import type { Getter } from "@/types";
-import { InjectionKey, Ref } from "vue";
 import { useContext } from "@/composables";
+import type { Collection } from "@/composables/use-collection";
+import type { InjectionKey, Ref } from "vue";
+
+export interface AccordionItem {
+  templateRef: Ref<HTMLElement | null>;
+  triggerID: string;
+  id: string;
+}
 
 export const ACCORDION_INJECTION_KEY = Symbol("accordion") as InjectionKey<{
   group: SelectionGroup<string>;
-  collection: Collection;
-}>;
-
-export const ACCORDION_ITEM_INJECTION_KEY = Symbol() as InjectionKey<{
-  contentID: string;
-  triggerID: string;
-  disabled: Getter<boolean>;
-  isExpanded: Ref<boolean>;
-  toggleExpansion: () => void;
+  collection: Collection<AccordionItem>;
 }>;
 
 export function useAccordionCtx(component: string) {
   return useContext(ACCORDION_INJECTION_KEY, "Accordion", component);
-}
-
-export function useAccordionItemCtx(component: string) {
-  return useContext(ACCORDION_ITEM_INJECTION_KEY, "AccordionItem", component);
 }
 
 export interface AccordionProps {
@@ -31,8 +24,6 @@ export interface AccordionProps {
   multiple?: boolean;
   /** The controlled expanded state of the accordion. */
   modelValue?: string[];
-  /** Allow an expanded item to be collapsed by clicking its trigger again. @default false */
-  deselectOnReselect?: boolean;
   /** The HTML element to render as. @default 'div' */
   as?: string;
 }
@@ -40,12 +31,9 @@ export interface AccordionProps {
 
 <script setup lang="ts">
 import { Primitive } from "@/components";
-import {
-  createCollection,
-  useControllableState,
-  useSelectionGroup,
-} from "@/composables";
-import { provide } from "vue";
+import { useControllableState, useRovingFocus, useSelectionGroup } from "@/composables";
+import { useCollection } from "@/composables/use-collection";
+import { provide, useTemplateRef } from "vue";
 
 const props = withDefaults(defineProps<AccordionProps>(), {
   multiple: false,
@@ -58,7 +46,7 @@ const emit = defineEmits<{
   (e: "update:modelValue", value: string[]): void;
 }>();
 
-const collection = createCollection("vex-accordion-item");
+const collection = useCollection<AccordionItem>();
 const group = useSelectionGroup(
   useControllableState(() => props.modelValue, {
     setter: (value: string[]) => {
@@ -68,15 +56,22 @@ const group = useSelectionGroup(
   }),
   {
     multiselect: () => props.multiple,
-    deselectOnReselect: () => props.deselectOnReselect,
   }
 );
+const accordionEl = useTemplateRef("accordion");
+useRovingFocus(accordionEl, () => {
+  return collection.items.value.reduce<HTMLElement[]>((arr, { templateRef, triggerID }) => {
+    const triggerEl = templateRef.value?.querySelector<HTMLElement>(triggerID);
+    triggerEl && arr.push(triggerEl);
+    return arr;
+  }, []);
+});
 
 provide(ACCORDION_INJECTION_KEY, { group, collection });
 </script>
 
 <template>
-  <Primitive :as="props.as">
+  <Primitive :as="props.as" ref="accordion">
     <slot />
   </Primitive>
 </template>
