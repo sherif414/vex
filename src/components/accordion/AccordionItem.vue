@@ -41,6 +41,11 @@ const props = withDefaults(defineProps<AccordionItemProps>(), {
   as: "div",
 });
 
+const emit = defineEmits<{
+  expand: [];
+  collapse: [];
+}>();
+
 const { group, collection } = useAccordionCtx("AccordionItem");
 const contentID = useID();
 const triggerID = useID();
@@ -62,14 +67,17 @@ if (props.initiallyExpanded) {
 }
 
 const isExpanded = computed(() => props.alwaysExpanded || group.isSelected(itemValue.value));
+
 const expand = () => {
   if (props.disabled || isExpanded.value) return;
   group.select(itemValue.value);
+  emit("expand");
 };
 
 const collapse = () => {
   if (!props.collapsible || props.disabled || !isExpanded.value) return;
   group.deselect(itemValue.value);
+  emit("collapse");
 };
 
 provide(ACCORDION_ITEM_INJECTION_KEY, {
