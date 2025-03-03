@@ -1,2 +1,2 @@
 export { default as Checkbox } from "./Checkbox.vue";
-import "./Checkbox.scss";
+export { default as CheckboxGroup } from "./CheckboxGroup.vue";
