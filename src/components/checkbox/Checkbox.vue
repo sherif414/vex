@@ -36,74 +36,53 @@ export interface CheckboxProps {
 </script>
 
 <script setup lang="ts">
-import { useControllableState } from "@/composables";
-import { computed, onMounted, ref, watch, type Ref } from "vue";
+import { useFormControl } from "@/composables";
+import { computed, useTemplateRef } from "vue";
 import { useCheckboxGroupContext } from "./CheckboxGroup.vue";
 
 const props = withDefaults(defineProps<CheckboxProps>(), {});
 const ctx = useCheckboxGroupContext();
 const isGrouped = !!ctx;
 
-const modelValue = useControllableState(() => props.modelValue);
-const inputRef = ref<HTMLInputElement | null>(null);
-const isChecked: Readonly<Ref<boolean>> = isGrouped
-  ? computed(() => ctx.group.isSelected(props.value))
-  : modelValue;
+const modelValue = !isGrouped
+  ? defineModel<boolean>({ default: false })
+  : computed<boolean>({
+      set: (v) => (v ? ctx.group.select(props.value) : ctx.group.deselect(props.value)),
+      get: () => ctx.group.isSelected(props.value),
+    });
 
-/**
- * indeterminate state cannot be set through html attributes in the template
- * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes
- */
-watch(
-  () => props.indeterminate,
-  (value) => {
-    if (inputRef.value) {
-      inputRef.value.indeterminate = value;
-    }
-  },
-);
+const checkboxRef = useTemplateRef("checkbox");
+const { isFormControl } = useFormControl(checkboxRef);
 
 function toggle() {
   if (props.disabled) return;
   modelValue.value = !modelValue.value;
 }
-
-onMounted(() => {
-  if (inputRef.value) {
-    inputRef.value.indeterminate = props.indeterminate;
-  }
-});
-
-defineExpose({
-  inputElement: inputRef,
-});
 </script>
 
 <template>
-  <div
+  <button
     @click="toggle"
     @keydown.space="toggle"
     @keydown.enter.prevent
+    ref="checkbox"
+    type="button"
     role="checkbox"
-    :aria-checked="props.indeterminate ? 'mixed' : isChecked"
+    :aria-checked="props.indeterminate ? 'mixed' : modelValue"
     :aria-disabled="props.disabled"
     :aria-required="props.required"
     :aria-invalid="props.validationState === 'invalid'"
-    tabindex="0"
   >
+    <slot />
     <input
-      ref="inputRef"
+      v-if="!isGrouped && isFormControl"
       type="checkbox"
-      :checked="isChecked"
-      :disabled="props.disabled"
-      :name="props.name"
       :value="props.value"
+      :checked="modelValue"
+      :name="props.name"
       :required="props.required"
-      :aria-checked="props.indeterminate ? 'mixed' : isChecked"
-      :aria-disabled="props.disabled"
-      :aria-required="props.required"
-      :aria-invalid="props.validationState === 'invalid'"
-      :autofocus="props.autoFocus"
+      :disabled="props.disabled"
+      aria-hidden="true"
       style="
         position: absolute;
         width: 1px;
@@ -116,6 +95,5 @@ defineExpose({
         border: 0;
       "
     />
-    <slot></slot>
-  </div>
+  </button>
 </template>

@@ -21,3 +21,4 @@ export { useTextDirection } from "./text-direction";
 export { useTimer } from "./timer";
 export { useVModel } from "./v-model";
 export { useRenderAsChild } from "./render-as-child";
+export { useFormControl } from "./form-control";
