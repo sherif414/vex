@@ -1,1 +1,1 @@
-export const EXPOSED_EL = "vex-reference-el";
+export const EXPOSED_EL = 'vex-reference-el';

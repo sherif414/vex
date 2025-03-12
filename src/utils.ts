@@ -1,13 +1,14 @@
-import { EXPOSED_EL } from "@/config";
-import type { MaybeRefOrGetter } from "@/types";
-import { isRef, type ComponentPublicInstance, type WatchSource } from "vue";
+import { EXPOSED_EL } from '@/config';
+import type { MaybeRefOrGetter } from '@/types';
+import { isRef, type ComponentPublicInstance, type WatchSource } from 'vue';
 
 // ----------------------------------------------------------------------------------------------------
 
 export const noop = () => {};
-export const isClient = typeof window !== "undefined";
-export const isString = (v: unknown): v is string => typeof v === "string";
-export const isFunction = (v: unknown): v is Function => v instanceof Function;
+export const isClient = typeof window !== 'undefined';
+export const isString = (v: unknown): v is string => typeof v === 'string';
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+export const isFunction = (v: unknown): v is (...args: any[]) => any => v instanceof Function;
 export const isArray = Array.isArray;
 export const isIOS = getIsIOS();
 export const isWatchable = <T>(v: MaybeRefOrGetter<T>): v is WatchSource<T> => {
@@ -25,7 +26,7 @@ export function getIsIOS() {
 }
 
 export function getRandomString(length: number): string {
-  let result = "";
+  let result = '';
   while (result.length < length) {
     const randomSubstring = Math.random().toString(36).substring(2);
     result += randomSubstring.slice(0, length - result.length);
@@ -35,7 +36,7 @@ export function getRandomString(length: number): string {
 
 export function getElementFromRef(
   vm: ComponentPublicInstance | Element | null,
-  component: string,
+  component: string
 ): HTMLElement | null {
   if (vm == null) return null;
   if (vm instanceof Element) return vm as HTMLElement;
@@ -45,14 +46,17 @@ export function getElementFromRef(
   throw new Error(`[vex] <${component}> has a non Element root child`);
 }
 
-export function getKebabCase(str = "") {
-  if (getKebabCase.cache.has(str)) return getKebabCase.cache.get(str)!;
-  const kebab = str
-    .replace(/[^a-z]/gi, "-")
-    .replace(/\B([A-Z])/g, "-$1")
+export function getKebabCase(input = ''): string {
+  const cached = getKebabCase.cache.get(input);
+  if (cached) return cached;
+
+  const kebabCase = input
+    .replace(/[^a-z]/gi, '-')
+    .replace(/\B([A-Z])/g, '-$1')
     .toLowerCase();
-  getKebabCase.cache.set(str, kebab);
-  return kebab;
+
+  getKebabCase.cache.set(input, kebabCase);
+  return kebabCase;
 }
 getKebabCase.cache = new Map<string, string>();
 

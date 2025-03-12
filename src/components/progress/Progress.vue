@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { animate, type AnimationControls } from "motion";
-import { onMounted, ref, watch, computed } from "vue";
+import { animate, type AnimationControls } from 'motion';
+import { onMounted, ref, watch, computed } from 'vue';
 
 //----------------------------------------------------------------------------------------------------
 // 📌 component meta
@@ -31,7 +31,7 @@ const p = withDefaults(
      * specifies the progress bar color.
      * @default 'primary'
      */
-    color?: "primary" | "success" | "danger" | "warning" | "info";
+    color?: 'primary' | 'success' | 'danger' | 'warning' | 'info';
 
     /**
      * specifies the progress aria-valuetext attribute
@@ -42,12 +42,12 @@ const p = withDefaults(
     value: 0,
     height: 3,
     duration: 300,
-    color: "primary",
-  },
+    color: 'primary',
+  }
 );
 
 const emit = defineEmits<{
-  (event: "finished"): void;
+  (event: 'finished'): void;
 }>();
 
 //----------------------------------------------------------------------------------------------------
@@ -69,22 +69,22 @@ onMounted(() => {
       animationControls = animate(
         progressEl.value,
         { width: [null, `${Math.min(val, 100)}%`] },
-        { duration: p.duration / 1000, easing: "linear" },
+        { duration: p.duration / 1000, easing: 'linear' }
       );
 
       animationControls.finished.then(() => {
         if (val === 100) {
-          emit("finished");
+          emit('finished');
         }
       });
     },
-    { immediate: true },
+    { immediate: true }
   );
 });
 
 //----------------------------------------------------------------------------------------------------
 
-const modifierClasses = computed(() => ["vex-progress", `--color-${p.color}`]);
+const modifierClasses = computed(() => ['vex-progress', `--color-${p.color}`]);
 
 defineExpose({
   resume: () => animationControls?.play(),

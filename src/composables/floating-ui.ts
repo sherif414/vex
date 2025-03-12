@@ -6,8 +6,8 @@ import {
   type ComputedRef,
   type Ref,
   onWatcherCleanup,
-} from "vue";
-import { useEventListener } from "@vueuse/core";
+} from 'vue';
+import { useEventListener } from '@vueuse/core';
 
 export interface UseClickOptions {
   /**
@@ -21,7 +21,7 @@ export interface UseClickOptions {
    * Keyboard clicks work as normal.
    * @default 'click'
    */
-  event?: Ref<"click" | "mousedown">;
+  event?: Ref<'click' | 'mousedown'>;
   /**
    * Whether to toggle the open state with repeated clicks.
    * @default true
@@ -49,7 +49,7 @@ export interface UseClickOptions {
   stickIfOpen?: Ref<boolean>;
   onOpenChange: (open: boolean) => void;
   open: ComputedRef<boolean>;
-  openEventType: "click" | "mousedown";
+  openEventType: 'click' | 'mousedown';
 }
 
 /**
@@ -62,7 +62,7 @@ export function useClick(target: Ref<HTMLElement | null>, options: UseClickOptio
     open,
     onOpenChange,
     openEventType,
-    event: eventOption = ref("click"),
+    event: eventOption = ref('click'),
     toggle = ref(true),
     ignoreMouse = ref(false),
     keyboardHandlers = true,
@@ -80,10 +80,10 @@ export function useClick(target: Ref<HTMLElement | null>, options: UseClickOptio
     // Ignore all buttons except for the "main" button.
     // https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button
     if (event.button !== 0) return;
-    if (eventOption.value === "click") return;
+    if (eventOption.value === 'click') return;
     if (isMouseLikePointerType(pointerType, true) && ignoreMouse.value) return;
 
-    if (open.value && toggle.value && (stickIfOpen.value ? openEventType === "mousedown" : true)) {
+    if (open.value && toggle.value && (stickIfOpen.value ? openEventType === 'mousedown' : true)) {
       onOpenChange(false);
     } else {
       // Prevent stealing focus from the floating element
@@ -93,14 +93,14 @@ export function useClick(target: Ref<HTMLElement | null>, options: UseClickOptio
   };
 
   const onClick = (event: MouseEvent) => {
-    if (eventOption.value === "mousedown" && pointerType) {
+    if (eventOption.value === 'mousedown' && pointerType) {
       pointerType = undefined;
       return;
     }
 
     if (isMouseLikePointerType(pointerType, true) && ignoreMouse.value) return;
 
-    if (open.value && toggle.value && (stickIfOpen.value ? openEventType === "click" : true)) {
+    if (open.value && toggle.value && (stickIfOpen.value ? openEventType === 'click' : true)) {
       onOpenChange(false);
     } else {
       onOpenChange(true);
@@ -114,13 +114,13 @@ export function useClick(target: Ref<HTMLElement | null>, options: UseClickOptio
       return;
     }
 
-    if (event.key === " " && !isSpaceIgnored(target.value)) {
+    if (event.key === ' ' && !isSpaceIgnored(target.value)) {
       // Prevent scrolling
       event.preventDefault();
       didKeyDownFire = true;
     }
 
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       if (open.value && toggle.value) {
         onOpenChange(false);
       } else {
@@ -139,7 +139,7 @@ export function useClick(target: Ref<HTMLElement | null>, options: UseClickOptio
       return;
     }
 
-    if (event.key === " " && didKeyDownFire) {
+    if (event.key === ' ' && didKeyDownFire) {
       didKeyDownFire = false;
       if (open.value && toggle.value) {
         onOpenChange(false);
@@ -153,11 +153,11 @@ export function useClick(target: Ref<HTMLElement | null>, options: UseClickOptio
   const cleanup = (el?: HTMLElement | null): void => {
     if (!el) return;
 
-    el.removeEventListener("pointerdown", onPointerdown);
-    el.removeEventListener("mousedown", onMousedown);
-    el.removeEventListener("click", onClick);
-    el.removeEventListener("keydown", onKeydown);
-    el.removeEventListener("keyup", onKeyup);
+    el.removeEventListener('pointerdown', onPointerdown);
+    el.removeEventListener('mousedown', onMousedown);
+    el.removeEventListener('click', onClick);
+    el.removeEventListener('keydown', onKeydown);
+    el.removeEventListener('keyup', onKeyup);
   };
 
   // Watch for target changes and enabled state
@@ -166,15 +166,15 @@ export function useClick(target: Ref<HTMLElement | null>, options: UseClickOptio
     ([el, isEnabled]) => {
       if (!el || !isEnabled) return;
 
-      el.addEventListener("pointerdown", onPointerdown);
-      el.addEventListener("mousedown", onMousedown);
-      el.addEventListener("click", onClick);
-      el.addEventListener("keydown", onKeydown);
-      el.addEventListener("keyup", onKeyup);
+      el.addEventListener('pointerdown', onPointerdown);
+      el.addEventListener('mousedown', onMousedown);
+      el.addEventListener('click', onClick);
+      el.addEventListener('keydown', onKeydown);
+      el.addEventListener('keyup', onKeyup);
 
       onWatcherCleanup(() => cleanup(el));
     },
-    { immediate: true },
+    { immediate: true }
   );
 
   // Cleanup on scope dispose
@@ -188,7 +188,7 @@ function isHTMLElement(element: unknown): element is HTMLElement {
 
 function isButtonTarget(event: KeyboardEvent) {
   const { target } = event;
-  return isHTMLElement(target) && target.tagName === "BUTTON";
+  return isHTMLElement(target) && target.tagName === 'BUTTON';
 }
 
 function isSpaceIgnored(element: Element | null) {
@@ -198,9 +198,9 @@ function isSpaceIgnored(element: Element | null) {
 export function isMouseLikePointerType(pointerType: string | undefined, strict?: boolean) {
   // On some Linux machines with Chromium, mouse inputs return a `pointerType`
   // of "pen": https://github.com/floating-ui/floating-ui/issues/2015
-  const values: Array<string | undefined> = ["mouse", "pen"];
+  const values: Array<string | undefined> = ['mouse', 'pen'];
   if (!strict) {
-    values.push("", undefined);
+    values.push('', undefined);
   }
   return values.includes(pointerType);
 }
@@ -209,6 +209,6 @@ function isTypeableElement(element: unknown): boolean {
   return (
     isHTMLElement(element) &&
     element.isContentEditable &&
-    element.matches("input:not([type='hidden']):not([disabled])," + "textarea:not([disabled])")
+    element.matches("input:not([type='hidden']):not([disabled])," + 'textarea:not([disabled])')
   );
 }

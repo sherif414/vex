@@ -1,8 +1,8 @@
-import type { Getter, MaybeRefOrGetter, Orientation } from "@/types";
-import { wrapArray } from "@/utils";
-import { toRef, toValue } from "vue";
-import { useEventListener } from ".";
-import { useKeyIntent } from "./key-intent";
+import type { Getter, MaybeRefOrGetter, Orientation } from '@/types';
+import { wrapArray } from '@/utils';
+import { toRef, toValue } from 'vue';
+import { useEventListener } from '.';
+import { useKeyIntent } from './key-intent';
 
 interface RovingFocusOptions {
   onEntryFocus?: (e: FocusEvent, focusFirst: (items: HTMLElement[]) => void) => void;
@@ -12,11 +12,11 @@ interface RovingFocusOptions {
 export function useRovingFocus(
   parent: MaybeRefOrGetter<HTMLElement | null>,
   children: MaybeRefOrGetter<HTMLElement[]>,
-  options: RovingFocusOptions = {},
+  options: RovingFocusOptions = {}
 ) {
   const { orientation, onEntryFocus } = options;
 
-  useEventListener(parent, "focus", (e: FocusEvent) => {
+  useEventListener(parent, 'focus', (e: FocusEvent) => {
     onEntryFocus ? onEntryFocus(e, focusFirst) : focusFirst(toValue(children));
   });
 
@@ -30,14 +30,14 @@ export function useRovingFocus(
       e.stopPropagation();
 
       switch (intent) {
-        case "next": {
+        case 'next': {
           const currFocusedItemIdx = elements.indexOf(e.target as HTMLElement);
           elements = wrapArray(elements, currFocusedItemIdx + 1);
           focusFirst(elements);
           break;
         }
 
-        case "prev": {
+        case 'prev': {
           elements.reverse();
           const currFocusedItemIdx = elements.indexOf(e.target as HTMLElement);
           elements = wrapArray(elements, currFocusedItemIdx + 1);
@@ -45,18 +45,18 @@ export function useRovingFocus(
           break;
         }
 
-        case "first": {
+        case 'first': {
           focusFirst(elements);
           break;
         }
 
-        case "last": {
+        case 'last': {
           focusFirst(elements.reverse());
           break;
         }
       }
     },
-    { orientation },
+    { orientation }
   );
 }
 

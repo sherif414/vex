@@ -1,7 +1,7 @@
 <script lang="ts">
-import { type SelectionGroup, useContext, useSelectionGroup } from "@/composables";
-import type { Collection } from "@/composables/collection";
-import type { Orientation } from "@/types";
+import { type SelectionGroup, useContext, useSelectionGroup } from '@/composables';
+import type { Collection } from '@/composables/collection';
+import type { Orientation } from '@/types';
 import {
   computed,
   type ComputedRef,
@@ -10,8 +10,8 @@ import {
   type Ref,
   ref,
   shallowRef,
-} from "vue";
-import type { ListItem } from "./AutocompleteListItem.vue";
+} from 'vue';
+import type { ListItem } from './AutocompleteListItem.vue';
 
 export interface AutocompleteProps {
   modelValue?: string[];
@@ -20,7 +20,7 @@ export interface AutocompleteProps {
   deselectOnReselect?: boolean;
   as?: string;
   /** Direction of keyboard navigation. @default 'vertical' */
-  orientation?: "vertical" | "horizontal";
+  orientation?: 'vertical' | 'horizontal';
   /** Label for the autocomplete input */
   label?: string;
   /** Whether the field is required */
@@ -62,7 +62,7 @@ export const AUTOCOMPLETE_INJECTION_KEY = Symbol() as InjectionKey<{
 }>;
 
 export function useAutocompleteContext(componentName: string) {
-  return useContext(AUTOCOMPLETE_INJECTION_KEY, "Autocomplete", componentName);
+  return useContext(AUTOCOMPLETE_INJECTION_KEY, 'Autocomplete', componentName);
 }
 </script>
 

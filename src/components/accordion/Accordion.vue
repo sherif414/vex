@@ -1,8 +1,8 @@
 <script lang="ts">
-import type { SelectionGroup } from "@/composables";
-import { useContext } from "@/composables";
-import type { Collection } from "@/composables/use-collection";
-import type { InjectionKey, Ref } from "vue";
+import type { SelectionGroup } from '@/composables';
+import { useContext } from '@/composables';
+import type { Collection } from '@/composables/use-collection';
+import type { InjectionKey, Ref } from 'vue';
 
 export interface AccordionItem {
   templateRef: Ref<HTMLElement | null>;
@@ -10,13 +10,13 @@ export interface AccordionItem {
   id: string;
 }
 
-export const ACCORDION_INJECTION_KEY = Symbol("accordion") as InjectionKey<{
+export const ACCORDION_INJECTION_KEY = Symbol('accordion') as InjectionKey<{
   group: SelectionGroup<string>;
   collection: Collection<AccordionItem>;
 }>;
 
 export function useAccordionCtx(component: string) {
-  return useContext(ACCORDION_INJECTION_KEY, "Accordion", component);
+  return useContext(ACCORDION_INJECTION_KEY, 'Accordion', component);
 }
 
 export interface AccordionProps {

@@ -25,7 +25,7 @@ const COMBOBOX_INJECTION_KEY = Symbol() as InjectionKey<{
   hide: () => void;
   highlightedIndex: Ref<number>;
   activeDescendentID: ComputedRef<string | undefined>;
-  orientation: Ref<"vertical" | "horizontal">;
+  orientation: Ref<'vertical' | 'horizontal'>;
   listItems: Ref<HTMLElement[]>;
   showOnFocus: Ref<boolean>;
   disabled: Ref<boolean>;
@@ -33,7 +33,7 @@ const COMBOBOX_INJECTION_KEY = Symbol() as InjectionKey<{
 }>;
 
 export function useComboboxContext(component: string) {
-  return useContext(COMBOBOX_INJECTION_KEY, "Combobox", component);
+  return useContext(COMBOBOX_INJECTION_KEY, 'Combobox', component);
 }
 </script>
 

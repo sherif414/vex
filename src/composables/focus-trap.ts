@@ -1,8 +1,8 @@
-import { isWatchable, remove } from "@/utils";
-import type { Options as $Options, FocusTrap } from "focus-trap";
-import { createFocusTrap } from "focus-trap";
-import type { MaybeRefOrGetter } from "vue";
-import { onScopeDispose, watch } from "vue";
+import { isWatchable, remove } from '@/utils';
+import type { Options as $Options, FocusTrap } from 'focus-trap';
+import { createFocusTrap } from 'focus-trap';
+import type { MaybeRefOrGetter } from 'vue';
+import { onScopeDispose, watch } from 'vue';
 
 interface Options extends $Options {
   immediate?: boolean;
@@ -12,7 +12,7 @@ const trapStack: FocusTrap[] = [];
 
 export function useFocusTrap(
   target: MaybeRefOrGetter<HTMLElement | null | undefined>,
-  options: Options = {},
+  options: Options = {}
 ) {
   let trap: FocusTrap | null = null;
   const createTrap = (el: HTMLElement) => createFocusTrap(el, { ...options, trapStack });

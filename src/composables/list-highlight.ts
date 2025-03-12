@@ -1,6 +1,6 @@
-import type { Fn, Orientation, TemplateRef } from "@/types";
-import type { MaybeRefOrGetter, Ref } from "vue";
-import { useKeyIntent } from ".";
+import type { Fn, Orientation, TemplateRef } from '@/types';
+import type { MaybeRefOrGetter, Ref } from 'vue';
+import { useKeyIntent } from '.';
 
 /**
  * Options for configuring list highlight behavior
@@ -84,7 +84,7 @@ export function useListHighlight(
   children: Ref<HTMLElement[]>,
   highlightedIndex: Readonly<Ref<number>>,
   onHighlight: (index: number) => void,
-  options: ListHighlightOptions = {},
+  options: ListHighlightOptions = {}
 ): cleanupFn {
   return useKeyIntent(
     parent,
@@ -96,19 +96,19 @@ export function useListHighlight(
 
       let newIndex: number;
       switch (intent) {
-        case "next":
+        case 'next':
           newIndex = currentIndex >= last ? 0 : currentIndex + 1;
           break;
 
-        case "prev":
+        case 'prev':
           newIndex = currentIndex <= 0 ? last : currentIndex - 1;
           break;
 
-        case "first":
+        case 'first':
           newIndex = 0;
           break;
 
-        case "last":
+        case 'last':
           newIndex = last;
           break;
 
@@ -118,6 +118,6 @@ export function useListHighlight(
 
       onHighlight(newIndex);
     },
-    options,
+    options
   );
 }

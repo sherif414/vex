@@ -1,5 +1,5 @@
-import { onScopeDispose, toValue } from "vue";
-import type { Fn, MaybeRefOrGetter } from "@/types";
+import { onScopeDispose, toValue } from 'vue';
+import type { Fn, MaybeRefOrGetter } from '@/types';
 
 interface Options {
   defaultShowDelay?: MaybeRefOrGetter<number | undefined>;

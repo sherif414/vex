@@ -1,14 +1,14 @@
-import { h, markRaw, render } from "vue";
-import type { VNode, Component } from "vue";
-import NotificationRoot from "./NotificationRoot.vue";
-import { useID } from "@/composables";
-import "./Notification.scss";
-import "./NotificationRoot.scss";
+import { h, markRaw, render } from 'vue';
+import type { VNode, Component } from 'vue';
+import NotificationRoot from './NotificationRoot.vue';
+import { useID } from '@/composables';
+import './Notification.scss';
+import './NotificationRoot.scss';
 
 export interface NotifyProps {
   title?: string | Component;
   body?: string | Component;
-  type?: "success" | "danger" | "warning" | "primary" | "info";
+  type?: 'success' | 'danger' | 'warning' | 'primary' | 'info';
   icon?: Component;
   customContent?: Component;
 }

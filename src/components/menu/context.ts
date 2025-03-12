@@ -1,7 +1,7 @@
-import { useContext } from "@/composables";
-import type { TemplateRef } from "@/composables/template-ref";
-import type { Signal, ComputableGetter, Setter, Fn, Getter } from "@/types";
-import { inject, type InjectionKey } from "vue";
+import { useContext } from '@/composables';
+import type { TemplateRef } from '@/composables/template-ref';
+import type { Signal, ComputableGetter, Setter, Fn, Getter } from '@/types';
+import { inject, type InjectionKey } from 'vue';
 
 //----------------------------------------------------------------------------------------------------
 // 📌 menu context
@@ -16,7 +16,7 @@ export type MenuContext = {
   ContentEl: TemplateRef;
   TRIGGER_ID: string;
   CONTENT_ID: string;
-  orientation: Getter<"vertical" | "horizontal">;
+  orientation: Getter<'vertical' | 'horizontal'>;
   isSubMenu: boolean;
   submenus: MenuContext[];
   parentMenu: MenuContext | null;
@@ -25,7 +25,7 @@ export type MenuContext = {
 export const MENU_CTX = Symbol() as InjectionKey<MenuContext>;
 
 export function injectMenuContext(component: string) {
-  return useContext(MENU_CTX, "Menu", component);
+  return useContext(MENU_CTX, 'Menu', component);
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ export const MENU_CONTENT_CTX = Symbol() as InjectionKey<{
 }>;
 
 export function injectContentContext(component: string) {
-  return useContext(MENU_CONTENT_CTX, "MenuContent", component);
+  return useContext(MENU_CONTENT_CTX, 'MenuContent', component);
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -60,7 +60,7 @@ export function injectTriggerContext() {
 
 export const MENU_GROUP = Symbol() as InjectionKey<{
   selection: [ComputableGetter<Selected>, Setter<Value>];
-  itemType: Getter<"menuitemcheckbox" | "menuitemradio">;
+  itemType: Getter<'menuitemcheckbox' | 'menuitemradio'>;
 }>;
 
 export function injectGroupContext() {

@@ -1,4 +1,4 @@
-import type { Ref } from "vue";
+import type { Ref } from 'vue';
 
 export type Fn = () => void;
 
@@ -11,7 +11,7 @@ export type RefOrGetter<T> = Ref<T> | Getter<T>;
 export type MaybeRefOrGetter<T> = RefOrGetter<T> | T;
 
 // utils
-export type Orientation = "vertical" | "horizontal";
-export type NavigationKey = "ArrowDown" | "ArrowUp" | "ArrowLeft" | "ArrowRight" | "Home" | "End";
-export type KeyIntent = "next" | "prev" | "last" | "first" | "show" | "hide";
+export type Orientation = 'vertical' | 'horizontal';
+export type NavigationKey = 'ArrowDown' | 'ArrowUp' | 'ArrowLeft' | 'ArrowRight' | 'Home' | 'End';
+export type KeyIntent = 'next' | 'prev' | 'last' | 'first' | 'show' | 'hide';
 export type TemplateRef<T extends HTMLElement = HTMLElement> = Ref<T | null>;

@@ -24,7 +24,7 @@ export const ACCORDION_ITEM_INJECTION_KEY = Symbol() as InjectionKey<{
 }>;
 
 export function useAccordionItemCtx(component: string) {
-  return useContext(ACCORDION_ITEM_INJECTION_KEY, "AccordionItem", component);
+  return useContext(ACCORDION_ITEM_INJECTION_KEY, 'AccordionItem', component);
 }
 </script>
 

@@ -1,5 +1,5 @@
-import { onScopeDispose } from "vue";
-import { noop, remove, isClient } from "@/utils";
+import { onScopeDispose } from 'vue';
+import { noop, remove, isClient } from '@/utils';
 
 type Listener = (e: KeyboardEvent) => void;
 
@@ -9,7 +9,7 @@ let isAttached = false;
 export function useEscapeKey(listener: Listener): () => void {
   if (!isClient) return noop;
   if (!isAttached) {
-    document.addEventListener("keydown", onEscape);
+    document.addEventListener('keydown', onEscape);
     isAttached = true;
   }
 
@@ -18,7 +18,7 @@ export function useEscapeKey(listener: Listener): () => void {
   const cleanup = () => {
     remove(listeners, listener);
     if (!listeners.length) {
-      document.removeEventListener("keydown", onEscape);
+      document.removeEventListener('keydown', onEscape);
       isAttached = false;
     }
   };
@@ -27,5 +27,5 @@ export function useEscapeKey(listener: Listener): () => void {
 }
 
 function onEscape(e: KeyboardEvent) {
-  if (e.key === "Escape") listeners.forEach((fn) => fn(e));
+  if (e.key === 'Escape') listeners.forEach((fn) => fn(e));
 }

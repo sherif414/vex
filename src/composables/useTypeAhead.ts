@@ -1,4 +1,4 @@
-import { ref, Ref } from "vue";
+import { ref, Ref } from 'vue';
 
 export interface TypeAheadOptions {
   items: Ref<string[]>;
@@ -16,11 +16,11 @@ export function useTypeAhead({
   selectedIndex,
   timeout = 500,
 }: TypeAheadOptions): UseTypeAhead {
-  const typedChars = ref("");
+  const typedChars = ref('');
   let resetTimer: NodeJS.Timeout | null = null;
 
   const resetTypeAhead = () => {
-    typedChars.value = "";
+    typedChars.value = '';
     if (resetTimer) {
       clearTimeout(resetTimer);
       resetTimer = null;

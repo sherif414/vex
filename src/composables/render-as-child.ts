@@ -8,7 +8,7 @@ import {
   useAttrs,
   useSlots,
   type VNode,
-} from "vue";
+} from 'vue';
 
 export const COMPONENT_ERROR_MESSAGES = {
   NO_CHILDREN: (componentName: string) =>
@@ -23,7 +23,7 @@ export const COMPONENT_ERROR_MESSAGES = {
  * @param props Props to pass to the component
  */
 export function useRenderAsChild(
-  slots?: Record<string, any>,
+  slots?: Record<string, any>
 ): (props?: Record<string, any>) => VNode {
   slots ??= useSlots();
   const attrs = useAttrs();
@@ -88,5 +88,5 @@ function validateRootChild(nodes: VNode[]): VNode {
 
 function getComponentName(): string {
   const instance = getCurrentInstance();
-  return instance?.type.name || instance?.parent?.type.name || "Unknown Component";
+  return instance?.type.name || instance?.parent?.type.name || 'Unknown Component';
 }

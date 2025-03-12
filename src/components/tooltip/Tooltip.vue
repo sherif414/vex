@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { arrowMiddleware, useArrow, useFloating, useID } from "@/composables";
-import { EXPOSED_EL } from "@/config";
-import type { Placement, Strategy } from "@floating-ui/vue";
-import { useEventListener } from "@vueuse/core";
-import type { ComponentPublicInstance, VNode, VNodeTypes } from "vue";
-import { Fragment, cloneVNode, computed, ref } from "vue";
+import { arrowMiddleware, useArrow, useFloating, useID } from '@/composables';
+import { EXPOSED_EL } from '@/config';
+import type { Placement, Strategy } from '@floating-ui/vue';
+import { useEventListener } from '@vueuse/core';
+import type { ComponentPublicInstance, VNode, VNodeTypes } from 'vue';
+import { Fragment, cloneVNode, computed, ref } from 'vue';
 
 //----------------------------------------------------------------------------------------------------
 // 📌 Component meta
@@ -20,13 +20,13 @@ const p = withDefaults(
      * specifies the tooltip's background color.
      * @defaultValue 'neutral'
      */
-    color?: "danger" | "warning" | "success" | "primary" | "accent" | "neutral";
+    color?: 'danger' | 'warning' | 'success' | 'primary' | 'accent' | 'neutral';
 
     /**
      * specifies the tooltip's variant.
      * @defaultValue 'filled'
      */
-    variant?: "filled" | "light";
+    variant?: 'filled' | 'light';
 
     /**
      * whether to hide the arrow.
@@ -58,11 +58,11 @@ const p = withDefaults(
   }>(),
   {
     openDelay: 0,
-    placement: "top",
-    strategy: "absolute",
-    color: "neutral",
-    variant: "filled",
-  },
+    placement: 'top',
+    strategy: 'absolute',
+    color: 'neutral',
+    variant: 'filled',
+  }
 );
 
 const slots = defineSlots<{
@@ -81,22 +81,22 @@ const ArrowEl = ref<HTMLElement | null>(null);
 // 📌 Trigger
 //----------------------------------------------------------------------------------------------------
 
-const INVALID_VNODE_TYPES: VNodeTypes[] = [Fragment, Comment, Text, "template"];
+const INVALID_VNODE_TYPES: VNodeTypes[] = [Fragment, Comment, Text, 'template'];
 
 const TriggerVNode = (): VNode => {
   const vNodes = slots.trigger?.({});
   if (!vNodes || vNodes?.length !== 1 || INVALID_VNODE_TYPES.includes(vNodes[0].type)) {
     throw new Error(
-      "[vex] <Tooltip> trigger slot requires exactly a single root child at all times",
+      '[vex] <Tooltip> trigger slot requires exactly a single root child at all times'
     );
   }
   return cloneVNode(
     vNodes[0],
     {
       ref: (vm) => (TriggerEl.value = getElementFromRef(vm)),
-      "aria-describedby": TOOLTIP_ID,
+      'aria-describedby': TOOLTIP_ID,
     },
-    true,
+    true
   );
 };
 
@@ -123,7 +123,7 @@ const { floatingStyles, middlewareData, placement } = useFloating(
     placement: () => p.placement,
     middleware: [arrowMiddleware(ArrowEl)],
     offset: 8,
-  },
+  }
 );
 
 const arrowStyles = useArrow(middlewareData, placement);
@@ -152,15 +152,15 @@ function close() {
   isTooltipVisible.value = false;
 }
 
-useEventListener(TriggerEl, "pointerenter", open);
-useEventListener(TriggerEl, "pointerleave", close);
+useEventListener(TriggerEl, 'pointerenter', open);
+useEventListener(TriggerEl, 'pointerleave', close);
 
-useEventListener(TriggerEl, "focus", open);
-useEventListener(TriggerEl, "blur", close);
+useEventListener(TriggerEl, 'focus', open);
+useEventListener(TriggerEl, 'blur', close);
 
 //----------------------------------------------------------------------------------------------------
 
-const modifierClasses = computed(() => ["vex-tooltip", `--c-${p.color}`, `--variant-${p.variant}`]);
+const modifierClasses = computed(() => ['vex-tooltip', `--c-${p.color}`, `--variant-${p.variant}`]);
 
 defineExpose({
   open,

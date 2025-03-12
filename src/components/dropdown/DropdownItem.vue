@@ -18,8 +18,8 @@ const props = withDefaults(
     selected?: boolean;
   }>(),
   {
-    tag: "li",
-  },
+    tag: 'li',
+  }
 );
 </script>
 

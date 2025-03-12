@@ -10,7 +10,7 @@ const MENU_DROPDOWN_CTX = Symbol() as InjectionKey<{
 }>;
 
 export function useMenuDropdownContext(componentName: string) {
-  return useContext(MENU_DROPDOWN_CTX, "MenuDropdown", componentName);
+  return useContext(MENU_DROPDOWN_CTX, 'MenuDropdown', componentName);
 }
 </script>
 

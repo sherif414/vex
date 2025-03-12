@@ -1,7 +1,7 @@
-import { type Ref, getCurrentInstance, shallowRef } from "vue";
-import { getKebabCase } from "@/utils";
-import { useVModel } from "./v-model";
-import type { Getter } from "@/types";
+import { type Ref, getCurrentInstance, shallowRef } from 'vue';
+import { getKebabCase } from '@/utils';
+import { useVModel } from './v-model';
+import type { Getter } from '@/types';
 
 interface Options<T> {
   propName?: string;
@@ -18,7 +18,7 @@ interface Options<T> {
  * @returns {Ref<T>} A reactive reference to the state value.
  */
 export function useControllableState<T>(getter: Getter<T>, options: Options<T> = {}): Ref<T> {
-  const { propName = "modelValue", setter } = options;
+  const { propName = 'modelValue', setter } = options;
   const isControlled = hasVModelBound(propName);
 
   return isControlled

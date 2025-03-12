@@ -1,12 +1,12 @@
-import type { FunctionalComponent, VNode } from "vue";
-import { cloneVNode, Comment, Fragment, h, Text } from "vue";
+import type { FunctionalComponent, VNode } from 'vue';
+import { cloneVNode, Comment, Fragment, h, Text } from 'vue';
 
 interface PrimitiveProps {
   as: string;
 }
 
 export const Primitive: FunctionalComponent<PrimitiveProps> = (props, { slots, attrs }) => {
-  if (props.as === "template") {
+  if (props.as === 'template') {
     const children = normalizeSlotNodes(normalizeChildren(slots.default?.()));
     const child = validateRootChild(children);
     return cloneVNode(child, attrs, true);
@@ -43,11 +43,11 @@ function normalizeSlotNodes(nodes: VNode[]): VNode[] {
 
 function validateRootChild(nodes: VNode[]): VNode {
   if (nodes.length === 0) {
-    throw new Error(COMPONENT_ERROR_MESSAGES.NO_CHILDREN("Primitive"));
+    throw new Error(COMPONENT_ERROR_MESSAGES.NO_CHILDREN('Primitive'));
   }
 
   if (nodes.length > 1) {
-    throw new Error(COMPONENT_ERROR_MESSAGES.MULTIPLE_CHILDREN("Primitive", nodes.length));
+    throw new Error(COMPONENT_ERROR_MESSAGES.MULTIPLE_CHILDREN('Primitive', nodes.length));
   }
 
   return nodes[0];

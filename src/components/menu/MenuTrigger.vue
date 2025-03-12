@@ -1,7 +1,7 @@
 <script lang="ts">
 interface MenuTriggerProps {
   as?: string;
-  interactionType?: "click" | "hover";
+  interactionType?: 'click' | 'hover';
 }
 </script>
 

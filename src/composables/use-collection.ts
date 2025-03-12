@@ -1,4 +1,4 @@
-import { shallowRef, type Ref } from "vue";
+import { shallowRef, type Ref } from 'vue';
 
 interface UseCollectionOptions<T> {
   /**

@@ -1,4 +1,4 @@
-import type { MaybeRefOrGetter } from "@/types";
+import type { MaybeRefOrGetter } from '@/types';
 import type {
   Middleware,
   MiddlewareData,
@@ -6,8 +6,8 @@ import type {
   Padding,
   Placement,
   Strategy,
-} from "@floating-ui/dom";
-import { arrow, autoUpdate, computePosition, flip, offset, shift, size } from "@floating-ui/dom";
+} from '@floating-ui/dom';
+import { arrow, autoUpdate, computePosition, flip, offset, shift, size } from '@floating-ui/dom';
 import {
   computed,
   onScopeDispose,
@@ -18,14 +18,14 @@ import {
   toValue,
   watch,
   type StyleValue,
-} from "vue";
+} from 'vue';
 
 export interface FloatingStyles {
   position: Strategy;
   top: string;
   left: string;
   transform?: string;
-  "will-change"?: "transform";
+  'will-change'?: 'transform';
 }
 
 export interface UseFloatingOptions {
@@ -69,10 +69,10 @@ export function useFloating(
   visible: MaybeRefOrGetter<boolean>,
   options: UseFloatingOptions = {
     middleware: [],
-    placement: "bottom-start",
-    strategy: "absolute",
+    placement: 'bottom-start',
+    strategy: 'absolute',
     offset: 4,
-  },
+  }
 ) {
   const FloatingEl = toRef(floating);
   const ReferenceEl = toRef(reference);
@@ -85,8 +85,8 @@ export function useFloating(
   const x = ref(0);
   const y = ref(0);
 
-  const newStrategy = ref(toValue(options.strategy) || "absolute");
-  const newPlacement = ref(toValue(options.placement) || "bottom-start");
+  const newStrategy = ref(toValue(options.strategy) || 'absolute');
+  const newPlacement = ref(toValue(options.placement) || 'bottom-start');
 
   const middlewareData = shallowRef<MiddlewareData>({});
   const isPositioned = ref(false);
@@ -109,11 +109,11 @@ export function useFloating(
         size({
           apply({ rects, elements }) {
             elements.floating.style.setProperty(
-              "--vex-auto-min-width",
-              `${Math.round(rects.reference.width)}px`,
+              '--vex-auto-min-width',
+              `${Math.round(rects.reference.width)}px`
             );
           },
-        }),
+        })
       );
     }
 
@@ -128,8 +128,8 @@ export function useFloating(
   const floatingStyles = computed(() => {
     const initialStyles = {
       position: newStrategy.value,
-      left: "0",
-      top: "0",
+      left: '0',
+      top: '0',
     };
 
     if (!isFloatingElVisible.value || !FloatingEl.value) return initialStyles;
@@ -141,7 +141,7 @@ export function useFloating(
       ...initialStyles,
       transform: `translate(${xVal}px, ${yVal}px)`,
       ...(getDPR(FloatingEl.value) >= 1.5 && {
-        willChange: "transform",
+        willChange: 'transform',
       }),
     };
   });
@@ -155,8 +155,8 @@ export function useFloating(
 
     computePosition(ReferenceEl.value, FloatingEl.value, {
       middleware: _middleware.value,
-      placement: placement.value || "bottom-start",
-      strategy: strategy.value || "absolute",
+      placement: placement.value || 'bottom-start',
+      strategy: strategy.value || 'absolute',
     }).then((position) => {
       x.value = position.x;
       y.value = position.y;
@@ -219,12 +219,12 @@ interface ArrowMiddlewareOptions {
  */
 export function arrowMiddleware(
   arrowEl: MaybeRefOrGetter<HTMLElement | null>,
-  options: ArrowMiddlewareOptions = {},
+  options: ArrowMiddlewareOptions = {}
 ) {
   const { padding } = options;
 
   return {
-    name: "arrow",
+    name: 'arrow',
     options: {},
     fn(args: MiddlewareState) {
       const element = toValue(arrowEl);
@@ -251,21 +251,21 @@ export function useArrow(options: {
     const x = _middlewareData.value.arrow?.x ?? null;
     const y = _middlewareData.value.arrow?.y ?? null;
 
-    const side = _placement.value.split("-")[0];
+    const side = _placement.value.split('-')[0];
     const staticSide =
       {
-        top: "bottom",
-        right: "left",
-        bottom: "top",
-        left: "right",
-      }[side] ?? "bottom";
+        top: 'bottom',
+        right: 'left',
+        bottom: 'top',
+        left: 'right',
+      }[side] ?? 'bottom';
 
     return {
-      position: "absolute",
-      left: x ? `${x}px` : "",
-      top: y ? `${y}px` : "",
+      position: 'absolute',
+      left: x ? `${x}px` : '',
+      top: y ? `${y}px` : '',
       // TODO: what's this `-1px` value?
-      [staticSide]: "-1px",
+      [staticSide]: '-1px',
     };
   });
 
@@ -283,7 +283,7 @@ function roundByDPR(el: HTMLElement, value: number) {
 }
 
 function getDPR(el: HTMLElement) {
-  if (typeof window === "undefined") return 1;
+  if (typeof window === 'undefined') return 1;
 
   const win = el.ownerDocument.defaultView || window;
   return win.devicePixelRatio || 1;

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { useRovingFocus, createSelectScope, useVModel, createCollection } from "@/composables";
-import type { Orientation } from "@/types";
+import { ref } from 'vue';
+import { useRovingFocus, createSelectScope, useVModel, createCollection } from '@/composables';
+import type { Orientation } from '@/types';
 
 //----------------------------------------------------------------------------------------------------
 // 📌 component meta
@@ -31,12 +31,12 @@ const p = withDefaults(
     orientation?: Orientation;
   }>(),
   {
-    orientation: "horizontal",
-  },
+    orientation: 'horizontal',
+  }
 );
 
 defineEmits<{
-  (event: "update:modelValue", value?: typeof p.modelValue): void;
+  (event: 'update:modelValue', value?: typeof p.modelValue): void;
 }>();
 
 defineSlots<{
@@ -52,7 +52,7 @@ createSelectScope(
   {
     deselection: () => p.deselection,
     multiselect: () => p.multiselect,
-  },
+  }
 );
 
 const { elements } = createCollection(GroupEl);
@@ -62,7 +62,7 @@ useRovingFocus(GroupEl, elements, {
 });
 
 function onKeydown(e: KeyboardEvent) {
-  if (e.key === " " || e.key === "Enter") {
+  if (e.key === ' ' || e.key === 'Enter') {
     e.preventDefault();
     (e.target as HTMLElement)?.click();
   }

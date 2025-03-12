@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref } from 'vue';
 
 //----------------------------------------------------------------------------------------------------
 // 📌 component meta
@@ -22,11 +22,11 @@ const p = withDefaults(
      */
     name?: string;
   }>(),
-  {},
+  {}
 );
 
 const emit = defineEmits<{
-  "update:modelValue": [value: string];
+  'update:modelValue': [value: string];
 }>();
 
 //----------------------------------------------------------------------------------------------------

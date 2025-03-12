@@ -1,4 +1,4 @@
-import { type InjectionKey, inject } from "vue";
+import { type InjectionKey, inject } from 'vue';
 
 export function useContext<T>(context: InjectionKey<T>, parent: string, child: string): T {
   const ctx = inject(context, null);

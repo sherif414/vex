@@ -1,8 +1,8 @@
 <script lang="ts">
-import type { InjectionKey, Ref } from "vue";
-import { useContext } from "@/composables";
+import type { InjectionKey, Ref } from 'vue';
+import { useContext } from '@/composables';
 
-export type LoadState = "loading" | "error" | "idle" | "loaded";
+export type LoadState = 'loading' | 'error' | 'idle' | 'loaded';
 
 export const AVATAR_INJECTION_KEY = Symbol() as InjectionKey<{
   setLoadState: (state: LoadState) => void;
@@ -10,7 +10,7 @@ export const AVATAR_INJECTION_KEY = Symbol() as InjectionKey<{
 }>;
 
 export function useAvatarContext(componentName: string) {
-  return useContext(AVATAR_INJECTION_KEY, "Avatar", componentName);
+  return useContext(AVATAR_INJECTION_KEY, 'Avatar', componentName);
 }
 
 export interface AvatarProps {

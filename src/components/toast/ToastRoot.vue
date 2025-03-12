@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import Toast from "./Toast.vue";
-import type { ToastItem } from "./use-toast";
+import { ref } from 'vue';
+import Toast from './Toast.vue';
+import type { ToastItem } from './use-toast';
 
 //----------------------------------------------------------------------------------------------------
 

@@ -1,14 +1,14 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { ref, nextTick, effectScope, type EffectScope } from "vue";
-import { useHover } from "../hover";
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { ref, nextTick, effectScope, type EffectScope } from 'vue';
+import { useHover } from '../hover';
 
-describe("useHover", () => {
+describe('useHover', () => {
   let target: HTMLElement | null = null;
   let onOpenChange: (open: boolean) => void;
   let scope: EffectScope;
 
   beforeEach(() => {
-    target = document.createElement("div");
+    target = document.createElement('div');
     document.body.appendChild(target);
     onOpenChange = vi.fn();
     scope = effectScope();
@@ -20,100 +20,100 @@ describe("useHover", () => {
     scope.stop();
   });
 
-  it("should initialize with default options", () => {
+  it('should initialize with default options', () => {
     const targetRef = ref(target);
     const { isHovered } = scope.run(() =>
       useHover(targetRef, {
         onOpenChange,
-      }),
+      })
     )!;
     expect(isHovered.value).toBe(false);
   });
 
-  it("should handle pointer enter events", async () => {
+  it('should handle pointer enter events', async () => {
     const targetRef = ref(target);
     const { isHovered } = scope.run(() =>
       useHover(targetRef, {
         onOpenChange,
-      }),
+      })
     )!;
 
-    target?.dispatchEvent(new PointerEvent("pointerenter", { pointerType: "mouse" }));
+    target?.dispatchEvent(new PointerEvent('pointerenter', { pointerType: 'mouse' }));
     await nextTick();
 
     expect(isHovered.value).toBe(true);
     expect(onOpenChange).toHaveBeenCalledWith(true);
   });
 
-  it("should handle pointer leave events", async () => {
+  it('should handle pointer leave events', async () => {
     const targetRef = ref(target);
     const { isHovered } = scope.run(() =>
       useHover(targetRef, {
         onOpenChange,
-      }),
+      })
     )!;
 
-    target?.dispatchEvent(new PointerEvent("pointerenter", { pointerType: "mouse" }));
+    target?.dispatchEvent(new PointerEvent('pointerenter', { pointerType: 'mouse' }));
     await nextTick();
-    target?.dispatchEvent(new PointerEvent("pointerleave", { pointerType: "mouse" }));
+    target?.dispatchEvent(new PointerEvent('pointerleave', { pointerType: 'mouse' }));
     await nextTick();
 
     expect(isHovered.value).toBe(false);
     expect(onOpenChange).toHaveBeenLastCalledWith(false);
   });
 
-  it("should ignore touch events when ignoreTouchDevices is true", async () => {
+  it('should ignore touch events when ignoreTouchDevices is true', async () => {
     const targetRef = ref(target);
     const { isHovered } = scope.run(() =>
       useHover(targetRef, {
         onOpenChange,
         ignoreTouchDevices: ref(true),
-      }),
+      })
     )!;
 
-    target?.dispatchEvent(new PointerEvent("pointerenter", { pointerType: "touch" }));
+    target?.dispatchEvent(new PointerEvent('pointerenter', { pointerType: 'touch' }));
     await nextTick();
 
     expect(isHovered.value).toBe(false);
     expect(onOpenChange).not.toHaveBeenCalled();
   });
 
-  it("should handle focus events when handleFocus is true", async () => {
+  it('should handle focus events when handleFocus is true', async () => {
     const targetRef = ref(target);
     const { isHovered } = scope.run(() =>
       useHover(targetRef, {
         onOpenChange,
         handleFocus: ref(true),
-      }),
+      })
     )!;
 
-    target?.dispatchEvent(new FocusEvent("focus"));
+    target?.dispatchEvent(new FocusEvent('focus'));
     await nextTick();
 
     expect(onOpenChange).toHaveBeenCalledWith(true);
 
-    target?.dispatchEvent(new FocusEvent("blur"));
+    target?.dispatchEvent(new FocusEvent('blur'));
     await nextTick();
 
     expect(onOpenChange).toHaveBeenLastCalledWith(false);
   });
 
-  it("should not handle focus events when handleFocus is false", async () => {
+  it('should not handle focus events when handleFocus is false', async () => {
     const targetRef = ref(target);
     const { isHovered } = scope.run(() =>
       useHover(targetRef, {
         onOpenChange,
         handleFocus: ref(false),
-      }),
+      })
     )!;
 
-    target?.dispatchEvent(new FocusEvent("focus"));
+    target?.dispatchEvent(new FocusEvent('focus'));
     await nextTick();
 
     expect(onOpenChange).not.toHaveBeenCalled();
   });
 
-  it("should respect delay option for show and hide", async () => {
+  it('should respect delay option for show and hide', async () => {
     vi.useFakeTimers();
     const targetRef = ref(target);
     const delay = ref({ show: 100, hide: 200 });
@@ -122,16 +122,16 @@ describe("useHover", () => {
       useHover(targetRef, {
         onOpenChange,
         delay,
-      }),
+      })
     )!;
 
-    target?.dispatchEvent(new PointerEvent("pointerenter", { pointerType: "mouse" }));
+    target?.dispatchEvent(new PointerEvent('pointerenter', { pointerType: 'mouse' }));
     expect(onOpenChange).not.toHaveBeenCalled();
 
     vi.advanceTimersByTime(100);
     expect(onOpenChange).toHaveBeenCalledWith(true);
 
-    target?.dispatchEvent(new PointerEvent("pointerleave", { pointerType: "mouse" }));
+    target?.dispatchEvent(new PointerEvent('pointerleave', { pointerType: 'mouse' }));
     vi.advanceTimersByTime(199);
     expect(onOpenChange).not.toHaveBeenCalledWith(false);
 
@@ -141,14 +141,14 @@ describe("useHover", () => {
     vi.useRealTimers();
   });
 
-  it("should cleanup event listeners when component is unmounted", async () => {
+  it('should cleanup event listeners when component is unmounted', async () => {
     const targetRef = ref(target);
-    const removeEventListenerSpy = vi.spyOn(target!, "removeEventListener");
+    const removeEventListenerSpy = vi.spyOn(target!, 'removeEventListener');
 
     scope.run(() =>
       useHover(targetRef, {
         onOpenChange,
-      }),
+      })
     )!;
 
     // Simulate unmount
@@ -159,16 +159,16 @@ describe("useHover", () => {
     removeEventListenerSpy.mockRestore();
   });
 
-  it("should not trigger events when enabled is false", async () => {
+  it('should not trigger events when enabled is false', async () => {
     const targetRef = ref(target);
     const { isHovered } = scope.run(() =>
       useHover(targetRef, {
         onOpenChange,
         enabled: ref(false),
-      }),
+      })
     )!;
 
-    target?.dispatchEvent(new PointerEvent("pointerenter", { pointerType: "mouse" }));
+    target?.dispatchEvent(new PointerEvent('pointerenter', { pointerType: 'mouse' }));
     await nextTick();
 
     expect(isHovered.value).toBe(false);

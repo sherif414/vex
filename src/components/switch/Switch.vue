@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed } from 'vue';
 
 //----------------------------------------------------------------------------------------------------
 // 📌 component meta
@@ -26,19 +26,19 @@ const p = withDefaults(
      */
     compact?: boolean;
   }>(),
-  {},
+  {}
 );
 
 const emit = defineEmits<{
-  "update:modelValue": [value: boolean];
+  'update:modelValue': [value: boolean];
 }>();
 
 //----------------------------------------------------------------------------------------------------
 
 const modifierClasses = computed(() => [
-  "vex-switch",
+  'vex-switch',
   {
-    "--compact": p.compact,
+    '--compact': p.compact,
   },
 ]);
 </script>

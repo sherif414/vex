@@ -1,11 +1,11 @@
-import { render, h, markRaw } from "vue";
-import type { VNode, Component } from "vue";
-import ToastRoot from "./ToastRoot.vue";
-import { useID } from "@/composables";
+import { render, h, markRaw } from 'vue';
+import type { VNode, Component } from 'vue';
+import ToastRoot from './ToastRoot.vue';
+import { useID } from '@/composables';
 
 export interface ToastifyProps {
   content: string | Component;
-  color?: "success" | "warning" | "danger" | "accent" | "primary";
+  color?: 'success' | 'warning' | 'danger' | 'accent' | 'primary';
   duration?: number;
 }
 

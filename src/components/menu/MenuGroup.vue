@@ -1,11 +1,11 @@
 <script lang="ts">
 interface MenuGroupProps {
-  type?: "radio" | "checkbox";
+  type?: 'radio' | 'checkbox';
 }
 
 const MENU_GROUP_INJECTION_KEY = Symbol() as InjectionKey<{
   selectionGroup: SelectionGroup<string>;
-  groupType: () => MenuGroupProps["type"];
+  groupType: () => MenuGroupProps['type'];
 }>;
 
 export function useMenuGroupContext() {

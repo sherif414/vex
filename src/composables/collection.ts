@@ -1,5 +1,5 @@
-import type { Ref } from "vue";
-import { computed, shallowRef } from "vue";
+import type { Ref } from 'vue';
+import { computed, shallowRef } from 'vue';
 
 export type CollectionItem<T> = T & {
   templateRef: Ref<HTMLElement | null>;
@@ -7,7 +7,7 @@ export type CollectionItem<T> = T & {
 };
 
 export interface Collection<T> {
-  addItem: (item: Omit<CollectionItem<T>, "uid">) => CollectionItem<T>;
+  addItem: (item: Omit<CollectionItem<T>, 'uid'>) => CollectionItem<T>;
   items: Ref<CollectionItem<T>[]>;
   removeItem: (id: string) => void;
   getItem: (id: string) => CollectionItem<T> | undefined;
@@ -24,10 +24,10 @@ export function useCollection<T>(uid: string): Collection<T> {
       const el = ref.templateRef.value;
       el && arr.push(el);
       return arr;
-    }, []),
+    }, [])
   );
 
-  const addItem = (item: Omit<CollectionItem<T>, "uid">): CollectionItem<T> => {
+  const addItem = (item: Omit<CollectionItem<T>, 'uid'>): CollectionItem<T> => {
     const collectionItem = {
       ...item,
       uid: generateUID(),

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
-import { useEventListener, useMouseInElement } from "@vueuse/core";
-import { IconDangerSign, IconBell, IconXMark, IconCheckCircle, IconWarn } from "@/icons";
-import { useTimer } from "@/composables";
-import { Progress } from "@/components/progress";
-import { animate } from "motion";
+import { computed, onMounted, ref } from 'vue';
+import { useEventListener, useMouseInElement } from '@vueuse/core';
+import { IconDangerSign, IconBell, IconXMark, IconCheckCircle, IconWarn } from '@/icons';
+import { useTimer } from '@/composables';
+import { Progress } from '@/components/progress';
+import { animate } from 'motion';
 
 //----------------------------------------------------------------------------------------------------
 // 📌 component meta
@@ -12,7 +12,7 @@ import { animate } from "motion";
 
 const p = withDefaults(
   defineProps<{
-    type?: "success" | "danger" | "warning" | "primary" | "info";
+    type?: 'success' | 'danger' | 'warning' | 'primary' | 'info';
     title?: string;
     body?: string;
     duration?: number;
@@ -20,9 +20,9 @@ const p = withDefaults(
     hideProgress?: boolean;
   }>(),
   {
-    type: "primary",
+    type: 'primary',
     duration: 10000,
-  },
+  }
 );
 
 const emit = defineEmits<{
@@ -61,7 +61,7 @@ if (timer) {
 
 function onClose() {
   timer?.stop();
-  emit("close");
+  emit('close');
 }
 
 function onMouseLeave() {
@@ -96,11 +96,11 @@ function resumeTimer() {
 let initialX = 0;
 let prevX = 0;
 let lastFrame: number | null = null;
-useEventListener(NotificationEl, "touchstart", (e: TouchEvent) => {
+useEventListener(NotificationEl, 'touchstart', (e: TouchEvent) => {
   initialX = e.touches[0].clientX;
 });
 
-useEventListener(NotificationEl, "touchmove", (e: TouchEvent) => {
+useEventListener(NotificationEl, 'touchmove', (e: TouchEvent) => {
   // ignore multi fingers touches
   if (e.touches.length !== 1) return;
   e.preventDefault();
@@ -126,7 +126,7 @@ useEventListener(NotificationEl, "touchmove", (e: TouchEvent) => {
   }
 });
 
-useEventListener(NotificationEl, "touchend", (e: TouchEvent) => {
+useEventListener(NotificationEl, 'touchend', (e: TouchEvent) => {
   // Ignore left swipes
   if (prevX < initialX) return;
 
@@ -139,21 +139,21 @@ useEventListener(NotificationEl, "touchend", (e: TouchEvent) => {
   }
 
   requestAnimationFrame(() => {
-    animate(NotificationEl.value!, { x: [delta, 0] }, { duration: 0.15, easing: "ease-out" });
+    animate(NotificationEl.value!, { x: [delta, 0] }, { duration: 0.15, easing: 'ease-out' });
   });
 });
 
 //----------------------------------------------------------------------------------------------------
 
 const icon = computed(() => {
-  if (p.type === "danger") return IconDangerSign;
-  if (p.type === "warning") return IconWarn;
-  if (p.type === "success") return IconCheckCircle;
+  if (p.type === 'danger') return IconDangerSign;
+  if (p.type === 'warning') return IconWarn;
+  if (p.type === 'success') return IconCheckCircle;
   return IconBell;
 });
 
 const modifierClasses = computed(() => [
-  slots.default ? "vex-notification-custom" : `vex-notification`,
+  slots.default ? 'vex-notification-custom' : `vex-notification`,
   `--type-${p.type}`,
 ]);
 </script>

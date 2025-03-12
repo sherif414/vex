@@ -1,5 +1,5 @@
 <script lang="ts">
-import type { InjectionKey, Ref } from "vue";
+import type { InjectionKey, Ref } from 'vue';
 
 interface CheckboxGroupProps {
   /**
@@ -16,9 +16,11 @@ export interface CheckboxItem {
   value: Ref<string>;
   checked: Ref<boolean>;
   disabled: Ref<boolean>;
+  check: () => void;
+  uncheck: () => void;
 }
 
-export type CheckedState = "checked" | "unchecked" | "indeterminate";
+export type CheckedState = 'checked' | 'unchecked' | 'indeterminate';
 
 export const CHECKBOX_GROUP_INJECTION_KEY = Symbol() as InjectionKey<{
   disabled: Ref<boolean>;
@@ -37,7 +39,7 @@ import { computed, inject, provide, toRefs } from "vue";
 
 const props = withDefaults(defineProps<CheckboxGroupProps>(), {});
 
-const collection = useCollection();
+const collection = useCollection<CheckboxItem>();
 const modelValue = defineModel<string[]>({ default: () => [] });
 const checkedState = computed<CheckedState>(() => {
   if (modelValue.value.length === 0) return "unchecked";
@@ -50,9 +52,19 @@ const group = useSelectionGroup(modelValue, {
 
 const { disabled } = toRefs(props);
 
+const checkAll = () => {
+  collection.items.value.forEach((item) => item.check());
+};
+
+const uncheckAll = () => {
+  collection.items.value.forEach((item) => item.uncheck());
+};
+
 provide(CHECKBOX_GROUP_INJECTION_KEY, {
   disabled,
   group,
+  checkAll,
+  uncheckAll,
 });
 </script>
 
@@ -61,3 +73,5 @@ provide(CHECKBOX_GROUP_INJECTION_KEY, {
     <slot :modelValue="modelValue" />
   </div>
 </template>
+
+defineExpose({ checkAll, uncheckAll });

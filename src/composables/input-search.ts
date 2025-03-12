@@ -1,6 +1,6 @@
-import { watchDebounced } from "@vueuse/core";
-import { type Ref, readonly, ref } from "vue";
-import { isFunction } from "@/utils";
+import { watchDebounced } from '@vueuse/core';
+import { type Ref, readonly, ref } from 'vue';
+import { isFunction } from '@/utils';
 
 interface Options {
   search?: (data: Suggestion[], query: string, limit: number) => Suggestion[];
@@ -19,7 +19,7 @@ interface Suggestion {
 export function useInputSearch(
   query: Ref<string | undefined>,
   suggestions: Suggestion[] | ((query: string, limit: number) => Promise<Suggestion[]>),
-  options: Options,
+  options: Options
 ) {
   const result = ref<Suggestion[]>([]);
   const isSearching = ref(false);
@@ -44,7 +44,7 @@ export function useInputSearch(
 
       onAfterSearch?.();
     },
-    { debounce },
+    { debounce }
   );
 
   return {

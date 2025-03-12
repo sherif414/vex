@@ -5,7 +5,7 @@ export interface AvatarImageProps {
   /** The alt text for the image */
   alt?: string;
   /** The cross-origin attribute for the image */
-  crossOrigin?: "anonymous" | "use-credentials";
+  crossOrigin?: 'anonymous' | 'use-credentials';
 }
 </script>
 

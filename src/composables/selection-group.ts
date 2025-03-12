@@ -1,6 +1,6 @@
-import { type Ref, watch, toValue } from "vue";
-import type { MaybeRefOrGetter } from "@/types";
-import { isWatchable } from "@/utils";
+import { type Ref, watch, toValue } from 'vue';
+import type { MaybeRefOrGetter } from '@/types';
+import { isWatchable } from '@/utils';
 
 type PrimitiveValue = string | number | boolean | symbol;
 
@@ -26,7 +26,7 @@ export interface SelectionGroup<T> {
 
 export function useSelectionGroup<T>(
   selected: Ref<T[]>,
-  options: Options<T> = {},
+  options: Options<T> = {}
 ): SelectionGroup<T> {
   const { deselectOnReselect = false, multiselect = false, getKey } = options;
 
@@ -70,7 +70,7 @@ export function useSelectionGroup<T>(
 
 function useSingleSelect<T>(
   selected: Ref<T[]>,
-  getKey?: (value: T) => PrimitiveValue,
+  getKey?: (value: T) => PrimitiveValue
 ): SelectionStrategy<T> {
   const isSelected = (value: T): boolean => {
     if (getKey) {
@@ -104,7 +104,7 @@ function useSingleSelect<T>(
 
 function useMultiSelect<T>(
   selected: Ref<T[]>,
-  getKey?: (value: T) => PrimitiveValue,
+  getKey?: (value: T) => PrimitiveValue
 ): SelectionStrategy<T> {
   const isSelected = (value: T): boolean => {
     if (getKey) {

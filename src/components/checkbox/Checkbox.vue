@@ -23,7 +23,7 @@ export interface CheckboxProps {
   /**
    * The validation state of the checkbox
    */
-  validationState?: "valid" | "invalid";
+  validationState?: 'valid' | 'invalid';
   /**
    * Whether the checkbox is required
    */
@@ -44,12 +44,28 @@ const props = withDefaults(defineProps<CheckboxProps>(), {});
 const ctx = useCheckboxGroupContext();
 const isGrouped = !!ctx;
 
+const checked = computed(() => {
+  return ctx?.group.modelValue.value.includes(props.value) ?? false;
+});
+
+function check() {
+  if (!ctx || props.disabled || ctx.disabled.value) return;
+  ctx.group.add(props.value);
+}
+
+function uncheck() {
+  if (!ctx || props.disabled || ctx.disabled.value) return;
+  ctx.group.remove(props.value);
+}
+
 const modelValue = !isGrouped
   ? defineModel<boolean>({ default: false })
   : computed<boolean>({
       set: (v) => (v ? ctx.group.select(props.value) : ctx.group.deselect(props.value)),
       get: () => ctx.group.isSelected(props.value),
     });
+
+defineExpose({ check, uncheck });
 
 const checkboxRef = useTemplateRef("checkbox");
 const { isFormControl } = useFormControl(checkboxRef);

@@ -1,6 +1,6 @@
 <script lang="ts">
-import { InjectionKey } from "vue";
-import { useContext } from "@/composables";
+import { InjectionKey } from 'vue';
+import { useContext } from '@/composables';
 
 export const ALERT_INJECTION_KEY = Symbol() as InjectionKey<{
   contentID: string;
@@ -8,7 +8,7 @@ export const ALERT_INJECTION_KEY = Symbol() as InjectionKey<{
 }>;
 
 export function useAlertContext(componentName: string) {
-  return useContext(ALERT_INJECTION_KEY, "Alert", componentName);
+  return useContext(ALERT_INJECTION_KEY, 'Alert', componentName);
 }
 
 export interface AlertProps {

@@ -1,4 +1,4 @@
-import { onScopeDispose, readonly, ref } from "vue";
+import { onScopeDispose, readonly, ref } from 'vue';
 
 /**
  * Custom hook to create a timer with the given duration and callback.
@@ -14,7 +14,7 @@ export function useTimer(duration: number, cb: () => void) {
   const start = () => {
     if (isRunning.value) {
       if (import.meta.env.DEV) {
-        console.warn("[vex] timer is already running, make sure to `stop` it first");
+        console.warn('[vex] timer is already running, make sure to `stop` it first');
       }
       return;
     }

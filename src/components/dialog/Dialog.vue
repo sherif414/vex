@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useEventListener } from "@vueuse/core";
-import type { FocusTrap } from "focus-trap";
-import { createFocusTrap } from "focus-trap";
-import { nextTick, onUnmounted, ref, watch } from "vue";
-import { dialogStore } from ".";
+import { useEventListener } from '@vueuse/core';
+import type { FocusTrap } from 'focus-trap';
+import { createFocusTrap } from 'focus-trap';
+import { nextTick, onUnmounted, ref, watch } from 'vue';
+import { dialogStore } from '.';
 
 defineOptions({
   inheritAttrs: false,
@@ -19,12 +19,12 @@ const props = withDefaults(
     /**
      * The id of the element that describes the dialog.
      */
-    "aria-describedby"?: string;
+    'aria-describedby'?: string;
 
     /**
      * The id of the element that labels the dialog.
      */
-    "aria-labelledby"?: string;
+    'aria-labelledby'?: string;
 
     /**
      * When true, prevents scrolling outside the dialog
@@ -34,11 +34,11 @@ const props = withDefaults(
   }>(),
   {
     preventScroll: true,
-  },
+  }
 );
 
 const emit = defineEmits<{
-  "update:modelValue": [value: boolean];
+  'update:modelValue': [value: boolean];
   /**
    * Emitted when the escape key is pressed
    */
@@ -61,10 +61,10 @@ const contentRef = ref<HTMLDivElement | null>(null);
 let focusTrap: FocusTrap | null = null;
 
 // Handle keyboard events
-useEventListener(dialogRef, "keydown", (e: KeyboardEvent) => {
-  if (e.key === "Escape" && props.modelValue) {
-    emit("escape");
-    emit("update:modelValue", false);
+useEventListener(dialogRef, 'keydown', (e: KeyboardEvent) => {
+  if (e.key === 'Escape' && props.modelValue) {
+    emit('escape');
+    emit('update:modelValue', false);
   }
 });
 
@@ -76,7 +76,7 @@ function hideBodyScrollbar(): void {
   if (dialogStore.openDialogsCount === 1) {
     const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
     document.body.style.marginRight = `${scrollBarWidth}px`;
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = 'hidden';
   }
 }
 
@@ -85,8 +85,8 @@ function showBodyScrollbar(): void {
 
   dialogStore.openDialogsCount--;
   if (dialogStore.openDialogsCount === 0) {
-    document.body.style.marginRight = "";
-    document.body.style.overflow = "";
+    document.body.style.marginRight = '';
+    document.body.style.overflow = '';
   }
 }
 
@@ -102,14 +102,14 @@ watch(
           escapeDeactivates: false,
         });
         focusTrap.activate();
-        emit("open");
+        emit('open');
       });
     } else {
       showBodyScrollbar();
       focusTrap?.deactivate();
-      emit("close");
+      emit('close');
     }
-  },
+  }
 );
 
 onUnmounted(() => {

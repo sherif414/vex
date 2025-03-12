@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { useDelayedOpen, useFloating, useID, useInjectRef } from "@/composables";
-import { EXPOSED_EL } from "@/config";
-import type { Placement, Strategy } from "@floating-ui/vue";
-import { onClickOutside, useEventListener } from "@vueuse/core";
-import type { VNode } from "vue";
-import { computed, nextTick, ref, toRef, watch } from "vue";
+import { useDelayedOpen, useFloating, useID, useInjectRef } from '@/composables';
+import { EXPOSED_EL } from '@/config';
+import type { Placement, Strategy } from '@floating-ui/vue';
+import { onClickOutside, useEventListener } from '@vueuse/core';
+import type { VNode } from 'vue';
+import { computed, nextTick, ref, toRef, watch } from 'vue';
 
 //----------------------------------------------------------------------------------------------------
 // 📌 component meta
@@ -20,7 +20,7 @@ const p = withDefaults(
      * The dropdown aria role.
      * @default 'menu'
      */
-    role?: "menu" | "listbox";
+    role?: 'menu' | 'listbox';
 
     /**
      * Whether to disable visibility.
@@ -64,7 +64,7 @@ const p = withDefaults(
     /**
      * Specifies the action that opens the dropdown.
      */
-    triggerOn?: "hover" | "click";
+    triggerOn?: 'hover' | 'click';
 
     /**
      * the element to position the dropdown relative to
@@ -78,15 +78,15 @@ const p = withDefaults(
     teleport?: boolean;
   }>(),
   {
-    placement: "bottom-start",
+    placement: 'bottom-start',
     autoMinWidth: true,
     offset: 4,
-    role: "menu",
+    role: 'menu',
     openDelay: 150,
     closeDelay: 150,
-    triggerOn: "click",
+    triggerOn: 'click',
     triggerEl: null,
-  },
+  }
 );
 
 const slots = defineSlots<{
@@ -120,14 +120,14 @@ const isDropdownOpen = computed({
 
 const TriggerSlotEl = ref<HTMLElement | null>(null);
 const TriggerEl = computed(() => (slots.trigger ? TriggerSlotEl.value : p.triggerEl));
-const TriggerComponent = useInjectRef(TriggerSlotEl, () => slots.trigger?.({}), "Dropdown");
+const TriggerComponent = useInjectRef(TriggerSlotEl, () => slots.trigger?.({}), 'Dropdown');
 
 watch(TriggerEl, (el) => {
   if (!el) return;
-  el.setAttribute("aria-expanded", `${isDropdownOpen.value}`);
-  el.setAttribute("aria-haspopup", `${role.value}`);
-  el.setAttribute("aria-controls", `${DROPDOWN_ID}`);
-  el.setAttribute("id", `${TRIGGER_ID}`);
+  el.setAttribute('aria-expanded', `${isDropdownOpen.value}`);
+  el.setAttribute('aria-haspopup', `${role.value}`);
+  el.setAttribute('aria-controls', `${DROPDOWN_ID}`);
+  el.setAttribute('id', `${TRIGGER_ID}`);
 });
 
 watch(
@@ -135,10 +135,10 @@ watch(
   ([open, role]) => {
     const el = TriggerEl.value;
     if (!el) return;
-    el.setAttribute("aria-haspopup", `${role}`);
-    el.setAttribute("aria-expanded", `${open}`);
+    el.setAttribute('aria-haspopup', `${role}`);
+    el.setAttribute('aria-expanded', `${open}`);
   },
-  { flush: "post" },
+  { flush: 'post' }
 );
 
 //----------------------------------------------------------------------------------------------------
@@ -152,13 +152,13 @@ const { close: closeDropdown, open: openDropdown } = useDelayedOpen({
   defaultCloseDelay: () => p.closeDelay,
 });
 
-useEventListener(TriggerEl, "keydown", (e: KeyboardEvent) => {
+useEventListener(TriggerEl, 'keydown', (e: KeyboardEvent) => {
   if (e.shiftKey || e.altKey || e.ctrlKey) return;
 
   if (isOpenKey(e.key)) {
     e.preventDefault();
     isDropdownOpen.value || openDropdown();
-    emit("open", e);
+    emit('open', e);
     e.stopImmediatePropagation();
     return;
   }
@@ -171,25 +171,25 @@ useEventListener(TriggerEl, "keydown", (e: KeyboardEvent) => {
   }
 });
 
-if (p.triggerOn === "hover") {
-  useEventListener(TriggerEl, "pointerenter", () => openDropdown());
-  useEventListener(TriggerEl, "pointerleave", () => closeDropdown());
+if (p.triggerOn === 'hover') {
+  useEventListener(TriggerEl, 'pointerenter', () => openDropdown());
+  useEventListener(TriggerEl, 'pointerleave', () => closeDropdown());
 
-  useEventListener(DropdownEl, "pointerenter", () => openDropdown());
-  useEventListener(DropdownEl, "pointerleave", () => closeDropdown());
+  useEventListener(DropdownEl, 'pointerenter', () => openDropdown());
+  useEventListener(DropdownEl, 'pointerleave', () => closeDropdown());
 }
 
-if (p.triggerOn === "click") {
-  useEventListener(TriggerEl, "pointerdown", () => openDropdown());
+if (p.triggerOn === 'click') {
+  useEventListener(TriggerEl, 'pointerdown', () => openDropdown());
   onClickOutside(DropdownEl, () => closeDropdown(), { ignore: [TriggerEl] });
 }
 
 function isOpenKey(key: string) {
-  return ["ArrowDown", "ArrowUp", "Enter", " "].includes(key);
+  return ['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(key);
 }
 
 function isCloseKey(key: string) {
-  return ["Escape"].includes(key);
+  return ['Escape'].includes(key);
 }
 
 //----------------------------------------------------------------------------------------------------

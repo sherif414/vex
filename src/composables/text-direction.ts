@@ -1,9 +1,9 @@
-import { isClient, noop } from "@/utils";
-import { createSharedComposable } from "@vueuse/core";
-import { customRef, onScopeDispose, ref } from "vue";
-import type { Fn } from "./types";
+import { isClient, noop } from '@/utils';
+import { createSharedComposable } from '@vueuse/core';
+import { customRef, onScopeDispose, ref } from 'vue';
+import type { Fn } from './types';
 
-export type Dir = "ltr" | "rtl" | "auto" | undefined;
+export type Dir = 'ltr' | 'rtl' | 'auto' | undefined;
 
 export const useTextDirection = createSharedComposable(() => {
   if (!isClient) return ref<Dir>();
@@ -20,12 +20,12 @@ export const useTextDirection = createSharedComposable(() => {
 
   let observer: MutationObserver | null = new MutationObserver(updateDir);
 
-  observer.observe(document.querySelector("html")!, {
+  observer.observe(document.querySelector('html')!, {
     attributes: true,
-    attributeFilter: ["dir"],
+    attributeFilter: ['dir'],
   });
 
-  document.addEventListener("DOMContentLoaded", updateDir, { once: true });
+  document.addEventListener('DOMContentLoaded', updateDir, { once: true });
 
   onScopeDispose(() => {
     observer?.disconnect();
@@ -50,13 +50,13 @@ export const useTextDirection = createSharedComposable(() => {
 });
 
 function getDocumentDir(): Dir {
-  return document?.querySelector("html")?.getAttribute("dir") as Dir;
+  return document?.querySelector('html')?.getAttribute('dir') as Dir;
 }
 
 function setDocumentDir(dir: Dir): void {
   if (dir) {
-    document?.querySelector("html")?.setAttribute("dir", dir);
+    document?.querySelector('html')?.setAttribute('dir', dir);
   } else {
-    document?.querySelector("html")?.removeAttribute("dir");
+    document?.querySelector('html')?.removeAttribute('dir');
   }
 }

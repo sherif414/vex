@@ -1,3 +1,3 @@
-export * from "./use-toast";
-import "./Toast.scss";
-import "./ToastRoot.scss";
+export * from './use-toast';
+import './Toast.scss';
+import './ToastRoot.scss';

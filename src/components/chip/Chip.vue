@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useCollection, useSelectScope, useID } from "@/composables";
-import { IconCheck } from "@/icons";
-import { TransitionExpand } from "@/transitions";
-import { ref } from "vue";
+import { useCollection, useSelectScope, useID } from '@/composables';
+import { IconCheck } from '@/icons';
+import { TransitionExpand } from '@/transitions';
+import { ref } from 'vue';
 
 //----------------------------------------------------------------------------------------------------
 // 📌 component meta
@@ -24,11 +24,11 @@ const p = withDefaults(
      */
     disabled?: boolean;
   }>(),
-  {},
+  {}
 );
 
 defineEmits<{
-  "update:modelValue": [value: boolean];
+  'update:modelValue': [value: boolean];
 }>();
 
 defineSlots<{

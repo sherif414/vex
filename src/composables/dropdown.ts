@@ -1,8 +1,8 @@
-import { watch } from "vue";
-import type { Getter } from "@/types";
+import { watch } from 'vue';
+import type { Getter } from '@/types';
 
 interface UseDropdownOptions {
-  role: "menu" | "listbox";
+  role: 'menu' | 'listbox';
   dropdownID: string;
   targetElID: string;
   ariaExpanded: Getter<boolean>;
@@ -15,7 +15,7 @@ interface UseDropdownOptions {
 export function useDropdownAria(
   TargetEl: Getter<HTMLElement | null>,
   Dropdown: Getter<HTMLElement | null>,
-  options: UseDropdownOptions,
+  options: UseDropdownOptions
 ) {
   const { ariaActiveDescendant, dropdownID, targetElID, role, ariaExpanded } = options;
 
@@ -23,30 +23,30 @@ export function useDropdownAria(
     TargetEl,
     (el) => {
       if (!el) return;
-      el.setAttribute("aria-expanded", `${ariaExpanded()}`);
-      el.setAttribute("aria-controls", `${dropdownID}`);
-      el.setAttribute("aria-haspopup", `${role}`);
-      el.setAttribute("id", `${targetElID}`);
+      el.setAttribute('aria-expanded', `${ariaExpanded()}`);
+      el.setAttribute('aria-controls', `${dropdownID}`);
+      el.setAttribute('aria-haspopup', `${role}`);
+      el.setAttribute('id', `${targetElID}`);
     },
-    { immediate: true },
+    { immediate: true }
   );
 
   watch(
     Dropdown,
     (el) => {
       if (!el) return;
-      el.setAttribute("aria-labelledby", `${targetElID}`);
-      el.setAttribute("role", `${role}`);
-      el.setAttribute("id", `${dropdownID}`);
+      el.setAttribute('aria-labelledby', `${targetElID}`);
+      el.setAttribute('role', `${role}`);
+      el.setAttribute('id', `${dropdownID}`);
     },
-    { immediate: true },
+    { immediate: true }
   );
 
   watch(ariaExpanded, (isExpanded) => {
-    TargetEl()?.setAttribute("aria-expanded", `${isExpanded}`);
+    TargetEl()?.setAttribute('aria-expanded', `${isExpanded}`);
   });
 
   watch(ariaActiveDescendant, (active) => {
-    Dropdown()?.setAttribute("aria-activedescendant", `${active}`);
+    Dropdown()?.setAttribute('aria-activedescendant', `${active}`);
   });
 }

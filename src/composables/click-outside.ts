@@ -1,6 +1,6 @@
-import { onScopeDispose, toValue } from "vue";
-import type { MaybeRefOrGetter, TemplateRef } from "@/types";
-import { isClient, isIOS, noop, remove } from "@/utils";
+import { onScopeDispose, toValue } from 'vue';
+import type { MaybeRefOrGetter, TemplateRef } from '@/types';
+import { isClient, isIOS, noop, remove } from '@/utils';
 
 type Listener = (e: PointerEvent) => void;
 
@@ -45,7 +45,7 @@ let isIOSWorkaroundActive = false;
 function useIosWorkaround() {
   if (!isIOSWorkaroundActive && isIOS) {
     isIOSWorkaroundActive = true;
-    Array.from(document.body.children).forEach((el) => el.addEventListener("click", noop));
+    Array.from(document.body.children).forEach((el) => el.addEventListener('click', noop));
   }
 }
 
@@ -61,14 +61,14 @@ function addGlobalEventListener(listener: Listener) {
   }
 
   if (!isAttached) {
-    document.addEventListener("pointerdown", sharedListener, { capture: true });
+    document.addEventListener('pointerdown', sharedListener, { capture: true });
     isAttached = true;
   }
 
   return () => {
     remove(listeners, listener);
     if (!listeners.length) {
-      document.removeEventListener("pointerdown", sharedListener, { capture: true });
+      document.removeEventListener('pointerdown', sharedListener, { capture: true });
       isAttached = false;
     }
   };

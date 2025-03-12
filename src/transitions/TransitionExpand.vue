@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { animate } from "motion";
-import { Transition } from "vue";
+import { animate } from 'motion';
+import { Transition } from 'vue';
 
 //----------------------------------------------------------------------------------------------------
 // 📌 component meta
@@ -13,68 +13,68 @@ defineOptions({
 const p = withDefaults(
   defineProps<{
     duration?: number;
-    orientation?: "horizontal" | "vertical";
+    orientation?: 'horizontal' | 'vertical';
     disabled?: boolean;
   }>(),
   {
     duration: 300,
-    orientation: "vertical",
-  },
+    orientation: 'vertical',
+  }
 );
 
 //----------------------------------------------------------------------------------------------------
 
-let expandedSize = "0";
-const dynamicSize = p.orientation === "vertical" ? "height" : "width";
-const staticSize = p.orientation === "vertical" ? "width" : "height";
+let expandedSize = '0';
+const dynamicSize = p.orientation === 'vertical' ? 'height' : 'width';
+const staticSize = p.orientation === 'vertical' ? 'width' : 'height';
 
 async function onEnter(el: HTMLElement, done: () => void) {
-  el.style.transitionDuration = "0s";
-  el.style.animationName = "none";
+  el.style.transitionDuration = '0s';
+  el.style.animationName = 'none';
   el.style[staticSize] = getComputedStyle(el)[staticSize];
-  el.style.position = "absolute";
-  el.style.visibility = "hidden";
-  el.style[dynamicSize] = "auto";
+  el.style.position = 'absolute';
+  el.style.visibility = 'hidden';
+  el.style[dynamicSize] = 'auto';
 
-  expandedSize = el.getBoundingClientRect()[dynamicSize] + "px";
+  expandedSize = el.getBoundingClientRect()[dynamicSize] + 'px';
 
-  el.style.transitionDuration = "";
-  el.style.animationName = "";
-  el.style[staticSize] = "";
-  el.style.position = "";
-  el.style.visibility = "";
-  el.style.overflow = "hidden";
+  el.style.transitionDuration = '';
+  el.style.animationName = '';
+  el.style[staticSize] = '';
+  el.style.position = '';
+  el.style.visibility = '';
+  el.style.overflow = 'hidden';
 
   await animate(
     el,
     { [dynamicSize]: [0, expandedSize], opacity: [0, 1] },
-    { duration: p.duration / 1000 },
+    { duration: p.duration / 1000 }
   ).finished;
   done();
 }
 
 function onAfterEnter(el: HTMLElement) {
-  el.style.overflow = "";
-  el.style[dynamicSize] = "";
-  el.style.opacity = "";
+  el.style.overflow = '';
+  el.style[dynamicSize] = '';
+  el.style.opacity = '';
 }
 
 async function onLeave(el: HTMLElement, done: () => void) {
-  expandedSize = el.getBoundingClientRect()[dynamicSize] + "px";
-  el.style.overflow = "hidden";
+  expandedSize = el.getBoundingClientRect()[dynamicSize] + 'px';
+  el.style.overflow = 'hidden';
 
   await animate(
     el,
     { [dynamicSize]: [expandedSize, 0], opacity: [1, 0] },
-    { duration: p.duration / 1000 },
+    { duration: p.duration / 1000 }
   ).finished;
   done();
 }
 
 function onAfterLeave(el: HTMLElement) {
-  el.style.overflow = "";
-  el.style[dynamicSize] = "";
-  el.style.opacity = "";
+  el.style.overflow = '';
+  el.style[dynamicSize] = '';
+  el.style.opacity = '';
 }
 </script>
 

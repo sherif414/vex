@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { IconDangerSign, IconBell, IconCheckCircle, IconWarn } from "@/icons";
-import { isString } from "@/composables/helpers";
-import { useTimer } from "@/composables/timer";
-import { onMounted, computed } from "vue";
-import type { Component } from "vue";
+import { IconDangerSign, IconBell, IconCheckCircle, IconWarn } from '@/icons';
+import { isString } from '@/composables/helpers';
+import { useTimer } from '@/composables/timer';
+import { onMounted, computed } from 'vue';
+import type { Component } from 'vue';
 
 //----------------------------------------------------------------------------------------------------
 // 📌 component meta
@@ -13,12 +13,12 @@ const p = withDefaults(
   defineProps<{
     content: string | Component;
     duration: number;
-    color: "primary" | "accent" | "danger" | "warning" | "success";
+    color: 'primary' | 'accent' | 'danger' | 'warning' | 'success';
   }>(),
   {
-    color: "primary",
+    color: 'primary',
     duration: 5000,
-  },
+  }
 );
 
 const emit = defineEmits<{
@@ -30,7 +30,7 @@ const emit = defineEmits<{
 //----------------------------------------------------------------------------------------------------
 
 // TODO: maybe we should add visual indication when the timer is paused?
-const timer = useTimer(p.duration, () => emit("close"));
+const timer = useTimer(p.duration, () => emit('close'));
 onMounted(timer.start);
 
 //----------------------------------------------------------------------------------------------------
@@ -38,13 +38,13 @@ onMounted(timer.start);
 //----------------------------------------------------------------------------------------------------
 
 const iconType = computed(() => {
-  if (p.color === "danger") return IconDangerSign;
-  if (p.color === "warning") return IconWarn;
-  if (p.color === "success") return IconCheckCircle;
+  if (p.color === 'danger') return IconDangerSign;
+  if (p.color === 'warning') return IconWarn;
+  if (p.color === 'success') return IconCheckCircle;
   return IconBell;
 });
 
-const modifierClasses = computed(() => ["vex-toast", `--c-${p.color}`]);
+const modifierClasses = computed(() => ['vex-toast', `--c-${p.color}`]);
 </script>
 
 <template>

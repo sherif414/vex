@@ -1,6 +1,6 @@
 <script lang="ts">
 interface MenuProps {
-  orientation?: "vertical" | "horizontal";
+  orientation?: 'vertical' | 'horizontal';
 }
 
 const MENU_INJECTION_KEY = Symbol() as InjectionKey<{
@@ -12,11 +12,11 @@ const MENU_INJECTION_KEY = Symbol() as InjectionKey<{
   show: () => void;
   hide: () => void;
   highlightedIndex: Ref<number>;
-  orientation: MaybeRefOrGetter<"vertical" | "horizontal">;
+  orientation: MaybeRefOrGetter<'vertical' | 'horizontal'>;
 }>;
 
 export function useMenuContext(component: string) {
-  return useContext(MENU_INJECTION_KEY, "Menu", component);
+  return useContext(MENU_INJECTION_KEY, 'Menu', component);
 }
 </script>
 

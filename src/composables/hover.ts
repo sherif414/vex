@@ -1,7 +1,7 @@
-import { tryOnScopeDispose } from "@vueuse/core";
-import { onWatcherCleanup, ref, watch, type Ref } from "vue";
-import { useDelayedOpen } from "./delayed-open";
-import { isMouseLikePointerType } from "./floating-ui";
+import { tryOnScopeDispose } from '@vueuse/core';
+import { onWatcherCleanup, ref, watch, type Ref } from 'vue';
+import { useDelayedOpen } from './delayed-open';
+import { isMouseLikePointerType } from './floating-ui';
 
 export interface UseHoverOptions {
   /**
@@ -64,8 +64,8 @@ export function useHover(target: Ref<HTMLElement | null>, options: UseHoverOptio
   };
 
   const delayed = useDelayedOpen(show, hide, {
-    defaultShowDelay: () => (typeof delay.value === "number" ? delay.value : delay.value.show),
-    defaultHideDelay: () => (typeof delay.value === "number" ? delay.value : delay.value.hide),
+    defaultShowDelay: () => (typeof delay.value === 'number' ? delay.value : delay.value.show),
+    defaultHideDelay: () => (typeof delay.value === 'number' ? delay.value : delay.value.hide),
   });
 
   const handlePointerEnter = (event: PointerEvent) => {
@@ -102,10 +102,10 @@ export function useHover(target: Ref<HTMLElement | null>, options: UseHoverOptio
   const cleanup = (el?: HTMLElement | null): void => {
     if (!el) return;
 
-    el.removeEventListener("pointerenter", handlePointerEnter);
-    el.removeEventListener("pointerleave", handlePointerLeave);
-    el.removeEventListener("focus", handleFocusIn);
-    el.removeEventListener("blur", handleFocusOut);
+    el.removeEventListener('pointerenter', handlePointerEnter);
+    el.removeEventListener('pointerleave', handlePointerLeave);
+    el.removeEventListener('focus', handleFocusIn);
+    el.removeEventListener('blur', handleFocusOut);
   };
 
   // Watch for target changes and enabled state
@@ -114,14 +114,14 @@ export function useHover(target: Ref<HTMLElement | null>, options: UseHoverOptio
     ([el, isEnabled]) => {
       if (!el || !isEnabled) return;
 
-      el.addEventListener("pointerenter", handlePointerEnter);
-      el.addEventListener("pointerleave", handlePointerLeave);
-      el.addEventListener("focus", handleFocusIn);
-      el.addEventListener("blur", handleFocusOut);
+      el.addEventListener('pointerenter', handlePointerEnter);
+      el.addEventListener('pointerleave', handlePointerLeave);
+      el.addEventListener('focus', handleFocusIn);
+      el.addEventListener('blur', handleFocusOut);
 
       onWatcherCleanup(() => cleanup(el));
     },
-    { immediate: true },
+    { immediate: true }
   );
 
   // Cleanup on scope dispose

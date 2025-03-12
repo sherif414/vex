@@ -8,9 +8,9 @@ import {
   offset,
   type Placement,
   arrow,
-} from "@floating-ui/vue";
-import { onClickOutside, useEventListener, useVModel } from "@vueuse/core";
-import { computed, ref, toRef, type StyleValue, onUnmounted } from "vue";
+} from '@floating-ui/vue';
+import { onClickOutside, useEventListener, useVModel } from '@vueuse/core';
+import { computed, ref, toRef, type StyleValue, onUnmounted } from 'vue';
 
 //----------------------------------------------------------------------------------------------------
 // 📌 component meta
@@ -49,7 +49,7 @@ const p = withDefaults(
      * whether to trigger visibility on hover or on click
      * @default 'click'
      */
-    trigger?: "click" | "hover";
+    trigger?: 'click' | 'hover';
 
     /**
      * sets the floating element min-width to the width of the reference element,
@@ -81,32 +81,32 @@ const p = withDefaults(
     hideOnClick?: boolean;
   }>(),
   {
-    trigger: "click",
-    placement: "bottom-start",
+    trigger: 'click',
+    placement: 'bottom-start',
     offset: 0,
     autoMinWidth: true,
-    tag: "div",
+    tag: 'div',
     arrowPadding: 0,
-  },
+  }
 );
 
 const emit = defineEmits<{
-  (event: "update:visible", value: boolean): void;
+  (event: 'update:visible', value: boolean): void;
 }>();
 
-const referenceEl = toRef(p, "reference");
+const referenceEl = toRef(p, 'reference');
 const floatingEl = ref<HTMLElement>();
 const arrowEl = ref<HTMLElement>();
-const isFloatingElVisible = useVModel(p, "visible", emit, {
-  eventName: "update:visible",
+const isFloatingElVisible = useVModel(p, 'visible', emit, {
+  eventName: 'update:visible',
 });
 
 //----------------------------------------------------------------------------------------------------
 // 📌 trigger
 //----------------------------------------------------------------------------------------------------
 
-if (p.trigger === "click") {
-  useEventListener(referenceEl, "click", () => {
+if (p.trigger === 'click') {
+  useEventListener(referenceEl, 'click', () => {
     isFloatingElVisible.value = !isFloatingElVisible.value;
   });
 
@@ -115,27 +115,27 @@ if (p.trigger === "click") {
     () => {
       isFloatingElVisible.value = false;
     },
-    { ignore: [referenceEl] },
+    { ignore: [referenceEl] }
   );
 }
 
-if (p.trigger === "hover") {
+if (p.trigger === 'hover') {
   let timeoutId: ReturnType<typeof setTimeout>;
 
   // reference element events
-  useEventListener(referenceEl, "mouseenter", () => {
+  useEventListener(referenceEl, 'mouseenter', () => {
     clearTimeout(timeoutId);
     if (!isFloatingElVisible.value) isFloatingElVisible.value = true;
   });
-  useEventListener(referenceEl, "mouseleave", () => {
+  useEventListener(referenceEl, 'mouseleave', () => {
     timeoutId = _setInvisible();
   });
 
   // floating element events
-  useEventListener(floatingEl, "mouseenter", () => {
+  useEventListener(floatingEl, 'mouseenter', () => {
     clearTimeout(timeoutId);
   });
-  useEventListener(floatingEl, "mouseleave", () => {
+  useEventListener(floatingEl, 'mouseleave', () => {
     timeoutId = _setInvisible();
   });
 
@@ -153,7 +153,7 @@ if (p.trigger === "hover") {
   });
 }
 
-useEventListener(floatingEl, "click", () => {
+useEventListener(floatingEl, 'click', () => {
   if (p.hideOnClick) {
     isFloatingElVisible.value = false;
   }
@@ -172,7 +172,7 @@ const middleware = computed(() => {
         apply({ rects, elements }) {
           elements.floating.style.minWidth = `${Math.round(rects.reference.width)}px`;
         },
-      }),
+      })
     );
   }
 
@@ -208,19 +208,19 @@ const arrowX = computed(() => middlewareData.value.arrow?.x ?? null);
 const arrowY = computed(() => middlewareData.value.arrow?.y ?? null);
 
 const arrowStyles = computed<StyleValue>(() => {
-  const side = floatingPlacement.value.split("-")[0];
+  const side = floatingPlacement.value.split('-')[0];
   const staticSide =
     {
-      top: "bottom",
-      right: "left",
-      bottom: "top",
-      left: "right",
-    }[side] ?? "bottom";
+      top: 'bottom',
+      right: 'left',
+      bottom: 'top',
+      left: 'right',
+    }[side] ?? 'bottom';
 
   return {
-    position: "absolute",
-    left: arrowX.value != null ? `${arrowX.value}px` : "",
-    top: arrowY.value != null ? `${arrowY.value}px` : "",
+    position: 'absolute',
+    left: arrowX.value != null ? `${arrowX.value}px` : '',
+    top: arrowY.value != null ? `${arrowY.value}px` : '',
     [staticSide]: `-2px`,
   };
 });
