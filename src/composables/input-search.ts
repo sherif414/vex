@@ -1,6 +1,6 @@
+import { isFunction } from '@/utils';
 import { watchDebounced } from '@vueuse/core';
 import { type Ref, readonly, ref } from 'vue';
-import { isFunction } from '@/utils';
 
 interface Options {
   search?: (data: Suggestion[], query: string, limit: number) => Suggestion[];

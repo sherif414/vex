@@ -1,3 +1,5 @@
+import { mount } from 'cypress/vue';
+import { h, ref } from 'vue';
 import {
   Accordion,
   AccordionContent,
@@ -5,8 +7,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '../index';
-import { h, ref } from 'vue';
-import { mount } from 'cypress/vue';
 
 type AccordionItemConfig = {
   value: string;

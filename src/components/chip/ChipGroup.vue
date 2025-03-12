@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useRovingFocus, createSelectScope, useVModel, createCollection } from '@/composables';
+import { createCollection, createSelectScope, useRovingFocus, useVModel } from '@/composables';
 import type { Orientation } from '@/types';
+import { ref } from 'vue';
 
 //----------------------------------------------------------------------------------------------------
 // 📌 component meta
@@ -35,9 +35,7 @@ const p = withDefaults(
   }
 );
 
-defineEmits<{
-  (event: 'update:modelValue', value?: typeof p.modelValue): void;
-}>();
+defineEmits<(event: 'update:modelValue', value?: typeof p.modelValue) => void>();
 
 defineSlots<{
   default: (props: {}) => any;

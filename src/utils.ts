@@ -1,6 +1,6 @@
 import { EXPOSED_EL } from '@/config';
 import type { MaybeRefOrGetter } from '@/types';
-import { isRef, type ComponentPublicInstance, type WatchSource } from 'vue';
+import { type ComponentPublicInstance, type WatchSource, isRef } from 'vue';
 
 // ----------------------------------------------------------------------------------------------------
 

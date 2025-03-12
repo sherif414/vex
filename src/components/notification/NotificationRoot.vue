@@ -1,10 +1,10 @@
 <script setup lang="ts">
+import { isString } from '@/composables/helpers';
+import { useEventListener } from '@vueuse/core';
+import { animate, timeline } from 'motion';
+import { ref } from 'vue';
 import type { NotificationItem } from '.';
 import Notification from './Notification.vue';
-import { animate, timeline } from 'motion';
-import { useEventListener } from '@vueuse/core';
-import { isString } from '@/composables/helpers';
-import { ref } from 'vue';
 
 //----------------------------------------------------------------------------------------------------
 // 📌 add/remove items

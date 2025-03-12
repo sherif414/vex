@@ -1,6 +1,6 @@
-import { describe, it, expect, vi } from 'vitest';
-import { useEventListener } from '..';
+import { describe, expect, it, vi } from 'vitest';
 import { effectScope } from 'vue';
+import { useEventListener } from '..';
 
 const elements = [window, document, new HTMLElement()] as const;
 

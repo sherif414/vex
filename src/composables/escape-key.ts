@@ -1,5 +1,5 @@
+import { isClient, noop, remove } from '@/utils';
 import { onScopeDispose } from 'vue';
-import { noop, remove, isClient } from '@/utils';
 
 type Listener = (e: KeyboardEvent) => void;
 

@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { fireEvent } from '@testing-library/vue';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useEscapeKey } from '..';
 
 describe('useEscapeKey', () => {

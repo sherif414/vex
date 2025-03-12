@@ -1,6 +1,6 @@
-import { type Ref, watch, toValue } from 'vue';
 import type { MaybeRefOrGetter } from '@/types';
 import { isWatchable } from '@/utils';
+import { type Ref, toValue, watch } from 'vue';
 
 type PrimitiveValue = string | number | boolean | symbol;
 

@@ -1,7 +1,7 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-vue';
-import { Primitive } from './Primitive';
 import { h } from 'vue';
+import { Primitive } from './Primitive';
 import { COMPONENT_ERROR_MESSAGES } from './Primitive';
 
 describe('Primitive', () => {

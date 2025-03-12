@@ -1,13 +1,13 @@
 import {
-  cloneVNode,
   Comment,
   Fragment,
+  Text,
+  type VNode,
+  cloneVNode,
   getCurrentInstance,
   mergeProps,
-  Text,
   useAttrs,
   useSlots,
-  type VNode,
 } from 'vue';
 
 export const COMPONENT_ERROR_MESSAGES = {

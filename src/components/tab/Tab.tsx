@@ -1,15 +1,15 @@
 import { useResizeObserver } from '@vueuse/core';
 import {
+  type PropType,
+  type Ref,
+  type SlotsType,
   computed,
   defineComponent,
   inject,
   onMounted,
+  provide,
   ref,
   watch,
-  provide,
-  type Ref,
-  type SlotsType,
-  type PropType,
 } from 'vue';
 import type { InjectionKey } from 'vue';
 

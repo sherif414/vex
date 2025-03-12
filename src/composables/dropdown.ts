@@ -1,5 +1,5 @@
-import { watch } from 'vue';
 import type { Getter } from '@/types';
+import { watch } from 'vue';
 
 interface UseDropdownOptions {
   role: 'menu' | 'listbox';

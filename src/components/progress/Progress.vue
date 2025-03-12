@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { animate, type AnimationControls } from 'motion';
-import { onMounted, ref, watch, computed } from 'vue';
+import { type AnimationControls, animate } from 'motion';
+import { computed, onMounted, ref, watch } from 'vue';
 
 //----------------------------------------------------------------------------------------------------
 // 📌 component meta
@@ -46,9 +46,7 @@ const p = withDefaults(
   }
 );
 
-const emit = defineEmits<{
-  (event: 'finished'): void;
-}>();
+const emit = defineEmits<(event: 'finished') => void>();
 
 //----------------------------------------------------------------------------------------------------
 // 📌 animation

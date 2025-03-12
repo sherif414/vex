@@ -1,6 +1,6 @@
 <script lang="ts">
-import { InjectionKey } from 'vue';
 import { useContext } from '@/composables';
+import type { InjectionKey } from 'vue';
 
 export const ALERT_INJECTION_KEY = Symbol() as InjectionKey<{
   contentID: string;

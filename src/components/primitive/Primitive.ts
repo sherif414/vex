@@ -1,5 +1,5 @@
 import type { FunctionalComponent, VNode } from 'vue';
-import { cloneVNode, Comment, Fragment, h, Text } from 'vue';
+import { Comment, Fragment, Text, cloneVNode, h } from 'vue';
 
 interface PrimitiveProps {
   as: string;

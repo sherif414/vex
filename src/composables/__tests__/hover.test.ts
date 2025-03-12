@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { ref, nextTick, effectScope, type EffectScope } from 'vue';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { type EffectScope, effectScope, nextTick, ref } from 'vue';
 import { useHover } from '../hover';
 
 describe('useHover', () => {

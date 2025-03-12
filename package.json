@@ -15,7 +15,7 @@
     "test:coverage": "vitest run --coverage",
     "format": "biome format --write \"./src\"",
     "lint": "biome lint \"./src\"",
-    "check": "biome check --apply \"./src\""
+    "check": "biome check --write \"./src\""
   },
   "dependencies": {
     "@floating-ui/dom": "^1.6.12",

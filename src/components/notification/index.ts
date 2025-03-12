@@ -1,7 +1,7 @@
-import { h, markRaw, render } from 'vue';
-import type { VNode, Component } from 'vue';
-import NotificationRoot from './NotificationRoot.vue';
 import { useID } from '@/composables';
+import { h, markRaw, render } from 'vue';
+import type { Component, VNode } from 'vue';
+import NotificationRoot from './NotificationRoot.vue';
 import './Notification.scss';
 import './NotificationRoot.scss';
 

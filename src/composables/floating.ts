@@ -9,6 +9,7 @@ import type {
 } from '@floating-ui/dom';
 import { arrow, autoUpdate, computePosition, flip, offset, shift, size } from '@floating-ui/dom';
 import {
+  type StyleValue,
   computed,
   onScopeDispose,
   ref,
@@ -17,7 +18,6 @@ import {
   toRef,
   toValue,
   watch,
-  type StyleValue,
 } from 'vue';
 
 export interface FloatingStyles {

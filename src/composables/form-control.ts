@@ -1,4 +1,4 @@
-import { computed, type Ref } from 'vue';
+import { type Ref, computed } from 'vue';
 
 interface UseFromControlReturn {
   isFormControl: Readonly<Ref<boolean>>;

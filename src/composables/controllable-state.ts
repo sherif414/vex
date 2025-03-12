@@ -1,7 +1,7 @@
-import { type Ref, getCurrentInstance, shallowRef } from 'vue';
-import { getKebabCase } from '@/utils';
-import { useVModel } from './v-model';
 import type { Getter } from '@/types';
+import { getKebabCase } from '@/utils';
+import { type Ref, getCurrentInstance, shallowRef } from 'vue';
+import { useVModel } from './v-model';
 
 interface Options<T> {
   propName?: string;

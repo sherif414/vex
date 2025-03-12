@@ -1,6 +1,6 @@
 <script lang="ts">
-import type { InjectionKey, Ref } from 'vue';
 import { useContext } from '@/composables';
+import type { InjectionKey, Ref } from 'vue';
 
 export type LoadState = 'loading' | 'error' | 'idle' | 'loaded';
 

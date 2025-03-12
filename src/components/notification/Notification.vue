@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
-import { useEventListener, useMouseInElement } from '@vueuse/core';
-import { IconDangerSign, IconBell, IconXMark, IconCheckCircle, IconWarn } from '@/icons';
+import type { Progress } from '@/components/progress';
 import { useTimer } from '@/composables';
-import { Progress } from '@/components/progress';
+import { IconBell, IconCheckCircle, IconDangerSign, IconWarn, IconXMark } from '@/icons';
+import { useEventListener, useMouseInElement } from '@vueuse/core';
 import { animate } from 'motion';
+import { computed, onMounted, ref } from 'vue';
 
 //----------------------------------------------------------------------------------------------------
 // 📌 component meta

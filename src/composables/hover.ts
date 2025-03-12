@@ -1,5 +1,5 @@
 import { tryOnScopeDispose } from '@vueuse/core';
-import { onWatcherCleanup, ref, watch, type Ref } from 'vue';
+import { type Ref, onWatcherCleanup, ref, watch } from 'vue';
 import { useDelayedOpen } from './delayed-open';
 import { isMouseLikePointerType } from './floating-ui';
 

@@ -1,6 +1,6 @@
-import { onScopeDispose, toValue } from 'vue';
 import type { MaybeRefOrGetter, TemplateRef } from '@/types';
 import { isClient, isIOS, noop, remove } from '@/utils';
+import { onScopeDispose, toValue } from 'vue';
 
 type Listener = (e: PointerEvent) => void;
 

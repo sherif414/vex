@@ -1,8 +1,8 @@
 import { mount } from 'cypress/vue';
 import Combobox from '../Combobox.vue';
 import ComboboxInput from '../ComboboxInput.vue';
-import ComboboxListbox from '../ComboboxListbox.vue';
 import ComboboxListItem from '../ComboboxListItem.vue';
+import ComboboxListbox from '../ComboboxListbox.vue';
 import ComboboxPanel from '../ComboboxPanel.vue';
 
 describe('Combobox', () => {

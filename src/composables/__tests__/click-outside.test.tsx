@@ -1,7 +1,7 @@
-import { type Ref, ref, nextTick } from 'vue';
+import { fireEvent, render, screen } from '@testing-library/vue';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { type Ref, nextTick, ref } from 'vue';
 import { useClickOutside } from '../click-outside';
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/vue';
 
 describe('useClickOutside', () => {
   const component = {

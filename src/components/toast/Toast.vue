@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { IconDangerSign, IconBell, IconCheckCircle, IconWarn } from '@/icons';
 import { isString } from '@/composables/helpers';
 import { useTimer } from '@/composables/timer';
-import { onMounted, computed } from 'vue';
+import { IconBell, IconCheckCircle, IconDangerSign, IconWarn } from '@/icons';
+import { computed, onMounted } from 'vue';
 import type { Component } from 'vue';
 
 //----------------------------------------------------------------------------------------------------

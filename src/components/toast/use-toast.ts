@@ -1,7 +1,7 @@
-import { render, h, markRaw } from 'vue';
-import type { VNode, Component } from 'vue';
-import ToastRoot from './ToastRoot.vue';
 import { useID } from '@/composables';
+import { h, markRaw, render } from 'vue';
+import type { Component, VNode } from 'vue';
+import ToastRoot from './ToastRoot.vue';
 
 export interface ToastifyProps {
   content: string | Component;

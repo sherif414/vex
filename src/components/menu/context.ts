@@ -1,7 +1,7 @@
 import { useContext } from '@/composables';
 import type { TemplateRef } from '@/composables/template-ref';
-import type { Signal, ComputableGetter, Setter, Fn, Getter } from '@/types';
-import { inject, type InjectionKey } from 'vue';
+import type { ComputableGetter, Fn, Getter, Setter, Signal } from '@/types';
+import { type InjectionKey, inject } from 'vue';
 
 //----------------------------------------------------------------------------------------------------
 // 📌 menu context

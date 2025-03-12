@@ -1,5 +1,5 @@
-import { screen, render, cleanup } from '@testing-library/vue';
-import { describe, expect, it, vi, afterEach } from 'vitest';
+import { cleanup, render, screen } from '@testing-library/vue';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { defineComponent, h } from 'vue';
 import { COMPONENT_ERROR_MESSAGES, useRenderAsChild } from './render-as-child';
 

@@ -1,5 +1,5 @@
-import { computed, getCurrentInstance, type Ref } from 'vue';
 import type { Getter } from '@/types';
+import { type Ref, computed, getCurrentInstance } from 'vue';
 
 interface Options<T> {
   setter?: (newValue: T) => T;

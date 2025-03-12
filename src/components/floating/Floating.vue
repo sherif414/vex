@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import {
-  useFloating,
-  size,
-  shift,
-  flip,
-  autoUpdate,
-  offset,
   type Placement,
   arrow,
+  autoUpdate,
+  flip,
+  offset,
+  shift,
+  size,
+  useFloating,
 } from '@floating-ui/vue';
 import { onClickOutside, useEventListener, useVModel } from '@vueuse/core';
-import { computed, ref, toRef, type StyleValue, onUnmounted } from 'vue';
+import { type StyleValue, computed, onUnmounted, ref, toRef } from 'vue';
 
 //----------------------------------------------------------------------------------------------------
 // 📌 component meta
@@ -90,9 +90,7 @@ const p = withDefaults(
   }
 );
 
-const emit = defineEmits<{
-  (event: 'update:visible', value: boolean): void;
-}>();
+const emit = defineEmits<(event: 'update:visible', value: boolean) => void>();
 
 const referenceEl = toRef(p, 'reference');
 const floatingEl = ref<HTMLElement>();
