@@ -3,59 +3,56 @@ export interface CheckboxProps {
   /**
    * Whether the checkbox is in an indeterminate state
    */
-  indeterminate?: boolean;
+  indeterminate?: boolean
   /**
    * Whether the checkbox is disabled
    */
-  disabled?: boolean;
+  disabled?: boolean
   /**
    * The name of the checkbox, used for form submissions
    */
-  name?: string;
+  name?: string
   /**
    * The value of the checkbox, used for form submissions
    */
-  value: string;
+  value: string
   /**
    * Whether the checkbox should receive focus on mount
    */
-  autoFocus?: boolean;
+  autoFocus?: boolean
   /**
    * The validation state of the checkbox
    */
-  validationState?: 'valid' | 'invalid';
+  validationState?: "valid" | "invalid"
   /**
    * Whether the checkbox is required
    */
-  required?: boolean;
+  required?: boolean
   /**
    * The state of the checkbox
    */
-  modelValue?: boolean;
+  modelValue?: boolean
 }
 </script>
 
 <script setup lang="ts">
-import { useFormControl } from "@/composables";
-import { computed, useTemplateRef } from "vue";
-import { useCheckboxGroupContext } from "./CheckboxGroup.vue";
+import { useFormControl } from "@/composables"
+import { computed, useTemplateRef } from "vue"
+import { useCheckboxGroupContext } from "./CheckboxGroup.vue"
 
-const props = withDefaults(defineProps<CheckboxProps>(), {});
-const ctx = useCheckboxGroupContext();
-const isGrouped = !!ctx;
-
-const checked = computed(() => {
-  return ctx?.group.modelValue.value.includes(props.value) ?? false;
-});
+const props = withDefaults(defineProps<CheckboxProps>(), {})
+const ctx = useCheckboxGroupContext()
+const isGrouped = !!ctx
+const isDisabled = computed<boolean>(() => ctx?.disabled.value || props.disabled)
 
 function check() {
-  if (!ctx || props.disabled || ctx.disabled.value) return;
-  ctx.group.add(props.value);
+  if (!ctx || props.disabled || ctx.disabled.value) return
+  ctx.group.select(props.value)
 }
 
 function uncheck() {
-  if (!ctx || props.disabled || ctx.disabled.value) return;
-  ctx.group.remove(props.value);
+  if (!ctx || props.disabled || ctx.disabled.value) return
+  ctx.group.deselect(props.value)
 }
 
 const modelValue = !isGrouped
@@ -63,16 +60,16 @@ const modelValue = !isGrouped
   : computed<boolean>({
       set: (v) => (v ? ctx.group.select(props.value) : ctx.group.deselect(props.value)),
       get: () => ctx.group.isSelected(props.value),
-    });
+    })
 
-defineExpose({ check, uncheck });
+defineExpose({ check, uncheck })
 
-const checkboxRef = useTemplateRef("checkbox");
-const { isFormControl } = useFormControl(checkboxRef);
+const checkboxRef = useTemplateRef("checkbox")
+const { isFormControl } = useFormControl(checkboxRef)
 
 function toggle() {
-  if (props.disabled) return;
-  modelValue.value = !modelValue.value;
+  if (props.disabled) return
+  modelValue.value = !modelValue.value
 }
 </script>
 
@@ -87,8 +84,7 @@ function toggle() {
     :aria-checked="props.indeterminate ? 'mixed' : modelValue"
     :aria-disabled="props.disabled"
     :aria-required="props.required"
-    :aria-invalid="props.validationState === 'invalid'"
-  >
+    :aria-invalid="props.validationState === 'invalid'">
     <slot />
     <input
       v-if="!isGrouped && isFormControl"
@@ -109,7 +105,6 @@ function toggle() {
         clip: rect(0, 0, 0, 0);
         white-space: nowrap;
         border: 0;
-      "
-    />
+      " />
   </button>
 </template>

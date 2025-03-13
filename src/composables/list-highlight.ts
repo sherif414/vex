@@ -1,6 +1,6 @@
-import type { Fn, Orientation, TemplateRef } from '@/types';
-import type { MaybeRefOrGetter, Ref } from 'vue';
-import { useKeyIntent } from '.';
+import type { Fn, Orientation, TemplateRef } from "@/types"
+import type { MaybeRefOrGetter, Ref } from "vue"
+import { useKeyIntent } from "."
 
 /**
  * Options for configuring list highlight behavior
@@ -10,10 +10,10 @@ interface ListHighlightOptions {
    * The orientation of the list navigation
    * @default "vertical"
    */
-  orientation?: MaybeRefOrGetter<Orientation>;
+  orientation?: MaybeRefOrGetter<Orientation>
 }
 
-type cleanupFn = Fn;
+type cleanupFn = Fn
 
 /**
  * A composable for managing keyboard navigation and highlighting in lists.
@@ -84,40 +84,40 @@ export function useListHighlight(
   children: Ref<HTMLElement[]>,
   highlightedIndex: Readonly<Ref<number>>,
   onHighlight: (index: number) => void,
-  options: ListHighlightOptions = {}
+  options: ListHighlightOptions = {},
 ): cleanupFn {
   return useKeyIntent(
     parent,
     (e: KeyboardEvent, intent) => {
-      const last = children.value.length - 1;
-      const currentIndex = highlightedIndex.value;
-      e.preventDefault();
-      e.stopPropagation();
+      const last = children.value.length - 1
+      const currentIndex = highlightedIndex.value
+      e.preventDefault()
+      e.stopPropagation()
 
-      let newIndex: number;
+      let newIndex: number
       switch (intent) {
-        case 'next':
-          newIndex = currentIndex >= last ? 0 : currentIndex + 1;
-          break;
+        case "next":
+          newIndex = currentIndex >= last ? 0 : currentIndex + 1
+          break
 
-        case 'prev':
-          newIndex = currentIndex <= 0 ? last : currentIndex - 1;
-          break;
+        case "prev":
+          newIndex = currentIndex <= 0 ? last : currentIndex - 1
+          break
 
-        case 'first':
-          newIndex = 0;
-          break;
+        case "first":
+          newIndex = 0
+          break
 
-        case 'last':
-          newIndex = last;
-          break;
+        case "last":
+          newIndex = last
+          break
 
         default:
-          return;
+          return
       }
 
-      onHighlight(newIndex);
+      onHighlight(newIndex)
     },
-    options
-  );
+    options,
+  )
 }

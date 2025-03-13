@@ -8,14 +8,14 @@ import {
   mergeProps,
   useAttrs,
   useSlots,
-} from 'vue';
+} from "vue"
 
 export const COMPONENT_ERROR_MESSAGES = {
   NO_CHILDREN: (componentName: string) =>
     `[vex]: <${componentName}> requires exactly one child element, but none found.`,
   MULTIPLE_CHILDREN: (componentName: string, count: number) =>
     `[vex]: <${componentName}> requires exactly one child element. Found ${count} children.`,
-} as const;
+} as const
 
 /**
  * renders the component as its child element
@@ -23,21 +23,21 @@ export const COMPONENT_ERROR_MESSAGES = {
  * @param props Props to pass to the component
  */
 export function useRenderAsChild(
-  slots?: Record<string, any>
+  slots?: Record<string, any>,
 ): (props?: Record<string, any>) => VNode {
-  slots ??= useSlots();
-  const attrs = useAttrs();
+  slots ??= useSlots()
+  const attrs = useAttrs()
 
   return (props: Record<string, any> = {}) => {
-    const children = normalizeSlotNodes(normalizeChildren(slots.default?.()));
-    const child = validateRootChild(children);
-    return cloneVNode(child, mergeProps(attrs, child.props ?? {}, props), true);
-  };
+    const children = normalizeSlotNodes(normalizeChildren(slots.default?.()))
+    const child = validateRootChild(children)
+    return cloneVNode(child, mergeProps(attrs, child.props ?? {}, props), true)
+  }
 }
 
 function normalizeChildren(children: unknown): VNode[] {
-  if (!children) return [];
-  return Array.isArray(children) ? children : [children as VNode];
+  if (!children) return []
+  return Array.isArray(children) ? children : [children as VNode]
 }
 
 /**
@@ -60,33 +60,33 @@ function normalizeSlotNodes(nodes: VNode[]): VNode[] {
   return nodes.flatMap((node) => {
     // Skip comment nodes (v-if false case)
     if (node.type === Comment || node.type === Text) {
-      return [];
+      return []
     }
 
     // Handle Fragment nodes (v-for case)
     if (node.type === Fragment) {
-      return normalizeSlotNodes((node.children as VNode[]) ?? []);
+      return normalizeSlotNodes((node.children as VNode[]) ?? [])
     }
 
-    return [node];
-  });
+    return [node]
+  })
 }
 
 function validateRootChild(nodes: VNode[]): VNode {
-  const componentName = getComponentName();
+  const componentName = getComponentName()
 
   if (nodes.length === 0) {
-    throw new Error(COMPONENT_ERROR_MESSAGES.NO_CHILDREN(componentName));
+    throw new Error(COMPONENT_ERROR_MESSAGES.NO_CHILDREN(componentName))
   }
 
   if (nodes.length > 1) {
-    throw new Error(COMPONENT_ERROR_MESSAGES.MULTIPLE_CHILDREN(componentName, nodes.length));
+    throw new Error(COMPONENT_ERROR_MESSAGES.MULTIPLE_CHILDREN(componentName, nodes.length))
   }
 
-  return nodes[0];
+  return nodes[0]
 }
 
 function getComponentName(): string {
-  const instance = getCurrentInstance();
-  return instance?.type.name || instance?.parent?.type.name || 'Unknown Component';
+  const instance = getCurrentInstance()
+  return instance?.type.name || instance?.parent?.type.name || "Unknown Component"
 }

@@ -123,21 +123,21 @@ The Combobox consists of five main components:
 
 ```vue
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref } from "vue"
 import {
   ComboboxRoot,
   ComboboxInput,
   ComboboxPanel,
   ComboboxListbox,
   ComboboxListItem,
-} from "@vex-ui/components";
+} from "@vex-ui/components"
 
-const selected = ref<string[]>([]);
+const selected = ref<string[]>([])
 const items = [
   { id: 1, label: "Option 1" },
   { id: 2, label: "Option 2" },
   { id: 3, label: "Option 3" },
-];
+]
 </script>
 
 <template>
@@ -146,11 +146,7 @@ const items = [
       <ComboboxInput :aria-labelledby="triggerId" />
       <ComboboxPanel v-if="isVisible">
         <ComboboxListbox :id="listboxId">
-          <ComboboxListItem
-            v-for="item in items"
-            :key="item.id"
-            :value="item.label"
-          >
+          <ComboboxListItem v-for="item in items" :key="item.id" :value="item.label">
             <template #default="{ isSelected, isActive }">
               <span :class="{ selected: isSelected, active: isActive }">
                 {{ item.label }}
@@ -198,10 +194,8 @@ The Combobox component follows WAI-ARIA guidelines for combobox widgets:
 ```vue
 <script setup lang="ts">
 const filterFunction = (query: string, items: any[]) => {
-  return items.filter((item) =>
-    item.label.toLowerCase().includes(query.toLowerCase())
-  );
-};
+  return items.filter((item) => item.label.toLowerCase().includes(query.toLowerCase()))
+}
 </script>
 
 <template>
@@ -272,18 +266,18 @@ The Combobox components accept standard HTML attributes including class and styl
 
 ```vue
 <script setup lang="ts">
-const loading = ref(false);
-const items = ref([]);
+const loading = ref(false)
+const items = ref([])
 
 const fetchItems = async (query: string) => {
-  loading.value = true;
+  loading.value = true
   try {
-    const response = await fetch(`/api/items?q=${query}`);
-    items.value = await response.json();
+    const response = await fetch(`/api/items?q=${query}`)
+    items.value = await response.json()
   } finally {
-    loading.value = false;
+    loading.value = false
   }
-};
+}
 </script>
 
 <template>
@@ -309,11 +303,7 @@ const fetchItems = async (query: string) => {
       <ComboboxListbox>
         <template v-for="group in groups" :key="group.id">
           <div class="group-label">{{ group.label }}</div>
-          <ComboboxListItem
-            v-for="item in group.items"
-            :key="item.id"
-            :value="item.value"
-          >
+          <ComboboxListItem v-for="item in group.items" :key="item.id" :value="item.value">
             {{ item.label }}
           </ComboboxListItem>
         </template>

@@ -1,73 +1,73 @@
 <script setup lang="ts">
-import { isString } from '@/composables/helpers';
-import { useEventListener } from '@vueuse/core';
-import { animate, timeline } from 'motion';
-import { ref } from 'vue';
-import type { NotificationItem } from '.';
-import Notification from './Notification.vue';
+import { isString } from "@/composables/helpers"
+import { useEventListener } from "@vueuse/core"
+import { animate, timeline } from "motion"
+import { ref } from "vue"
+import type { NotificationItem } from "."
+import Notification from "./Notification.vue"
 
 //----------------------------------------------------------------------------------------------------
 // 📌 add/remove items
 //----------------------------------------------------------------------------------------------------
 
-const items = ref<NotificationItem[]>([]);
+const items = ref<NotificationItem[]>([])
 
 function addNotification(notification: NotificationItem) {
-  items.value.unshift(notification);
+  items.value.unshift(notification)
 }
 
 function removeNotification(notification: NotificationItem) {
-  const idx = items.value.findIndex((_notification) => _notification === notification);
-  items.value.splice(idx, 1);
+  const idx = items.value.findIndex((_notification) => _notification === notification)
+  items.value.splice(idx, 1)
 }
 
 //----------------------------------------------------------------------------------------------------
 // 📌 keyboard navigation
 //----------------------------------------------------------------------------------------------------
 
-useEventListener('keydown', (e: KeyboardEvent) => {
-  if (e.key === 'F8' && !e.altKey && !e.shiftKey && !e.ctrlKey) {
-    const el = document.querySelector<HTMLElement>('.vex-notification-root');
-    el?.focus();
+useEventListener("keydown", (e: KeyboardEvent) => {
+  if (e.key === "F8" && !e.altKey && !e.shiftKey && !e.ctrlKey) {
+    const el = document.querySelector<HTMLElement>(".vex-notification-root")
+    el?.focus()
   }
-});
+})
 
 //----------------------------------------------------------------------------------------------------
 // 📌 animation
 //----------------------------------------------------------------------------------------------------
 
 async function onEnter(el: HTMLElement, done: () => void) {
-  const children = el.querySelectorAll<HTMLElement>('.vex-notification-item > *');
-  const { opacity, transform } = getComputedStyle(el);
+  const children = el.querySelectorAll<HTMLElement>(".vex-notification-item > *")
+  const { opacity, transform } = getComputedStyle(el)
 
   await timeline(
     [
-      [el, { x: ['100%', 0], opacity: [0, 1] }, { duration: 0.5 }],
+      [el, { x: ["100%", 0], opacity: [0, 1] }, { duration: 0.5 }],
       [children, { opacity: [0, 1] }, { duration: 0.3, at: 0.3 }],
     ],
-    { defaultOptions: { easing: 'ease-out' }, persist: false }
-  ).finished;
+    { defaultOptions: { easing: "ease-out" }, persist: false },
+  ).finished
 
   children.forEach((child) => {
-    child.style.opacity = '';
-  });
-  el.style.opacity = opacity;
-  el.style.transform = transform;
+    child.style.opacity = ""
+  })
+  el.style.opacity = opacity
+  el.style.transform = transform
 
-  done();
+  done()
 }
 
 function onBeforeLeave(el: HTMLElement) {
   // make the element retain its position
-  const rect = el.getBoundingClientRect();
-  el.style.top = `${rect.top}px`;
-  el.style.left = `${rect.left}px`;
-  el.style.position = 'absolute';
+  const rect = el.getBoundingClientRect()
+  el.style.top = `${rect.top}px`
+  el.style.left = `${rect.left}px`
+  el.style.position = "absolute"
 }
 
 async function onLeave(el: HTMLElement, done: () => void) {
-  await animate(el, { opacity: 0, x: '100%' }, { duration: 0.3 }).finished;
-  done();
+  await animate(el, { opacity: 0, x: "100%" }, { duration: 0.3 }).finished
+  done()
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -75,7 +75,7 @@ async function onLeave(el: HTMLElement, done: () => void) {
 defineExpose({
   addNotification,
   removeNotification,
-});
+})
 </script>
 
 <template>
@@ -92,8 +92,7 @@ defineExpose({
       aria-label="Notifications (F8)"
       tabindex="-1"
       role="region"
-      aria-live="polite"
-    >
+      aria-live="polite">
       <Notification
         v-for="item in items"
         :key="item.key"
@@ -104,8 +103,7 @@ defineExpose({
         :persist="item.persist"
         :hide-progress="item.hideProgress"
         :closeable="item.closable"
-        @close="removeNotification(item)"
-      >
+        @close="removeNotification(item)">
         <template v-if="item.customContent" #default>
           <Component :is="item.customContent" />
         </template>

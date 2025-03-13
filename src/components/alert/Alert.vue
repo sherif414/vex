@@ -1,38 +1,38 @@
 <script lang="ts">
-import { useContext } from '@/composables';
-import type { InjectionKey } from 'vue';
+import { useContext } from "@/composables"
+import type { InjectionKey } from "vue"
 
 export const ALERT_INJECTION_KEY = Symbol() as InjectionKey<{
-  contentID: string;
-  headerID: string;
-}>;
+  contentID: string
+  headerID: string
+}>
 
 export function useAlertContext(componentName: string) {
-  return useContext(ALERT_INJECTION_KEY, 'Alert', componentName);
+  return useContext(ALERT_INJECTION_KEY, "Alert", componentName)
 }
 
 export interface AlertProps {
   /** The HTML element to render as. @default 'div' */
-  as?: string;
+  as?: string
 }
 </script>
 
 <script setup lang="ts">
-import { Primitive } from "@/components";
-import { useID } from "@/composables";
-import { provide } from "vue";
+import { Primitive } from "@/components"
+import { useID } from "@/composables"
+import { provide } from "vue"
 
 const props = withDefaults(defineProps<AlertProps>(), {
   as: "div",
-});
+})
 
-const headerID = useID();
-const contentID = useID();
+const headerID = useID()
+const contentID = useID()
 
 provide(ALERT_INJECTION_KEY, {
   headerID,
   contentID,
-});
+})
 </script>
 
 <template>

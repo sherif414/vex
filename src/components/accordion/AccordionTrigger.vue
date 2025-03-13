@@ -1,25 +1,25 @@
 <script lang="ts">
 export interface AccordionTriggerProps {
   /** The HTML element to render as. @default 'button' */
-  as?: string;
+  as?: string
 }
 </script>
 
 <script setup lang="ts">
-import { Primitive } from "@/components";
-import { useAccordionItemCtx } from "./AccordionItem.vue";
+import { Primitive } from "@/components"
+import { useAccordionItemCtx } from "./AccordionItem.vue"
 
 const props = withDefaults(defineProps<AccordionTriggerProps>(), {
   as: "button",
-});
+})
 
 const { expand, collapse, contentID, isExpanded, triggerID, disabled } =
-  useAccordionItemCtx("AccordionTrigger");
+  useAccordionItemCtx("AccordionTrigger")
 function onClick() {
   if (isExpanded.value) {
-    collapse();
+    collapse()
   } else {
-    expand();
+    expand()
   }
 }
 </script>
@@ -33,8 +33,7 @@ function onClick() {
     :disabled="disabled"
     @click="onClick"
     :aria-controls="contentID"
-    :aria-expanded="isExpanded"
-  >
+    :aria-expanded="isExpanded">
     <slot />
   </Primitive>
 </template>

@@ -1,1 +1,1 @@
-export { default as TransitionExpand } from './TransitionExpand.vue';
+export { default as TransitionExpand } from "./TransitionExpand.vue"

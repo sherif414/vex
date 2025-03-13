@@ -28,13 +28,13 @@ yarn add @primitives/core
 Add the following to your `main.ts` or entry file:
 
 ```ts
-import { createApp } from "vue";
-import { PrimitivesPlugin } from "@primitives/core";
-import App from "./App.vue";
+import { createApp } from "vue"
+import { PrimitivesPlugin } from "@primitives/core"
+import App from "./App.vue"
 
-const app = createApp(App);
-app.use(PrimitivesPlugin);
-app.mount("#app");
+const app = createApp(App)
+app.use(PrimitivesPlugin)
+app.mount("#app")
 ```
 
 ## Usage Example
@@ -43,10 +43,10 @@ Here's a basic example using a component:
 
 ```vue
 <script setup lang="ts">
-import { ref } from "vue";
-import { PButton } from "@primitives/core";
+import { ref } from "vue"
+import { PButton } from "@primitives/core"
 
-const count = ref(0);
+const count = ref(0)
 </script>
 
 <template>
@@ -61,7 +61,7 @@ You can customize the default settings when installing the plugin:
 ```ts
 app.use(PrimitivesPlugin, {
   // configuration options will go here
-});
+})
 ```
 
 ## Next Steps

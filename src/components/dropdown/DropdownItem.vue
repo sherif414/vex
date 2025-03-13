@@ -5,22 +5,22 @@ const props = withDefaults(
      * the rendered html tag
      * @default 'li'
      */
-    tag?: string;
+    tag?: string
 
     /**
      * whether the item is disabled
      */
-    disabled?: boolean;
+    disabled?: boolean
 
     /**
      * whether the item is selected
      */
-    selected?: boolean;
+    selected?: boolean
   }>(),
   {
-    tag: 'li',
-  }
-);
+    tag: "li",
+  },
+)
 </script>
 
 <template>
@@ -28,8 +28,7 @@ const props = withDefaults(
     :is="props.tag"
     :inert="props.disabled"
     :class="['vex-dropdown-item', props.selected && 'vex-selected']"
-    tabindex="0"
-  >
+    tabindex="0">
     <slot></slot>
   </Component>
 </template>

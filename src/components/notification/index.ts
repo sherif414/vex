@@ -1,35 +1,35 @@
-import { useID } from '@/composables';
-import { h, markRaw, render } from 'vue';
-import type { Component, VNode } from 'vue';
-import NotificationRoot from './NotificationRoot.vue';
-import './Notification.scss';
-import './NotificationRoot.scss';
+import { useID } from "@/composables"
+import { h, markRaw, render } from "vue"
+import type { Component, VNode } from "vue"
+import NotificationRoot from "./NotificationRoot.vue"
+import "./Notification.scss"
+import "./NotificationRoot.scss"
 
 export interface NotifyProps {
-  title?: string | Component;
-  body?: string | Component;
-  type?: 'success' | 'danger' | 'warning' | 'primary' | 'info';
-  icon?: Component;
-  customContent?: Component;
+  title?: string | Component
+  body?: string | Component
+  type?: "success" | "danger" | "warning" | "primary" | "info"
+  icon?: Component
+  customContent?: Component
 }
 
 export interface NotifyOptions {
-  duration?: number;
-  persist?: boolean;
-  closable?: boolean;
-  hideProgress?: boolean;
+  duration?: number
+  persist?: boolean
+  closable?: boolean
+  hideProgress?: boolean
 }
 
 export interface NotificationItem extends NotifyProps, NotifyOptions {
-  key: string;
+  key: string
 }
 
-let Root: VNode | null = null;
+let Root: VNode | null = null
 
 function useNotification() {
   if (!Root) {
-    Root = h(NotificationRoot);
-    render(Root, document.createDocumentFragment() as unknown as Element);
+    Root = h(NotificationRoot)
+    render(Root, document.createDocumentFragment() as unknown as Element)
   }
 
   /**
@@ -41,22 +41,22 @@ function useNotification() {
       key: useID(),
       ...args,
       ...options,
-    });
-    Root?.component?.exposed?.addNotification(notification);
+    })
+    Root?.component?.exposed?.addNotification(notification)
 
     /**
      * removes the notification.
      */
     const remove = () => {
-      Root?.component?.exposed?.removeNotification(notification);
-    };
+      Root?.component?.exposed?.removeNotification(notification)
+    }
 
-    return remove;
+    return remove
   }
 
   return {
     notify,
-  };
+  }
 }
 
-export { useNotification };
+export { useNotification }

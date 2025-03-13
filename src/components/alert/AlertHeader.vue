@@ -1,19 +1,19 @@
 <script lang="ts">
 export interface AlertHeaderProps {
   /** The HTML element to render as. @default 'div' */
-  as?: string;
+  as?: string
 }
 </script>
 
 <script setup lang="ts">
-import { Primitive } from "@/components";
-import { useAlertContext } from "./Alert.vue";
+import { Primitive } from "@/components"
+import { useAlertContext } from "./Alert.vue"
 
 const props = withDefaults(defineProps<AlertHeaderProps>(), {
   as: "div",
-});
+})
 
-const { headerID } = useAlertContext("AlertHeader");
+const { headerID } = useAlertContext("AlertHeader")
 </script>
 
 <template>

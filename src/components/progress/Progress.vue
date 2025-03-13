@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { type AnimationControls, animate } from 'motion';
-import { computed, onMounted, ref, watch } from 'vue';
+import { type AnimationControls, animate } from "motion"
+import { computed, onMounted, ref, watch } from "vue"
 
 //----------------------------------------------------------------------------------------------------
 // 📌 component meta
@@ -12,41 +12,41 @@ const p = withDefaults(
      * specifies the current progress percentage.
      * @default 0
      */
-    value?: number;
+    value?: number
 
     /**
      * specifies the time it takes - in ms - to animate the progress bar
      * from the previous value the new value.
      * @default 300
      */
-    duration?: number;
+    duration?: number
 
     /**
      * specifies the progress bar height.
      * @default 3
      */
-    height?: number;
+    height?: number
 
     /**
      * specifies the progress bar color.
      * @default 'primary'
      */
-    color?: 'primary' | 'success' | 'danger' | 'warning' | 'info';
+    color?: "primary" | "success" | "danger" | "warning" | "info"
 
     /**
      * specifies the progress aria-valuetext attribute
      */
-    ariaValuetext?: string;
+    ariaValuetext?: string
   }>(),
   {
     value: 0,
     height: 3,
     duration: 300,
-    color: 'primary',
-  }
-);
+    color: "primary",
+  },
+)
 
-const emit = defineEmits<(event: 'finished') => void>();
+const emit = defineEmits<(event: "finished") => void>()
 
 //----------------------------------------------------------------------------------------------------
 // 📌 animation
@@ -54,42 +54,42 @@ const emit = defineEmits<(event: 'finished') => void>();
 // TODO: add reduced motion
 //----------------------------------------------------------------------------------------------------
 
-const progressEl = ref<HTMLElement | null>(null);
-let animationControls: AnimationControls | null = null;
+const progressEl = ref<HTMLElement | null>(null)
+let animationControls: AnimationControls | null = null
 
 onMounted(() => {
   watch(
     () => p.value,
     (val, _, onCleanup) => {
-      if (!progressEl.value) return;
-      onCleanup(() => animationControls?.stop());
+      if (!progressEl.value) return
+      onCleanup(() => animationControls?.stop())
 
       animationControls = animate(
         progressEl.value,
         { width: [null, `${Math.min(val, 100)}%`] },
-        { duration: p.duration / 1000, easing: 'linear' }
-      );
+        { duration: p.duration / 1000, easing: "linear" },
+      )
 
       animationControls.finished.then(() => {
         if (val === 100) {
-          emit('finished');
+          emit("finished")
         }
-      });
+      })
     },
-    { immediate: true }
-  );
-});
+    { immediate: true },
+  )
+})
 
 //----------------------------------------------------------------------------------------------------
 
-const modifierClasses = computed(() => ['vex-progress', `--color-${p.color}`]);
+const modifierClasses = computed(() => ["vex-progress", `--color-${p.color}`])
 
 defineExpose({
   resume: () => animationControls?.play(),
   pause: () => animationControls?.pause(),
   finish: () => animationControls?.finish(),
   stop: () => animationControls?.stop(),
-});
+})
 </script>
 
 <template>
@@ -102,8 +102,7 @@ defineExpose({
     :class="modifierClasses"
     :style="{
       height: p.height + 'px',
-    }"
-  >
+    }">
     <div ref="progressEl" class="vex-progress-bar" />
   </div>
 </template>

@@ -1,31 +1,31 @@
-import { useContext } from '@/composables';
-import type { TemplateRef } from '@/composables/template-ref';
-import type { ComputableGetter, Fn, Getter, Setter, Signal } from '@/types';
-import { type InjectionKey, inject } from 'vue';
+import { useContext } from "@/composables"
+import type { TemplateRef } from "@/composables/template-ref"
+import type { ComputableGetter, Fn, Getter, Setter, Signal } from "@/types"
+import { type InjectionKey, inject } from "vue"
 
 //----------------------------------------------------------------------------------------------------
 // 📌 menu context
 //----------------------------------------------------------------------------------------------------
 
-export type Value = string;
-export type Selected = Value | Value[] | undefined;
+export type Value = string
+export type Selected = Value | Value[] | undefined
 
 export type MenuContext = {
-  isMenuOpen: Signal<boolean>;
-  TriggerEl: TemplateRef;
-  ContentEl: TemplateRef;
-  TRIGGER_ID: string;
-  CONTENT_ID: string;
-  orientation: Getter<'vertical' | 'horizontal'>;
-  isSubMenu: boolean;
-  submenus: MenuContext[];
-  parentMenu: MenuContext | null;
-};
+  isMenuOpen: Signal<boolean>
+  TriggerEl: TemplateRef
+  ContentEl: TemplateRef
+  TRIGGER_ID: string
+  CONTENT_ID: string
+  orientation: Getter<"vertical" | "horizontal">
+  isSubMenu: boolean
+  submenus: MenuContext[]
+  parentMenu: MenuContext | null
+}
 
-export const MENU_CTX = Symbol() as InjectionKey<MenuContext>;
+export const MENU_CTX = Symbol() as InjectionKey<MenuContext>
 
 export function injectMenuContext(component: string) {
-  return useContext(MENU_CTX, 'Menu', component);
+  return useContext(MENU_CTX, "Menu", component)
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -33,13 +33,13 @@ export function injectMenuContext(component: string) {
 //----------------------------------------------------------------------------------------------------
 
 export const MENU_CONTENT_CTX = Symbol() as InjectionKey<{
-  CONTENT_ID: string;
-  activeItemId: Signal<string>;
-  closeAllMenus: Fn;
-}>;
+  CONTENT_ID: string
+  activeItemId: Signal<string>
+  closeAllMenus: Fn
+}>
 
 export function injectContentContext(component: string) {
-  return useContext(MENU_CONTENT_CTX, 'MenuContent', component);
+  return useContext(MENU_CONTENT_CTX, "MenuContent", component)
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -47,11 +47,11 @@ export function injectContentContext(component: string) {
 //----------------------------------------------------------------------------------------------------
 
 export const MENU_TRIGGER_CTX = Symbol() as InjectionKey<{
-  isTrigger: boolean;
-}>;
+  isTrigger: boolean
+}>
 
 export function injectTriggerContext() {
-  return inject(MENU_TRIGGER_CTX, null);
+  return inject(MENU_TRIGGER_CTX, null)
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -59,10 +59,10 @@ export function injectTriggerContext() {
 //----------------------------------------------------------------------------------------------------
 
 export const MENU_GROUP = Symbol() as InjectionKey<{
-  selection: [ComputableGetter<Selected>, Setter<Value>];
-  itemType: Getter<'menuitemcheckbox' | 'menuitemradio'>;
-}>;
+  selection: [ComputableGetter<Selected>, Setter<Value>]
+  itemType: Getter<"menuitemcheckbox" | "menuitemradio">
+}>
 
 export function injectGroupContext() {
-  return inject(MENU_GROUP, null);
+  return inject(MENU_GROUP, null)
 }

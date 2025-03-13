@@ -1,59 +1,59 @@
 <script lang="ts">
 interface MenuTriggerProps {
-  as?: string;
-  interactionType?: 'click' | 'hover';
+  as?: string
+  interactionType?: "click" | "hover"
 }
 </script>
 
 <script setup lang="ts">
-import { nextTick, onUnmounted } from "vue";
-import { Primitive } from "../primitive";
-import { useMenuContext } from "./Menu.vue";
-import { useEventListener } from "@/composables";
+import { nextTick, onUnmounted } from "vue"
+import { Primitive } from "../primitive"
+import { useMenuContext } from "./Menu.vue"
+import { useEventListener } from "@/composables"
 
 const props = withDefaults(defineProps<MenuTriggerProps>(), {
   as: "button",
   interactionType: "click",
-});
+})
 
 const { triggerEl, triggerID, dropdownID, isVisible, show, hide, dropdownEl } =
-  useMenuContext("MenuTrigger");
+  useMenuContext("MenuTrigger")
 
 function onKeydown() {
-  show();
+  show()
   nextTick(() => {
-    dropdownEl.value?.focus();
-  });
+    dropdownEl.value?.focus()
+  })
 }
 
 if (props.interactionType === "hover") {
-  let timeoutId: ReturnType<typeof setTimeout>;
+  let timeoutId: ReturnType<typeof setTimeout>
 
   useEventListener(dropdownEl, "mouseenter", () => {
-    clearTimeout(timeoutId);
-    show();
-  });
+    clearTimeout(timeoutId)
+    show()
+  })
   useEventListener(dropdownEl, "mouseleave", () => {
-    timeoutId = debouncedHide();
-  });
+    timeoutId = debouncedHide()
+  })
 
   useEventListener(triggerEl, "mouseenter", () => {
-    clearTimeout(timeoutId);
-  });
+    clearTimeout(timeoutId)
+  })
   useEventListener(triggerEl, "mouseleave", () => {
-    timeoutId = debouncedHide();
-  });
+    timeoutId = debouncedHide()
+  })
 
   // we debounce to avoid toggling visibility (v-show)
   // when hover is moved from dropdownEl to triggerEl
   // and there is a gap between the two elements
   function debouncedHide() {
-    return setTimeout(hide, 25);
+    return setTimeout(hide, 25)
   }
 
   onUnmounted(() => {
-    clearTimeout(timeoutId);
-  });
+    clearTimeout(timeoutId)
+  })
 }
 
 //  firefox space keyup triggers a click unless default is prevented
@@ -70,8 +70,7 @@ if (props.interactionType === "hover") {
     :aria-controls="dropdownID"
     @keyup.space.prevent
     @keydown.down.prevent="onKeydown"
-    @click.prevent="show"
-  >
+    @click.prevent="show">
     <slot />
   </Primitive>
 </template>

@@ -1,11 +1,10 @@
-import { defineConfig } from "vitepress";
-import Unocss from "unocss/vite";
-import { fileURLToPath } from "node:url";
+import { defineConfig } from "vitepress"
+import Unocss from "unocss/vite"
+import { fileURLToPath } from "node:url"
 
 export default defineConfig({
   title: "Vex UI",
-  description:
-    "A Vue 3 component library focused on accessibility and developer experience",
+  description: "A Vue 3 component library focused on accessibility and developer experience",
 
   themeConfig: {
     nav: [
@@ -37,9 +36,7 @@ export default defineConfig({
       ],
     },
 
-    socialLinks: [
-      { icon: "github", link: "https://github.com/your-org/vex-ui" },
-    ],
+    socialLinks: [{ icon: "github", link: "https://github.com/your-org/vex-ui" }],
 
     footer: {
       message: "Released under the MIT License.",
@@ -55,4 +52,4 @@ export default defineConfig({
       },
     },
   },
-});
+})
