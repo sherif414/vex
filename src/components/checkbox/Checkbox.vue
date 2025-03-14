@@ -43,20 +43,16 @@ export interface CheckboxProps {
 import { useFormControl } from "@/composables"
 import { computed, useTemplateRef } from "vue"
 import { useCheckboxGroupContext } from "./CheckboxGroup.vue"
-import { useFieldContext } from "../Field/Field.vue"
+import { useFieldContext } from "../field/Field.vue"
 
 const props = withDefaults(defineProps<CheckboxProps>(), {})
+const modelValue = defineModel<boolean>({ default: false })
 const fieldContext = useFieldContext()
 const groupContext = useCheckboxGroupContext()
 const isGrouped = !!groupContext
 const isDisabled = computed<boolean>(
   () => groupContext?.disabled.value || fieldContext?.disabled.value || props.disabled,
 )
-
-const modelValue = defineModel<boolean>({
-  default: false,
-})
-
 const checkboxID = computed(() => props.id ?? fieldContext?.inputID)
 
 const isChecked = !isGrouped
@@ -68,12 +64,12 @@ const isChecked = !isGrouped
     })
 
 function check() {
-  if (!groupContext || isDisabled.value || groupContext.disabled.value) return
+  if (!groupContext || isDisabled.value) return
   groupContext.group.select(props.value)
 }
 
 function uncheck() {
-  if (!groupContext || isDisabled.value || groupContext.disabled.value) return
+  if (!groupContext || isDisabled.value) return
   groupContext.group.deselect(props.value)
 }
 

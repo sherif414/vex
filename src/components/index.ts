@@ -15,3 +15,6 @@ export {
   ComboboxPanel,
   Combobox as ComboboxRoot,
 } from "./combobox"
+export { Field } from "./field"
+export { Description } from "./description"
+export { Label } from "./label"

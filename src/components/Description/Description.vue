@@ -6,7 +6,7 @@ export interface DescriptionProps {
 </script>
 <script setup lang="ts">
 import { computed } from "vue"
-import { useFieldContext } from "../Field/Field.vue"
+import { useFieldContext } from "../field/Field.vue"
 
 const props = withDefaults(defineProps<DescriptionProps>(), {
   as: "div",

@@ -14,7 +14,7 @@ export interface LabelProps {
 <script setup lang="ts">
 import { Primitive } from "@/components"
 import { computed } from "vue"
-import { useFieldContext } from "../Field/Field.vue"
+import { useFieldContext } from "../field/Field.vue"
 
 const props = withDefaults(defineProps<LabelProps>(), {
   as: "label",
