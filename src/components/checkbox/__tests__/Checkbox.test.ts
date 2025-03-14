@@ -1,7 +1,6 @@
 import { render, type RenderResult, screen } from "@testing-library/vue"
 import "@testing-library/jest-dom"
 import { userEvent } from "@testing-library/user-event"
-import { h, type VNode } from "vue"
 import { describe, it, expect } from "vitest"
 import { Checkbox } from "../index"
 
