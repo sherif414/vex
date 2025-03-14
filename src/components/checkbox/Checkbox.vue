@@ -41,7 +41,7 @@ export interface CheckboxProps {
 
 <script setup lang="ts">
 import { useFormControl } from "@/composables"
-import { computed, useTemplateRef } from "vue"
+import { computed, onMounted, useTemplateRef } from "vue"
 import { useFieldContext } from "../field/Field.vue"
 
 const props = withDefaults(defineProps<CheckboxProps>(), {})
@@ -72,7 +72,7 @@ defineExpose({ check, uncheck, toggle, isChecked: modelValue, isDisabled })
 
 <template>
   <button
-    @click="toggle"
+    @pointerdown="toggle"
     @keydown.space="toggle"
     @keydown.enter.prevent
     ref="checkbox"
