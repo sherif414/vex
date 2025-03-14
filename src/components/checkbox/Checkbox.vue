@@ -42,46 +42,32 @@ export interface CheckboxProps {
 <script setup lang="ts">
 import { useFormControl } from "@/composables"
 import { computed, useTemplateRef } from "vue"
-import { useCheckboxGroupContext } from "./CheckboxGroup.vue"
 import { useFieldContext } from "../field/Field.vue"
 
 const props = withDefaults(defineProps<CheckboxProps>(), {})
 const modelValue = defineModel<boolean>({ default: false })
 const fieldContext = useFieldContext()
-const groupContext = useCheckboxGroupContext()
-const isGrouped = !!groupContext
-const isDisabled = computed<boolean>(
-  () => groupContext?.disabled.value || fieldContext?.disabled.value || props.disabled,
-)
+const checkboxRef = useTemplateRef("checkbox")
+const isDisabled = computed<boolean>(() => fieldContext?.disabled.value || props.disabled)
 const checkboxID = computed(() => props.id ?? fieldContext?.inputID)
-
-const isChecked = !isGrouped
-  ? modelValue
-  : computed<boolean>({
-      set: (v) =>
-        v ? groupContext.group.select(props.value) : groupContext.group.deselect(props.value),
-      get: () => groupContext.group.isSelected(props.value),
-    })
+const { isFormControl } = useFormControl(checkboxRef)
 
 function check() {
-  if (!groupContext || isDisabled.value) return
-  groupContext.group.select(props.value)
+  if (isDisabled.value) return
+  modelValue.value = true
 }
 
 function uncheck() {
-  if (!groupContext || isDisabled.value) return
-  groupContext.group.deselect(props.value)
+  if (isDisabled.value) return
+  modelValue.value = false
 }
-
-defineExpose({ check, uncheck })
-
-const checkboxRef = useTemplateRef("checkbox")
-const { isFormControl } = useFormControl(checkboxRef)
 
 function toggle() {
   if (isDisabled.value) return
-  isChecked.value = !isChecked.value
+  modelValue.value ? check() : uncheck()
 }
+
+defineExpose({ check, uncheck, toggle, isChecked: modelValue, isDisabled })
 </script>
 
 <template>
@@ -92,22 +78,22 @@ function toggle() {
     ref="checkbox"
     type="button"
     role="checkbox"
-    :aria-checked="props.indeterminate ? 'mixed' : isChecked"
+    :aria-checked="props.indeterminate ? 'mixed' : modelValue"
     :aria-disabled="isDisabled"
     :aria-required="props.required"
     :aria-invalid="props.validationState === 'invalid'"
     :aria-describedby="fieldContext?.descriptionID"
     :aria-labelledby="fieldContext?.labelID"
-    :data-checked="isChecked || undefined"
+    :data-checked="modelValue || undefined"
     :data-disabled="isDisabled || undefined"
     :id="checkboxID"
   >
-    <slot :is-checked="isChecked" :is-disabled="isDisabled" />
+    <slot :is-checked="modelValue" :is-disabled="isDisabled" />
     <input
-      v-if="!isGrouped && isFormControl"
+      v-if="isFormControl"
       type="checkbox"
       :value="props.value"
-      :checked="isChecked"
+      :checked="modelValue"
       :name="props.name"
       :required="props.required"
       :disabled="isDisabled"
