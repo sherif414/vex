@@ -64,7 +64,7 @@ function uncheck() {
 
 function toggle() {
   if (isDisabled.value) return
-  modelValue.value ? check() : uncheck()
+  modelValue.value ? uncheck() : check()
 }
 
 defineExpose({ check, uncheck, toggle, isChecked: modelValue, isDisabled })
