@@ -52,7 +52,8 @@ function onClick() {
     :disabled="disabled"
     :aria-checked="isChecked"
     :role="role"
-    @click.prevent="onClick">
+    @click.prevent="onClick"
+  >
     <slot :checked="isChecked" />
   </Primitive>
 </template>

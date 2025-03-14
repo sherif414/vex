@@ -31,14 +31,16 @@ defineExpose({
       aria-label="toast"
       role="region"
       aria-live="assertive"
-      class="vex-toast-root">
+      class="vex-toast-root"
+    >
       <Toast
         v-for="item in items"
         :key="item.key"
         :content="item.content"
         :duration="item.duration"
         :color="item.color"
-        @close="removeToast(item)"></Toast>
+        @close="removeToast(item)"
+      ></Toast>
     </TransitionGroup>
   </Teleport>
 </template>

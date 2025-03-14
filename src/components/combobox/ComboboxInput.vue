@@ -198,5 +198,6 @@ function handleBlur(event: FocusEvent) {
     :readonly="readonly"
     @input="handleInput"
     @focus="handleFocus"
-    @blur="handleBlur" />
+    @blur="handleBlur"
+  />
 </template>

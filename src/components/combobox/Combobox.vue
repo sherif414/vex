@@ -181,5 +181,6 @@ defineExpose({
     :trigger-id="triggerID"
     :listbox-id="listboxID"
     :is-visible="isVisible"
-    :highlighted-index="highlightedIndex" />
+    :highlighted-index="highlightedIndex"
+  />
 </template>

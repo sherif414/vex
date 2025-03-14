@@ -87,7 +87,8 @@ function onAfterLeave(el: HTMLElement) {
     @enter="(el, done) => onEnter(el as HTMLElement, done)"
     @leave="(el, done) => onLeave(el as HTMLElement, done)"
     @after-enter="(el) => onAfterEnter(el as HTMLElement)"
-    @after-leave="(el) => onAfterLeave(el as HTMLElement)">
+    @after-leave="(el) => onAfterLeave(el as HTMLElement)"
+  >
     <slot />
   </Transition>
 </template>

@@ -52,7 +52,8 @@ useCollection({ id: chipID, ref: ChipEl, disabled: () => p.disabled })
     :class="['vex-chip', { '--checked': isSelected, '--disabled': p.disabled }]"
     @click="setSelected(p.value)"
     ref="ChipEl"
-    tabindex="-1">
+    tabindex="-1"
+  >
     <!-- check icon -->
 
     <TransitionExpand orientation="width">

@@ -160,5 +160,6 @@ useEventListener(inputEl, "keydown", (e: KeyboardEvent) => {
     :aria-required="props.required"
     :aria-invalid="props.invalid"
     @input="(e) => emit('update:modelValue', (e.target as HTMLInputElement).value)"
-    @keydown.down.prevent="show" />
+    @keydown.down.prevent="show"
+  />
 </template>

@@ -181,7 +181,8 @@ defineExpose({
         :class="modifierClasses"
         :id="TOOLTIP_ID"
         ref="TooltipEl"
-        role="tooltip">
+        role="tooltip"
+      >
         <div class="vex-tooltip-content">
           <slot />
         </div>

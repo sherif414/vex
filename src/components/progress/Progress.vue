@@ -102,7 +102,8 @@ defineExpose({
     :class="modifierClasses"
     :style="{
       height: p.height + 'px',
-    }">
+    }"
+  >
     <div ref="progressEl" class="vex-progress-bar" />
   </div>
 </template>

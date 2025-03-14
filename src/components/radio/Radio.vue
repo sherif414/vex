@@ -48,7 +48,8 @@ defineExpose({
       @change="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
       ref="InputEl"
       type="radio"
-      class="vex-radio-input" />
+      class="vex-radio-input"
+    />
 
     <!-- svg -->
 

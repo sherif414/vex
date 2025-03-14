@@ -54,7 +54,8 @@ const modifierClasses = computed(() => [
       @change="emit('update:modelValue', ($event.target as HTMLInputElement).checked)"
       class="vex-switch-input"
       type="checkbox"
-      role="switch" />
+      role="switch"
+    />
 
     <!-- svg -->
 
@@ -73,13 +74,15 @@ const modifierClasses = computed(() => [
           width="200%"
           y="-50%"
           height="200%"
-          color-interpolation-filters="sRGB">
+          color-interpolation-filters="sRGB"
+        >
           <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur" />
           <feColorMatrix
             in="blur"
             mode="matrix"
             values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 21 -7"
-            result="cm" />
+            result="cm"
+          />
         </filter>
       </defs>
     </svg>

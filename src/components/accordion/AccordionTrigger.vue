@@ -33,7 +33,8 @@ function onClick() {
     :disabled="disabled"
     @click="onClick"
     :aria-controls="contentID"
-    :aria-expanded="isExpanded">
+    :aria-expanded="isExpanded"
+  >
     <slot />
   </Primitive>
 </template>

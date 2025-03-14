@@ -92,7 +92,8 @@ defineExpose({
       aria-label="Notifications (F8)"
       tabindex="-1"
       role="region"
-      aria-live="polite">
+      aria-live="polite"
+    >
       <Notification
         v-for="item in items"
         :key="item.key"
@@ -103,7 +104,8 @@ defineExpose({
         :persist="item.persist"
         :hide-progress="item.hideProgress"
         :closeable="item.closable"
-        @close="removeNotification(item)">
+        @close="removeNotification(item)"
+      >
         <template v-if="item.customContent" #default>
           <Component :is="item.customContent" />
         </template>

@@ -96,7 +96,8 @@ useClickOutside(dropdownEl, hide, {
     @focus="focusFirst"
     role="menu"
     ref="dropdownEl"
-    tabindex="-1">
+    tabindex="-1"
+  >
     <slot :hide="hide" />
   </Primitive>
 </template>

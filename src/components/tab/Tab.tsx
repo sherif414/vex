@@ -73,7 +73,8 @@ const Tabs = defineComponent({
     return () => (
       <div
         ref={TabsEl}
-        class={["vex-tabs", `--variant-${p.variant}`, `--orientation-${p.orientation}`]}>
+        class={["vex-tabs", `--variant-${p.variant}`, `--orientation-${p.orientation}`]}
+      >
         {slots.default?.()}
         <div ref={PointerEl} class="vex-tabs-pointer" />
       </div>
@@ -95,7 +96,8 @@ const TabTrigger = defineComponent({
     return () => (
       <div
         class={["vex-tabs-trigger", { "--active": p.value === context?.activeTab.value }]}
-        onClick={() => (context!.activeTab.value = p.value)}>
+        onClick={() => (context!.activeTab.value = p.value)}
+      >
         {slots.default?.()}
       </div>
     )

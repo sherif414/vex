@@ -82,7 +82,8 @@ onUnmounted(() => {
     ]"
     @click.prevent="() => !disabled && group.select(props.value)"
     @keydown.enter.prevent="() => !disabled && group.select(props.value)"
-    @keydown.space.prevent="() => !disabled && group.select(props.value)">
+    @keydown.space.prevent="() => !disabled && group.select(props.value)"
+  >
     <slot :selected="isSelected" :active="isActive" />
     <span
       v-if="props.description"

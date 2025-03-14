@@ -137,7 +137,8 @@ defineSlots<{
       ref="dialogRef"
       role="dialog"
       aria-modal="true"
-      tabindex="-1">
+      tabindex="-1"
+    >
       <div ref="contentRef" class="contents">
         <slot />
       </div>

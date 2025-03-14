@@ -70,7 +70,8 @@ if (props.interactionType === "hover") {
     :aria-controls="dropdownID"
     @keyup.space.prevent
     @keydown.down.prevent="onKeydown"
-    @click.prevent="show">
+    @click.prevent="show"
+  >
     <slot />
   </Primitive>
 </template>

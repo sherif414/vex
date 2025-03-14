@@ -169,7 +169,8 @@ const modifierClasses = computed(() => [
     @mouseleave="onMouseLeave"
     @focus="pauseTimer"
     @blur="onBlur"
-    :class="modifierClasses">
+    :class="modifierClasses"
+  >
     <slot>
       <!-- icon -->
 
@@ -210,7 +211,8 @@ const modifierClasses = computed(() => [
         :color="p.type"
         :duration="_duration"
         :value="progressValue"
-        inert />
+        inert
+      />
     </div>
   </div>
 </template>

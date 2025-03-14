@@ -37,7 +37,8 @@ useEventListener(listboxEl, "click", (e) => {
     role="listbox"
     :id="listboxID"
     :aria-labelledby="triggerID"
-    tabindex="-1">
+    tabindex="-1"
+  >
     <slot></slot>
   </Primitive>
 </template>

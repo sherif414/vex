@@ -27,7 +27,8 @@ const isSelected = computed(() => group.isSelected(props.value))
     :aria-selected="isSelected"
     :data-vex-value="props.value"
     :data-vex-active="isActive"
-    :data-vex-text-content="props.textContent">
+    :data-vex-text-content="props.textContent"
+  >
     <slot :id="id" />
   </li>
 </template>

@@ -99,9 +99,11 @@ onMounted(() => {
     :id="listElementID"
     :aria-labelledby="inputElementID"
     :aria-multiselectable="multiselectable"
-    :style="floatingStyles">
+    :style="floatingStyles"
+  >
     <slot
       :setListItems="(items: HTMLElement[]) => (listItems = items)"
-      :currentFocusIndex="currentFocusIndex"></slot>
+      :currentFocusIndex="currentFocusIndex"
+    ></slot>
   </Primitive>
 </template>

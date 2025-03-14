@@ -240,7 +240,8 @@ defineExpose({
         top: `${y ?? 0}px`,
         left: `${x ?? 0}px`,
         position: strategy,
-      }">
+      }"
+    >
       <div v-if="p.arrow" ref="arrowEl" class="vex-floating-arrow" :style="arrowStyles" />
       <slot></slot>
     </component>

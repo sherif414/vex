@@ -222,7 +222,8 @@ defineExpose({
         :id="DROPDOWN_ID"
         :aria-labelledby="TRIGGER_ID"
         :role="role"
-        :style="floatingStyles">
+        :style="floatingStyles"
+      >
         <slot />
       </div>
     </Transition>

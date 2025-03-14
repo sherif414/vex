@@ -54,7 +54,8 @@ const modifierClasses = computed(() => ["vex-toast", `--c-${p.color}`])
     @mouseleave="timer.resume"
     tabindex="0"
     role="alert"
-    aria-atomic>
+    aria-atomic
+  >
     <Component width="16" height="16" :is="iconType" />
     <span v-if="isString(p.content)">{{ p.content }}</span>
     <Component v-else :is="p.content" />
