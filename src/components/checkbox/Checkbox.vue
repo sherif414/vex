@@ -67,6 +67,12 @@ function toggle() {
   modelValue.value ? uncheck() : check()
 }
 
+onMounted(() => {
+  if (props.autoFocus) {
+    checkboxRef.value?.focus()
+  }
+})
+
 defineExpose({ check, uncheck, toggle, isChecked: modelValue, isDisabled })
 </script>
 
