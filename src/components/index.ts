@@ -7,7 +7,7 @@ export {
 } from "./accordion"
 export { Alert, AlertContent, AlertHeader } from "./alert"
 export { Primitive } from "./primitive"
-export { Checkbox } from "./checkbox"
+export { Checkbox, CheckboxGroup } from "./checkbox"
 export {
   ComboboxInput,
   ComboboxListItem,

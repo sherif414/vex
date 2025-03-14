@@ -98,9 +98,11 @@ function toggle() {
     :aria-invalid="props.validationState === 'invalid'"
     :aria-describedby="fieldContext?.descriptionID"
     :aria-labelledby="fieldContext?.labelID"
+    :data-checked="isChecked || undefined"
+    :data-disabled="isDisabled || undefined"
     :id="checkboxID"
   >
-    <slot />
+    <slot :is-checked="isChecked" :is-disabled="isDisabled" />
     <input
       v-if="!isGrouped && isFormControl"
       type="checkbox"

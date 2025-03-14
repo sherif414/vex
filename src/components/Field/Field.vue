@@ -20,7 +20,7 @@ export function useFieldContext(): FieldContext | null {
 <script setup lang="ts">
 import { inject, provide, toRef, type InjectionKey, type Ref } from "vue"
 import { Primitive } from "../primitive"
-import { useContext, useID } from "@/composables"
+import { useID } from "@/composables"
 
 const props = withDefaults(defineProps<FieldProps>(), {
   as: "div",
@@ -35,7 +35,7 @@ provide(FIELD_INJECTION_KEY, {
 </script>
 
 <template>
-  <Primitive :as="as" :data-disabled="props.disabled">
+  <Primitive :as="as" :data-disabled="props.disabled || undefined">
     <slot />
   </Primitive>
 </template>

@@ -17,7 +17,7 @@ const descriptionID = computed(() => props.id || context?.descriptionID)
 </script>
 
 <template>
-  <div :id="descriptionID" :data-disabled="context?.disabled">
+  <div :id="descriptionID" :data-disabled="context?.disabled.value || undefined">
     <slot />
   </div>
 </template>

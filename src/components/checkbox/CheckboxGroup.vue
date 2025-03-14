@@ -22,12 +22,14 @@ export interface CheckboxItem {
 
 export type CheckedState = "checked" | "unchecked" | "indeterminate"
 
-export const CHECKBOX_GROUP_INJECTION_KEY = Symbol() as InjectionKey<{
+export interface CheckboxGroupContext {
   disabled: Ref<boolean>
   group: SelectionGroup<string>
-}>
+}
 
-export function useCheckboxGroupContext() {
+export const CHECKBOX_GROUP_INJECTION_KEY = Symbol() as InjectionKey<CheckboxGroupContext>
+
+export function useCheckboxGroupContext(): CheckboxGroupContext | null {
   return inject(CHECKBOX_GROUP_INJECTION_KEY, null)
 }
 </script>
@@ -63,9 +65,9 @@ const uncheckAll = () => {
 provide(CHECKBOX_GROUP_INJECTION_KEY, {
   disabled,
   group,
-  checkAll,
-  uncheckAll,
 })
+
+defineExpose({ checkAll, uncheckAll, checkedState })
 </script>
 
 <template>
@@ -73,5 +75,3 @@ provide(CHECKBOX_GROUP_INJECTION_KEY, {
     <slot :modelValue="modelValue" />
   </div>
 </template>
-
-defineExpose({ checkAll, uncheckAll });

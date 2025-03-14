@@ -53,7 +53,7 @@ const handleClick = (e: MouseEvent) => {
     :as="props.as"
     :id="labelID"
     :for="inputID"
-    :data-disabled="context?.disabled"
+    :data-disabled="context?.disabled.value || undefined"
     @click="handleClick"
   >
     <slot />

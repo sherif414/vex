@@ -6,7 +6,8 @@ import vue from "@vitejs/plugin-vue"
 import { resolve } from "node:path"
 import Unocss from "unocss/vite"
 import vueJsx from "@vitejs/plugin-vue-jsx"
-import DevTools from "vite-plugin-vue-devtools"
+// import { presetIcons } from "@unocss/preset-icons"
+// import DevTools from "vite-plugin-vue-devtools"
 
 // https://vite.dev/config/
 export default defineConfig({
