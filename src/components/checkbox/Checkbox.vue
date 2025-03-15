@@ -31,7 +31,7 @@ export interface CheckboxProps {
   /**
    * The state of the checkbox
    */
-  modelValue?: boolean
+  checked?: boolean
   /**
    * The id for the checkbox
    */
@@ -45,7 +45,7 @@ import { computed, onMounted, useTemplateRef } from "vue"
 import { useFieldContext } from "../field/Field.vue"
 
 const props = withDefaults(defineProps<CheckboxProps>(), {})
-const modelValue = defineModel<boolean>({ default: false })
+const checked = defineModel<boolean>("checked", { default: false })
 const fieldContext = useFieldContext()
 const checkboxRef = useTemplateRef("checkbox")
 const isDisabled = computed<boolean>(() => fieldContext?.disabled.value || props.disabled)
@@ -54,17 +54,17 @@ const { isFormControl } = useFormControl(checkboxRef)
 
 function check() {
   if (isDisabled.value) return
-  modelValue.value = true
+  checked.value = true
 }
 
 function uncheck() {
   if (isDisabled.value) return
-  modelValue.value = false
+  checked.value = false
 }
 
 function toggle() {
   if (isDisabled.value) return
-  modelValue.value ? uncheck() : check()
+  checked.value ? uncheck() : check()
 }
 
 onMounted(() => {
@@ -73,7 +73,7 @@ onMounted(() => {
   }
 })
 
-defineExpose({ check, uncheck, toggle, isChecked: modelValue, isDisabled })
+defineExpose({ check, uncheck, toggle, isChecked: checked, isDisabled })
 </script>
 
 <template>
@@ -84,22 +84,22 @@ defineExpose({ check, uncheck, toggle, isChecked: modelValue, isDisabled })
     ref="checkbox"
     type="button"
     role="checkbox"
-    :aria-checked="props.indeterminate ? 'mixed' : modelValue"
+    :aria-checked="props.indeterminate ? 'mixed' : checked"
     :aria-disabled="isDisabled"
     :aria-required="props.required"
     :aria-invalid="props.validationState === 'invalid'"
     :aria-describedby="fieldContext?.descriptionID"
     :aria-labelledby="fieldContext?.labelID"
-    :data-checked="modelValue || undefined"
+    :data-checked="checked || undefined"
     :data-disabled="isDisabled || undefined"
     :id="checkboxID"
   >
-    <slot :is-checked="modelValue" :is-disabled="isDisabled" />
+    <slot :is-checked="checked" :is-disabled="isDisabled" />
     <input
       v-if="isFormControl"
       type="checkbox"
       :value="props.value"
-      :checked="modelValue"
+      :checked="checked"
       :name="props.name"
       :required="props.required"
       :disabled="isDisabled"

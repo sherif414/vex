@@ -3,16 +3,10 @@ import "@testing-library/jest-dom"
 import { userEvent } from "@testing-library/user-event"
 import { describe, it, expect } from "vitest"
 import { Checkbox } from "../index"
+import type { CheckboxProps } from "../Checkbox.vue"
 
-type CheckboxConfig = {
-  value: string
+type CheckboxConfig = CheckboxProps & {
   label?: string
-  disabled?: boolean
-  indeterminate?: boolean
-  required?: boolean
-  validationState?: "valid" | "invalid"
-  autoFocus?: boolean
-  name?: string
 }
 
 function createCheckbox(props: CheckboxConfig = { value: "checkbox" }): RenderResult {
@@ -84,6 +78,14 @@ describe("Checkbox", () => {
     checkbox.focus()
     await user.keyboard("{Space}")
     expect(checkbox).toHaveAttribute("aria-checked", "false")
+  })
+
+  it("can be checked by default and disabled", () => {
+    createCheckbox({ value: "test", checked: true, disabled: true })
+
+    const checkbox = screen.getByRole("checkbox", { name: "Checkbox test" })
+    expect(checkbox).toHaveAttribute("aria-checked", "true")
+    expect(checkbox).toHaveAttribute("aria-disabled", "true")
   })
 
   it("supports indeterminate state", () => {
