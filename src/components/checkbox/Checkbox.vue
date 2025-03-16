@@ -46,11 +46,15 @@ import { useFieldContext } from "../field/Field.vue"
 
 const props = withDefaults(defineProps<CheckboxProps>(), {})
 const checked = defineModel<boolean>("checked", { default: false })
+
+const defaultValue = checked.value
+const checkboxEl = useTemplateRef("checkbox")
+const hiddenInputEl = useTemplateRef("input")
 const fieldContext = useFieldContext()
-const checkboxRef = useTemplateRef("checkbox")
+const { isFormControl } = useFormControl(checkboxEl)
+
 const isDisabled = computed<boolean>(() => fieldContext?.disabled.value || props.disabled)
 const checkboxID = computed(() => props.id ?? fieldContext?.inputID)
-const { isFormControl } = useFormControl(checkboxRef)
 
 function check() {
   if (isDisabled.value) return
@@ -67,9 +71,17 @@ function toggle() {
   checked.value ? uncheck() : check()
 }
 
+function reset(): void {
+  checked.value = defaultValue
+}
+
 onMounted(() => {
   if (props.autoFocus) {
-    checkboxRef.value?.focus()
+    checkboxEl.value?.focus()
+  }
+
+  if (isFormControl.value && hiddenInputEl.value) {
+    hiddenInputEl.value.form?.addEventListener("reset", reset)
   }
 })
 
@@ -99,10 +111,12 @@ defineExpose({ check, uncheck, toggle, isChecked: checked, isDisabled })
       v-if="isFormControl"
       type="checkbox"
       :value="props.value"
-      :checked="checked"
+      v-model="checked"
       :name="props.name"
       :required="props.required"
       :disabled="isDisabled"
+      inert
+      ref="input"
       aria-hidden="true"
       style="
         position: absolute;
