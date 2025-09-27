@@ -50,22 +50,24 @@ export function useCollection<T>(options: UseCollectionOptions<T> = {}): Collect
   const { onRegister, onUnregister } = options
   const items = shallowRef<T[]>([])
 
-  const register = (item: T) => {
+  const register: (item: T) => T = (item: T) => {
     items.value = [...items.value, item]
     onRegister?.(item)
     return item
   }
 
-  const unregister = (item: T) => {
+  const unregister: (item: T) => void = (item: T) => {
     items.value = items.value.filter((i) => i !== item)
     onUnregister?.(item)
   }
 
-  const getItem = (predicate: (item: T) => boolean) => {
+  const getItem: (predicate: (item: T) => boolean) => T | undefined = (
+    predicate: (item: T) => boolean,
+  ) => {
     return items.value.find(predicate)
   }
 
-  const clear = () => {
+  const clear: () => void = () => {
     items.value = []
   }
 
