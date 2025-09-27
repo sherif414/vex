@@ -1,6 +1,12 @@
 <script lang="ts">
+/**
+ * Public props accepted by `AccordionHeader`.
+ */
 export interface AccordionHeaderProps {
-  /** The HTML element to render as. @default 'h3' */
+  /**
+   * The HTML element to render as.
+   * @default 'h3'
+   */
   as?: string
 }
 </script>
@@ -13,6 +19,7 @@ const props = withDefaults(defineProps<AccordionHeaderProps>(), {
   as: "h3",
 })
 
+// Touch the parent accordion context to ensure correct usage within an Accordion tree
 useAccordionCtx("AccordionHeader")
 </script>
 

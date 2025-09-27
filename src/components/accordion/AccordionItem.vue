@@ -1,37 +1,65 @@
 <script lang="ts">
+import type { InjectionKey, Ref } from "vue"
+import { useContext } from "@/composables"
+
+/**
+ * Public props accepted by `AccordionItem`.
+ */
 export interface AccordionItemProps {
-  /** Force the item to stay expanded. @default false */
+  /**
+   * Force the item to stay expanded.
+   * @default false
+   */
   alwaysExpanded?: boolean
-  /** Whether the item should be expanded when first rendered. @default false */
+  /**
+   * Whether the item should be expanded when first rendered.
+   * @default false
+   */
   initiallyExpanded?: boolean
-  /** Whether the item is disabled. @default false */
+  /**
+   * Whether the item is disabled.
+   * @default false
+   */
   disabled?: boolean
-  /** Whether the item can be collapsed. @default false */
+  /**
+   * Whether the item can be collapsed.
+   * @default false
+   */
   collapsible?: boolean
-  /** A unique value for the accordion item. If not provided, an auto-generated ID will be used. */
+  /**
+   * A unique value for the accordion item. If not provided, an auto-generated ID will be used.
+   */
   value?: string
-  /** The HTML element to render as. @default 'div' */
+  /**
+   * The HTML element to render as.
+   * @default 'div'
+   */
   as?: string
 }
 
-export const ACCORDION_ITEM_INJECTION_KEY = Symbol() as InjectionKey<{
+/**
+ * Context provided by `AccordionItem` for its trigger/content children.
+ */
+export interface AccordionItemContext {
   contentID: string
   triggerID: string
   disabled: Ref<boolean>
   isExpanded: Ref<boolean>
   expand: () => void
   collapse: () => void
-}>
+}
 
-export function useAccordionItemCtx(component: string) {
+export const ACCORDION_ITEM_INJECTION_KEY = Symbol() as InjectionKey<AccordionItemContext>
+
+export function useAccordionItemCtx(component: string): AccordionItemContext {
   return useContext(ACCORDION_ITEM_INJECTION_KEY, "AccordionItem", component)
 }
 </script>
 
 <script setup lang="ts">
 import { Primitive } from "@/components"
-import { useContext, useID } from "@/composables"
-import { computed, onBeforeUnmount, provide, ref, toRef, type InjectionKey, type Ref } from "vue"
+import { useID } from "@/composables"
+import { computed, onBeforeUnmount, provide, ref, toRef } from "vue"
 import { useAccordionCtx } from "./Accordion.vue"
 
 const props = withDefaults(defineProps<AccordionItemProps>(), {

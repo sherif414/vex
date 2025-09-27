@@ -1,6 +1,12 @@
 <script lang="ts">
+/**
+ * Public props accepted by `AccordionTrigger`.
+ */
 export interface AccordionTriggerProps {
-  /** The HTML element to render as. @default 'button' */
+  /**
+   * The HTML element to render as.
+   * @default 'button'
+   */
   as?: string
 }
 </script>
@@ -15,6 +21,7 @@ const props = withDefaults(defineProps<AccordionTriggerProps>(), {
 
 const { expand, collapse, contentID, isExpanded, triggerID, disabled } =
   useAccordionItemCtx("AccordionTrigger")
+
 function onClick() {
   if (isExpanded.value) {
     collapse()

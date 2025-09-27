@@ -4,29 +4,52 @@ import { useContext } from "@/composables"
 import type { Collection } from "@/composables/use-collection"
 import type { InjectionKey, Ref } from "vue"
 
+/**
+ * A single accordion item's bookkeeping.
+ * - `templateRef` is the root element for the item (used to query the trigger)
+ * - `triggerID` must match the id on the item's trigger element
+ * - `id` is the unique value used by the selection group
+ */
 export interface AccordionItem {
   templateRef: Ref<HTMLElement | null>
   triggerID: string
   id: string
 }
 
-export const ACCORDION_INJECTION_KEY = Symbol("accordion") as InjectionKey<{
+/**
+ * Context shape provided by `Accordion` and consumed by its sub-components.
+ */
+export interface AccordionContext {
   group: SelectionGroup<string>
   collection: Collection<AccordionItem>
-}>
+}
 
-export function useAccordionCtx(component: string) {
+/**
+ * Injection key used to provide/consume accordion context.
+ */
+export const ACCORDION_INJECTION_KEY = Symbol("accordion") as InjectionKey<AccordionContext>
+
+/**
+ * Access the accordion context from child components.
+ * @param component Used for more descriptive error messages
+ */
+export function useAccordionCtx(component: string): AccordionContext {
   return useContext(ACCORDION_INJECTION_KEY, "Accordion", component)
 }
 
+/**
+ * Public props accepted by the `Accordion` root.
+ */
 export interface AccordionProps {
-  /** Allow multiple items to be expanded at once. @default false */
+  /**
+   * Allow multiple items to be expanded at once.
+   * @default false
+   */
   multiple?: boolean
-  /** The controlled expanded state of the accordion. */
-  modelValue?: string[]
-  /** The default value of the accordion in uncontrolled mode. @default [] */
-  defaultValue?: string[]
-  /** The HTML element to render as. @default 'div' */
+  /**
+   * The HTML element to render as.
+   * @default 'div'
+   */
   as?: string
 }
 </script>
@@ -39,27 +62,27 @@ import { provide, useTemplateRef } from "vue"
 
 const props = withDefaults(defineProps<AccordionProps>(), {
   multiple: false,
-  modelValue: () => [],
   as: "div",
 })
 
-const emit = defineEmits<{
-  (e: "update:modelValue", value: string[]): void
-}>()
-
 const collection = useCollection<AccordionItem>()
-const modelValue = defineModel({ default: () => [] })
+
+const modelValue = defineModel<string[]>({ default: () => [] })
 const group = useSelectionGroup(modelValue, {
   multiselect: () => props.multiple,
 })
+
 const accordionEl = useTemplateRef("accordion")
-useRovingFocus(accordionEl, () => {
-  return collection.items.value.reduce<HTMLElement[]>((arr, { templateRef, triggerID }) => {
+
+function getRovingFocusTargets(): HTMLElement[] {
+  return collection.items.value.reduce<HTMLElement[]>((acc, { templateRef, triggerID }) => {
     const triggerEl = templateRef.value?.querySelector<HTMLElement>(`#${triggerID}`)
-    triggerEl && arr.push(triggerEl)
-    return arr
+    if (triggerEl) acc.push(triggerEl)
+    return acc
   }, [])
-})
+}
+
+useRovingFocus(accordionEl, getRovingFocusTargets)
 
 provide(ACCORDION_INJECTION_KEY, { group, collection })
 </script>
