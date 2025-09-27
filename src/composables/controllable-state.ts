@@ -1,6 +1,6 @@
+import { getCurrentInstance, type Ref, shallowRef } from "vue"
 import type { Getter } from "@/types"
 import { getKebabCase } from "@/utils"
-import { type Ref, getCurrentInstance, shallowRef } from "vue"
 import { useVModel } from "./v-model"
 
 interface Options<T> {
@@ -26,7 +26,7 @@ export function useControllableState<T>(getter: Getter<T>, options: Options<T> =
     : shallowRef(getter())
 }
 
-function hasVModelBound(propName: string) {
+function hasVModelBound(propName: string): boolean {
   const vm = getCurrentInstance()
   const kebabPropName = getKebabCase(propName)
 
@@ -38,6 +38,6 @@ function hasVModelBound(propName: string) {
   return hasPropBound && hasEventBound
 }
 
-function hasOwn(obj: any, key: string): boolean {
-  return Object.prototype.hasOwnProperty.call(obj, key)
+function hasOwn(obj: unknown, key: string): boolean {
+  return Object.hasOwn(obj, key)
 }
