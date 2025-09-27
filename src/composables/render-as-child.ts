@@ -1,13 +1,13 @@
 import {
   Comment,
-  Fragment,
-  Text,
-  type VNode,
   cloneVNode,
+  Fragment,
   getCurrentInstance,
   mergeProps,
+  Text,
   useAttrs,
   useSlots,
+  type VNode,
 } from "vue"
 
 export const COMPONENT_ERROR_MESSAGES = {
@@ -74,7 +74,11 @@ function normalizeSlotNodes(nodes: VNode[]): VNode[] {
 
 function validateRootChild(nodes: VNode[]): VNode {
   const componentName = getComponentName()
+  assertExactlyOneChild(nodes, componentName)
+  return nodes[0]
+}
 
+function assertExactlyOneChild(nodes: VNode[], componentName: string): asserts nodes is [VNode] {
   if (nodes.length === 0) {
     throw new Error(COMPONENT_ERROR_MESSAGES.NO_CHILDREN(componentName))
   }
@@ -82,8 +86,6 @@ function validateRootChild(nodes: VNode[]): VNode {
   if (nodes.length > 1) {
     throw new Error(COMPONENT_ERROR_MESSAGES.MULTIPLE_CHILDREN(componentName, nodes.length))
   }
-
-  return nodes[0]
 }
 
 function getComponentName(): string {
