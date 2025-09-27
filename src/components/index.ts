@@ -15,6 +15,7 @@ export {
   ComboboxPanel,
   Combobox as ComboboxRoot,
 } from "./combobox"
-export { Field } from "./field"
-export { Description } from "./description"
-export { Label } from "./label"
+// export { Field } from "./field"
+// export { Description } from "./description"
+// export { Label } from "./label"
+export { Avatar, AvatarImage, AvatarFallback } from "./avatar"
