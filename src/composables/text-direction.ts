@@ -1,17 +1,18 @@
-import { isClient, noop } from "@/utils"
 import { createSharedComposable } from "@vueuse/core"
+import type { Ref } from "vue"
 import { customRef, onScopeDispose, ref } from "vue"
+import { isClient, noop } from "@/utils"
 import type { Fn } from "./types"
 
 export type Dir = "ltr" | "rtl" | "auto" | undefined
 
-export const useTextDirection = createSharedComposable(() => {
+export const useTextDirection: () => Ref<Dir> = createSharedComposable(() => {
   if (!isClient) return ref<Dir>()
 
   let dir = getDocumentDir()
   let trigger: Fn = noop
 
-  const updateDir = () => {
+  const updateDir: () => void = () => {
     const newDir = getDocumentDir()
     if (newDir === dir) return
     dir = newDir
@@ -20,10 +21,13 @@ export const useTextDirection = createSharedComposable(() => {
 
   let observer: MutationObserver | null = new MutationObserver(updateDir)
 
-  observer.observe(document.querySelector("html")!, {
-    attributes: true,
-    attributeFilter: ["dir"],
-  })
+  const html = document.querySelector("html")
+  if (html) {
+    observer.observe(html, {
+      attributes: true,
+      attributeFilter: ["dir"],
+    })
+  }
 
   document.addEventListener("DOMContentLoaded", updateDir, { once: true })
 
@@ -35,11 +39,11 @@ export const useTextDirection = createSharedComposable(() => {
   return customRef<Dir>((_track, _trigger) => {
     trigger = _trigger
     return {
-      get() {
+      get(): Dir {
         _track()
         return dir
       },
-      set(v) {
+      set(v: Dir): void {
         if (v === dir) return
         dir = v
         setDocumentDir(dir)
