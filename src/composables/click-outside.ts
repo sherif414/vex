@@ -1,6 +1,6 @@
+import { onScopeDispose, toValue } from "vue"
 import type { MaybeRefOrGetter, TemplateRef } from "@/types"
 import { isClient, isIOS, noop, remove } from "@/utils"
-import { onScopeDispose, toValue } from "vue"
 
 type Listener = (e: PointerEvent) => void
 
@@ -9,13 +9,17 @@ interface Options {
   isActive?: MaybeRefOrGetter<boolean>
 }
 
-export function useClickOutside(target: TemplateRef, listener: Listener, options: Options = {}) {
+export function useClickOutside(
+  target: TemplateRef,
+  listener: Listener,
+  options: Options = {},
+): () => void {
   if (!isClient) return noop
   useIosWorkaround()
 
   const { ignore = [], isActive = true } = options
 
-  const onPointerDown: Listener = (e) => {
+  const onPointerDown: Listener = (e: PointerEvent) => {
     if (!toValue(isActive)) return
 
     const _target = toValue(target)
@@ -42,20 +46,24 @@ export function useClickOutside(target: TemplateRef, listener: Listener, options
 
 // See: https://www.quirksmode.org/blog/archives/2014/02/mouse_event_bub.html
 let isIOSWorkaroundActive = false
-function useIosWorkaround() {
+function useIosWorkaround(): void {
   if (!isIOSWorkaroundActive && isIOS) {
     isIOSWorkaroundActive = true
-    Array.from(document.body.children).forEach((el) => el.addEventListener("click", noop))
+    Array.from(document.body.children).forEach((el: Element) => {
+      el.addEventListener("click", noop)
+    })
   }
 }
 
 let isAttached = false
 const listeners: Listener[] = []
-function sharedListener(e: PointerEvent) {
-  listeners.forEach((cb) => cb(e))
+function sharedListener(e: PointerEvent): void {
+  listeners.forEach((cb: Listener) => {
+    cb(e)
+  })
 }
 
-function addGlobalEventListener(listener: Listener) {
+function addGlobalEventListener(listener: Listener): () => void {
   if (!listeners.includes(listener)) {
     listeners.push(listener)
   }
@@ -65,7 +73,7 @@ function addGlobalEventListener(listener: Listener) {
     isAttached = true
   }
 
-  return () => {
+  return (): void => {
     remove(listeners, listener)
     if (!listeners.length) {
       document.removeEventListener("pointerdown", sharedListener, { capture: true })
