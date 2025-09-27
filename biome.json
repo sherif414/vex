@@ -1,7 +1,15 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "files": {
-    "ignore": ["dist", "node_modules", "*.min.js", "coverage"]
+    "includes": [
+      "**",
+      "!node_modules",
+      "!dist",
+      "!coverage",
+      "!docs",
+      "!**/*.min.js",
+      "!**/*.vue"
+    ]
   },
   "formatter": {
     "enabled": true,
