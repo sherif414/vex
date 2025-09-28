@@ -8,11 +8,11 @@ interface UseDelayedOpenOptions {
   /**
    * Default delay for showing the element (in milliseconds).
    */
-  defaultShowDelay?: MaybeRefOrGetter<number>
+  defaultShowDelay?: MaybeRefOrGetter<number | undefined>
   /**
    * Default delay for hiding the element (in milliseconds).
    */
-  defaultHideDelay?: MaybeRefOrGetter<number>
+  defaultHideDelay?: MaybeRefOrGetter<number | undefined>
 }
 
 /**
@@ -65,7 +65,7 @@ export function useDelayedOpen(
   return {
     show: (delay?: number): void => {
       clearTimeouts()
-      const _delay = delay ?? toValue(defaultShowDelay)
+      const _delay = delay ?? toValue(defaultShowDelay) ?? 0
 
       if (_delay === 0) show()
       else showTimeoutID = setTimeout(show, _delay)
@@ -73,7 +73,7 @@ export function useDelayedOpen(
 
     hide: (delay?: number): void => {
       clearTimeouts()
-      const _delay = delay ?? toValue(defaultHideDelay)
+      const _delay = delay ?? toValue(defaultHideDelay) ?? 0
 
       if (_delay === 0) hide()
       else hideTimeoutID = setTimeout(hide, _delay)
