@@ -1,21 +1,21 @@
 export {
   Accordion,
-  AccordionItem,
-  AccordionHeader,
   AccordionContent,
+  AccordionHeader,
+  AccordionItem,
   AccordionTrigger,
 } from "./accordion"
 export { Alert, AlertContent, AlertHeader } from "./alert"
-export { Primitive } from "./primitive"
-export { Checkbox } from "./checkbox"
-export {
-  ComboboxInput,
-  ComboboxListItem,
-  ComboboxListbox,
-  ComboboxPanel,
-  Combobox as ComboboxRoot,
-} from "./combobox"
 // export { Field } from "./field"
 // export { Description } from "./description"
 // export { Label } from "./label"
-export { Avatar, AvatarImage, AvatarFallback } from "./avatar"
+export { Avatar, AvatarFallback, AvatarImage } from "./avatar"
+export { Checkbox } from "./checkbox"
+export {
+  Combobox,
+  ComboboxDropdown,
+  ComboboxInput,
+  ComboboxListbox,
+  ComboboxListItem,
+} from "./combobox"
+export { Primitive } from "./primitive"
