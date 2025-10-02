@@ -13,7 +13,7 @@ export interface ComboboxInputProps {
 
 <script setup lang="ts">
 import { useEventListener, useKeyIntent } from "@/composables"
-import { onClickOutside } from "@vueuse/core"
+import { useClick } from "v-float"
 import { nextTick, onMounted, watch } from "vue"
 import { useComboboxContext } from "./Combobox.vue"
 
@@ -27,7 +27,7 @@ const {
   triggerEl,
   listboxID,
   listboxEl,
-  panelEl,
+  dropdownEl,
   isVisible,
   show,
   hide,
@@ -41,6 +41,7 @@ const {
   showOnFocus,
   disabled,
   readonly,
+  floating,
 } = useComboboxContext("ComboboxInput")
 
 const handleInput = (e: Event) => {
@@ -134,7 +135,15 @@ onMounted(() => {
   )
 })
 
-onClickOutside(panelEl, hide, { ignore: [triggerEl] })
+useClick(floating, {
+  outsideClick: true,
+  toggle: false,
+  ignoreMouse: true,
+  ignoreKeyboard: true,
+  onOutsideClick: () => {
+    hide()
+  },
+})
 
 watch(highlightedIndex, (index) => {
   if (index === -1 || !isVisible.value) return
@@ -170,10 +179,10 @@ function getSelectedLabel(): string | undefined {
 
 function handleBlur(event: FocusEvent) {
   const relatedTarget = event.relatedTarget as HTMLElement
-  const isWithinPanel = panelEl.value?.contains(relatedTarget)
+  const isWithinDropdown = dropdownEl.value?.contains(relatedTarget)
   const isInput = triggerEl.value === relatedTarget
 
-  if (!isWithinPanel && !isInput) {
+  if (!isWithinDropdown && !isInput) {
     hide()
   }
 }
