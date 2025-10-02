@@ -9,6 +9,7 @@ export interface ComboboxProps {
   showDelay?: number
   hideDelay?: number
   orientation?: Orientation
+  floatingOptions?: UseFloatingOptions
 }
 
 const COMBOBOX_INJECTION_KEY = Symbol() as InjectionKey<{
@@ -16,7 +17,7 @@ const COMBOBOX_INJECTION_KEY = Symbol() as InjectionKey<{
   listboxID: string
   listboxEl: Ref<HTMLElement | null>
   triggerEl: Ref<HTMLInputElement | null>
-  panelEl: Ref<HTMLElement | null>
+  dropdownEl: Ref<HTMLElement | null>
   multiselect: Ref<boolean>
   group: SelectionGroup<string>
   scrollBehavior: Ref<ScrollBehavior>
@@ -30,6 +31,8 @@ const COMBOBOX_INJECTION_KEY = Symbol() as InjectionKey<{
   showOnFocus: Ref<boolean>
   disabled: Ref<boolean>
   readonly: Ref<boolean>
+  floating: FloatingContext
+  setFloatingOptions: (options: Partial<UseFloatingOptions>) => void
 }>
 
 export function useComboboxContext(component: string) {
@@ -48,6 +51,7 @@ import {
 import type { SelectionGroup } from "@/composables/selection-group"
 import type { Orientation } from "@/types"
 import { useMutationObserver } from "@vueuse/core"
+import { useFloating, type FloatingContext, type UseFloatingOptions, type Middleware, type Placement, type Strategy } from "v-float"
 import {
   computed,
   provide,
@@ -63,6 +67,7 @@ const props = withDefaults(defineProps<ComboboxProps>(), {
   modelValue: () => [],
   scrollBehavior: "instant",
   orientation: "vertical",
+  floatingOptions: () => ({}),
 })
 
 const emit = defineEmits<{
@@ -77,7 +82,7 @@ const listboxID = useID()
 const triggerID = useID()
 const listboxEl = ref<HTMLElement | null>(null)
 const triggerEl = ref<HTMLInputElement | null>(null)
-const panelEl = ref<HTMLElement | null>(null)
+const dropdownEl = ref<HTMLElement | null>(null)
 const listItems = ref<HTMLElement[]>([])
 
 const _isVisible = ref(false)
@@ -111,11 +116,9 @@ const group = useSelectionGroup(modelValue, {
 
 const { hide, show } = useDelayedOpen(
   () => {
-    if (isVisible.value) return
     _isVisible.value = true
   },
   () => {
-    if (!isVisible.value) return
     _isVisible.value = false
   },
   {
@@ -145,10 +148,34 @@ watch(listboxEl, (el) => {
   )
 })
 
+// Reactive floating options that can be updated by children
+const _placement = ref<Placement | undefined>()
+const _strategy = ref<Strategy | undefined>()
+const _transform = ref<boolean | undefined>()
+const _middlewares = ref<Middleware[]>([])
+const _autoUpdate = ref<boolean | undefined>(true)
+
+const setFloatingOptions = (options: Partial<UseFloatingOptions>) => {
+  if (options.placement !== undefined) _placement.value = options.placement as Placement | undefined
+  if (options.strategy !== undefined) _strategy.value = options.strategy as Strategy | undefined
+  if (options.transform !== undefined) _transform.value = options.transform as boolean | undefined
+  if (options.middlewares !== undefined) _middlewares.value = options.middlewares as Middleware[]
+  if (options.autoUpdate !== undefined) _autoUpdate.value = options.autoUpdate as boolean | undefined
+}
+
+const floating = useFloating(triggerEl, dropdownEl, {
+  placement: _placement,
+  strategy: _strategy,
+  transform: _transform,
+  middlewares: _middlewares,
+  autoUpdate: _autoUpdate.value,
+  open: isVisible,
+})
+
 provide(COMBOBOX_INJECTION_KEY, {
   triggerID,
   triggerEl,
-  panelEl,
+  dropdownEl,
   listboxID,
   listboxEl,
   multiselect,
@@ -164,6 +191,8 @@ provide(COMBOBOX_INJECTION_KEY, {
   showOnFocus,
   disabled,
   readonly,
+  floating,
+  setFloatingOptions,
 })
 
 // Expose context to template
