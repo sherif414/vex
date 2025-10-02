@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { animate } from "motion"
+import { animate } from "motion-v"
 import { Transition } from "vue"
 
 //----------------------------------------------------------------------------------------------------
