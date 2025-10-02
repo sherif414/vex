@@ -12,28 +12,44 @@ export interface ComboboxProps {
   floatingOptions?: UseFloatingOptions
 }
 
-const COMBOBOX_INJECTION_KEY = Symbol() as InjectionKey<{
-  triggerID: string
-  listboxID: string
-  listboxEl: Ref<HTMLElement | null>
-  triggerEl: Ref<HTMLInputElement | null>
-  dropdownEl: Ref<HTMLElement | null>
-  multiselect: Ref<boolean>
-  group: SelectionGroup<string>
-  scrollBehavior: Ref<ScrollBehavior>
-  isVisible: ComputedRef<boolean>
-  show: () => void
-  hide: () => void
-  highlightedIndex: Ref<number>
-  activeDescendentID: ComputedRef<string | undefined>
-  orientation: Ref<"vertical" | "horizontal">
-  listItems: Ref<HTMLElement[]>
-  showOnFocus: Ref<boolean>
-  disabled: Ref<boolean>
-  readonly: Ref<boolean>
-  floating: FloatingContext
-  setFloatingOptions: (options: Partial<UseFloatingOptions>) => void
-}>
+export interface ComboboxContext {
+  ids: {
+    triggerID: string
+    listboxID: string
+  }
+  els: {
+    listboxEl: Ref<HTMLElement | null>
+    triggerEl: Ref<HTMLInputElement | null>
+    dropdownEl: Ref<HTMLElement | null>
+  }
+  flags: {
+    multiselect: Ref<boolean>
+    showOnFocus: Ref<boolean>
+    disabled: Ref<boolean>
+    readonly: Ref<boolean>
+  }
+  state: {
+    scrollBehavior: Ref<ScrollBehavior>
+    isVisible: ComputedRef<boolean>
+    highlightedIndex: Ref<number>
+    activeDescendentID: ComputedRef<string | undefined>
+    orientation: Ref<"vertical" | "horizontal">
+    listItems: Ref<HTMLElement[]>
+  }
+  selection: {
+    group: SelectionGroup<string>
+  }
+  api: {
+    show: () => void
+    hide: () => void
+  }
+  floating: {
+    floating: FloatingContext
+    setFloatingOptions: (options: Partial<UseFloatingOptions>) => void
+  }
+}
+
+const COMBOBOX_INJECTION_KEY = Symbol() as InjectionKey<ComboboxContext>
 
 export function useComboboxContext(component: string) {
   return useContext(COMBOBOX_INJECTION_KEY, "Combobox", component)
@@ -173,26 +189,40 @@ const floating = useFloating(triggerEl, dropdownEl, {
 })
 
 provide(COMBOBOX_INJECTION_KEY, {
-  triggerID,
-  triggerEl,
-  dropdownEl,
-  listboxID,
-  listboxEl,
-  multiselect,
-  group,
-  scrollBehavior,
-  isVisible,
-  show,
-  hide,
-  highlightedIndex,
-  orientation,
-  activeDescendentID,
-  listItems,
-  showOnFocus,
-  disabled,
-  readonly,
-  floating,
-  setFloatingOptions,
+  ids: {
+    triggerID,
+    listboxID,
+  },
+  els: {
+    triggerEl,
+    listboxEl,
+    dropdownEl,
+  },
+  flags: {
+    multiselect,
+    showOnFocus,
+    disabled,
+    readonly,
+  },
+  state: {
+    scrollBehavior,
+    isVisible,
+    highlightedIndex,
+    activeDescendentID,
+    orientation,
+    listItems,
+  },
+  selection: {
+    group,
+  },
+  api: {
+    show,
+    hide,
+  },
+  floating: {
+    floating,
+    setFloatingOptions,
+  },
 })
 
 // Expose context to template

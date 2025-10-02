@@ -12,7 +12,11 @@ import { useComboboxContext } from "./Combobox.vue"
 
 const props = withDefaults(defineProps<ComboboxListItemProps>(), {})
 
-const { listboxID, activeDescendentID, group } = useComboboxContext("ComboboxListItem")
+const {
+  ids: { listboxID },
+  state: { activeDescendentID },
+  selection: { group },
+} = useComboboxContext("ComboboxListItem")
 const id = `${listboxID}-${props.value}`
 
 const isActive = computed(() => id === activeDescendentID.value)

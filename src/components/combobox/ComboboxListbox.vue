@@ -13,8 +13,13 @@ const props = withDefaults(defineProps<ComboboxListboxProps>(), {
   as: "ul",
 })
 
-const { triggerID, listboxEl, listboxID, group, multiselect, hide, listItems } =
-  useComboboxContext("ComboboxListbox")
+const {
+  ids: { triggerID, listboxID },
+  els: { listboxEl },
+  selection: { group },
+  flags: { multiselect },
+  api: { hide },
+} = useComboboxContext("ComboboxListbox")
 
 // Event delegation for clicks
 useEventListener(listboxEl, "click", (e) => {

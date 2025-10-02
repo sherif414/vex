@@ -23,25 +23,20 @@ const props = withDefaults(defineProps<ComboboxInputProps>(), {
 })
 
 const {
-  triggerID,
-  triggerEl,
-  listboxID,
-  listboxEl,
-  dropdownEl,
-  isVisible,
-  show,
-  hide,
-  group,
-  highlightedIndex,
-  activeDescendentID,
-  orientation,
-  listItems,
-  multiselect,
-  scrollBehavior,
-  showOnFocus,
-  disabled,
-  readonly,
-  floating,
+  ids: { triggerID, listboxID },
+  els: { triggerEl, listboxEl, dropdownEl },
+  state: {
+    isVisible,
+    highlightedIndex,
+    activeDescendentID,
+    orientation,
+    listItems,
+    scrollBehavior,
+  },
+  flags: { multiselect, showOnFocus, disabled, readonly },
+  selection: { group },
+  api: { show, hide },
+  floating: { floating },
 } = useComboboxContext("ComboboxInput")
 
 const handleInput = (e: Event) => {

@@ -81,8 +81,10 @@ const props = withDefaults(defineProps<ComboboxDropdownProps>(), {
   autoUpdate: true,
 })
 
-const { isVisible, dropdownEl, floating, setFloatingOptions } =
-  useComboboxContext("ComboboxDropdown")
+const {
+  els: { dropdownEl },
+  floating: { floating, setFloatingOptions },
+} = useComboboxContext("ComboboxDropdown")
 
 const middlewares = computed(() => {
   const stack = [offset(props.offset)]
